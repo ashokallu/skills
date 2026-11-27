@@ -1,0 +1,57 @@
+schema_version: 1
+collector_id: cloudsql-environment-metadata-v1
+queries:
+  cloudsql_instance_metadata_v1:
+    command:
+      - gcloud
+      - sql
+      - instances
+      - describe
+      - <instance>
+      - --project
+      - <project>
+    format_fields:
+      - name
+      - instanceType
+      - state
+      - databaseVersion
+      - databaseInstalledVersion
+      - region
+      - settings.tier
+      - settings.availabilityType
+      - settings.dataDiskSizeGb
+      - settings.dataDiskType
+      - settings.storageAutoResize
+      - settings.storageAutoResizeLimit
+      - settings.databaseFlags
+      - settings.backupConfiguration.enabled
+      - settings.backupConfiguration.pointInTimeRecoveryEnabled
+      - settings.deletionProtectionEnabled
+      - settings.ipConfiguration.sslMode
+      - masterInstanceName
+    forbidden_output:
+      - ipAddresses
+      - serverCaCert
+      - serviceAccountEmailAddress
+      - users
+  cloudsql_disk_used_v1:
+    api: monitoring.googleapis.com/v3/projects/<project>/timeSeries
+    metric: cloudsql.googleapis.com/database/disk/bytes_used
+    resource_filter: resource.labels.database_id="<project>:<instance>"
+    window_minutes: 30
+    page_size: 10
+    point_selection: latest_by_interval_end_time
+    retained_fields:
+      - instance
+      - window_minutes
+      - point_timestamp
+      - int64_value
+  production_access_preflight_v1:
+    commands:
+      - gcloud auth list --filter=status:ACTIVE --format=value(account)
+      - scripts/dev/agent-collab-vpn-smoke.sh --timeout-sec 12
+    persisted_fields:
+      - vpn_smoke_passed
+    forbidden_output:
+      - account
+      - token

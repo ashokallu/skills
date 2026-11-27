@@ -1,0 +1,17 @@
+interface:
+  display_name: "Jira Workflow"
+  short_description: >-
+    Draft Jira tickets and carry Jira-backed Learn work through issue, branch, worktree, and PR
+    workflows
+  default_prompt: >-
+    Use $jira-agent-workflow to draft or complete Jira issue work and connect Jira-backed
+    Learn engineering work to a git worktree branch and PR.
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "mcp-jira-prd"
+      description: >-
+        organization-hosted Jira Server/Data Center MCP
+      transport: "http"
+policy:
+  allow_implicit_invocation: true

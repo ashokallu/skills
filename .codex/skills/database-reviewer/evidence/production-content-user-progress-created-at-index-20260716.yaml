@@ -1,0 +1,65 @@
+# Illustrative fixture. Values are synthetic and cannot establish environment readiness.
+schema_version: 1
+record_kind: database_operation_evidence_candidate
+record_id: production-content-user-progress-created-at-index-20200716
+record_version: 1
+environment: production
+engine: PostgreSQL 14
+observed_at: "2020-07-16T17:58:02Z"
+completed_at: "2020-07-16T17:58:47Z"
+provenance:
+  classification: agent_attested_non_replayable
+  basis: >-
+    The example models terminal results, bounded Cloud Monitoring values,
+    and primary and replica catalog readbacks for an approved index operation.
+    The values are illustrative.
+  independently_replayable: false
+  portable_source_artifact_retained: false
+  limitation: >-
+    No portable raw terminal, Monitoring, or catalog artifact and no content
+    digest were retained. This record cannot satisfy an independently verified
+    primary-evidence requirement.
+operation:
+  kind: create_index_concurrently
+  table: public.content_user_progress
+  index: public.idx_content_user_progress_created_at
+  column: created_at
+  access_method: btree
+claim_groups:
+  execution_terminal:
+    provenance_class: agent_attested_non_replayable
+    result: CREATE INDEX
+    exit_code: 0
+    duration_seconds: 39.0
+  terminal_catalog_readback:
+    provenance_class: agent_attested_non_replayable
+    index_valid: true
+    index_ready: true
+    index_live: true
+    index_size_bytes: 110000000
+    primary_replica_definition_match: true
+  bounded_monitoring_readback:
+    provenance_class: agent_attested_non_replayable
+    cpu_peak_percent: 32.0
+    free_memory_min_percent: 38.0
+    replica_lag_seconds: 0
+    network_lag_seconds: 1
+  terminal_safety_readback:
+    provenance_class: agent_attested_non_replayable
+    invalid_indexes: 0
+    active_index_build_sessions: 0
+    lock_waiters: 0
+relevance:
+  direct:
+    - The named concurrent index operation completed in Production at the stated time.
+    - The named terminal catalog and resource observations were recorded for that operation.
+  comparable:
+    - Similar concurrent B-tree index operations on the same environment and data shape.
+  contextual:
+    - Calibration of generic resource-saturation or runtime assumptions for Production DDL.
+limitations:
+  - Historical evidence does not prove the index currently exists or remains valid.
+  - Historical resource observations do not prove current workload or headroom.
+  - One successful operation does not prove future duration, repeatability, rollback, or recovery.
+  - Different tables, index definitions, data distributions, writers, or concurrent workload may not be comparable.
+supersedes: []

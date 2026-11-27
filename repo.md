@@ -21,12 +21,12 @@ by the active runtime, or read the shared copy when working without discovery.
 | --- | --- |
 | Multi-step work or a handoff | `work-orchestration` |
 | Implementation or refactoring | `code-authoring` |
-| Review of a stable change | `code-review` |
+| Review of a stable change | `reviewer` |
 | Database change or rollout review | `database-reviewer` |
 | Browser testing or E2E triage | `browser-e2e` |
-| PR preparation, review, or check triage | `pull-request-workflow` |
+| PR preparation, review, or check triage | `pr-workflow` |
 | GitHub operations | `github-workflow` |
-| Jira issues | `jira-workflow` |
+| Jira issues | `jira-agent-workflow` |
 | Confluence documentation | `confluence-workflow` |
 
 ## Commands and validation

@@ -1,0 +1,15 @@
+interface:
+  display_name: "Confluence Workflow"
+  short_description: >-
+    Search, read, update, and comment on Confluence content through the the organization Confluence MCP
+  default_prompt: >-
+    Use $confluence-workflow to complete a Confluence task through the the organization Confluence MCP.
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "mcp-confluence-prd"
+      description: >-
+        organization-hosted Confluence Server/Data Center MCP
+      transport: "http"
+policy:
+  allow_implicit_invocation: true

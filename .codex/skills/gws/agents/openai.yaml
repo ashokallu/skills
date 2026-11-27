@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Workspace CLI"
+  short_description: "Use Google Workspace CLI workflows safely"
+  default_prompt: "Use $gws to work with Google Workspace APIs through the gws CLI."

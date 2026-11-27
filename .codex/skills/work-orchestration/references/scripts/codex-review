@@ -1,0 +1,330 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: codex-review [options]
+
+Options:
+  --mode auto|local|branch   Target selection. Default: auto.
+  --base REF                 Base ref for branch review. Default: origin/main.
+  --codex-bin PATH           Codex binary. Default: codex.
+  --model MODEL              Review model. Default: CODEX_REVIEW_MODEL or CLI config.
+  --reasoning-effort LEVEL   Review effort. Default: CODEX_REVIEW_EFFORT or high.
+  --resolve-pr-base          Query the current PR with gh (explicit remote read).
+  --fetch                    Refresh origin before branch review (explicit remote read and local ref write).
+  --output FILE              Also save output to file (explicit local write).
+  --parallel-tests CMD       Run an authorized test command concurrently.
+  --dry-run                  Print selected commands, do not run.
+  -h, --help                 Show help.
+
+Modes:
+  local   codex [--model <configured>] review -c 'model_reasoning_effort="high"' --uncommitted
+  branch  codex [--model <configured>] review -c 'model_reasoning_effort="high"' --base <base>
+  auto    dirty tree -> local, clean non-main branch -> branch
+
+The helper reviews the current target worktree but requires Codex to read the
+canonical reviewer contract from the checkout that owns this script.
+EOF
+}
+
+mode=auto
+base_ref=
+codex_bin=${CODEX_BIN:-codex}
+review_model=${CODEX_REVIEW_MODEL:-}
+reasoning_effort=${CODEX_REVIEW_EFFORT:-high}
+output=
+parallel_tests=
+resolve_pr_base=false
+fetch_refs=false
+dry_run=false
+
+require_value() {
+  local option=$1
+  local value=${2-}
+  if [[ -z "$value" ]]; then
+    echo "$option requires a non-empty value" >&2
+    exit 2
+  fi
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --mode)
+      require_value "$1" "${2-}"
+      mode=${2:-}
+      shift 2
+      ;;
+    --base)
+      require_value "$1" "${2-}"
+      base_ref=${2:-}
+      shift 2
+      ;;
+    --codex-bin)
+      require_value "$1" "${2-}"
+      codex_bin=${2:-}
+      shift 2
+      ;;
+    --model)
+      require_value "$1" "${2-}"
+      review_model=${2:-}
+      shift 2
+      ;;
+    --reasoning-effort)
+      require_value "$1" "${2-}"
+      reasoning_effort=${2:-}
+      shift 2
+      ;;
+    --resolve-pr-base)
+      resolve_pr_base=true
+      shift
+      ;;
+    --fetch)
+      fetch_refs=true
+      shift
+      ;;
+    --output)
+      require_value "$1" "${2-}"
+      output=${2:-}
+      shift 2
+      ;;
+    --parallel-tests)
+      require_value "$1" "${2-}"
+      parallel_tests=${2:-}
+      shift 2
+      ;;
+    --dry-run)
+      dry_run=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+case "$mode" in
+  auto|local|branch) ;;
+  *)
+    echo "invalid --mode: $mode" >&2
+    exit 2
+    ;;
+esac
+
+if [[ ! "$reasoning_effort" =~ ^[A-Za-z0-9._-]+$ ]]; then
+  echo "invalid --reasoning-effort: use a simple configured level name" >&2
+  exit 2
+fi
+
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+if ! instruction_root=$(git -C "$script_dir" rev-parse --show-toplevel 2>/dev/null); then
+  echo "codex-review must run from a skill installed inside the canonical instruction git checkout" >&2
+  exit 1
+fi
+if ! target_root=$(git rev-parse --show-toplevel 2>/dev/null); then
+  echo "codex-review target must be a git worktree" >&2
+  exit 1
+fi
+
+review_context_files=(
+  "$instruction_root/.codex/agents/reviewer.toml"
+  "$instruction_root/.codex/skills/reviewer/SKILL.md"
+  "$instruction_root/.codex/skills/reviewer/references/review-bootstrap.md"
+  "$instruction_root/.codex/skills/reviewer/references/review-analysis-routing.md"
+  "$instruction_root/.codex/skills/reviewer/references/review-verdict-closeout.md"
+  "$instruction_root/docs/agents/codex-review-output-contract.md"
+)
+
+for review_context_file in "${review_context_files[@]}"; do
+  if [[ ! -r "$review_context_file" ]]; then
+    echo "required canonical review context is unreadable: $review_context_file" >&2
+    exit 1
+  fi
+done
+
+review_prompt=$(cat <<EOF
+Review the target repository at:
+$target_root
+
+The canonical instruction checkout is separate from the target worktree. Before
+collecting review evidence, use file-reading tools to read every file below in
+full from the filesystem. A path in this prompt, pasted content, memory, prior
+conversation, or a grep/snippet does not satisfy a full-read requirement. If a
+file cannot be read through EOF, stop and report the exact blocker.
+
+$(printf '%s\n' "${review_context_files[@]}")
+
+After those reads, review the selected target with native independent judgment
+and the canonical reviewer workflow. Reconstruct applicable changed-boundary
+states from the stable diff before consulting author matrices, prior findings,
+or summaries. Keep the review read-only. Do not edit files, install tools,
+commit, push, resolve threads, or mutate local or remote state.
+
+This invocation is noninteractive. Follow the Headless Instruction-Read
+Adaptation in the Codex Review Output Contract. The reviewer role owns judgment;
+the output contract owns compact final serialization.
+EOF
+)
+
+toml_basic_string() {
+  local value=$1
+  value=${value//\\/\\\\}
+  value=${value//\"/\\\"}
+  value=${value//$'\b'/\\b}
+  value=${value//$'\t'/\\t}
+  value=${value//$'\n'/\\n}
+  value=${value//$'\f'/\\f}
+  value=${value//$'\r'/\\r}
+  printf '"%s"' "$value"
+}
+
+review_prompt_toml=$(toml_basic_string "$review_prompt")
+
+cd "$target_root"
+
+current_branch=$(git branch --show-current 2>/dev/null || true)
+dirty=false
+if [[ -n "$(git status --porcelain)" ]]; then
+  dirty=true
+fi
+
+review_kind=
+if [[ "$mode" == local || ( "$mode" == auto && "$dirty" == true ) ]]; then
+  review_kind=local
+elif [[ "$mode" == branch || ( "$mode" == auto && -n "$current_branch" && "$current_branch" != "main" ) ]]; then
+  review_kind=branch
+else
+  echo "no review target: clean main checkout and no forced mode" >&2
+  exit 1
+fi
+
+pr_url=
+if [[ "$review_kind" == local ]]; then
+  if [[ -n "$base_ref" || "$resolve_pr_base" == true || "$fetch_refs" == true ]]; then
+    echo "--base, --resolve-pr-base, and --fetch apply only to branch review; use --mode branch to override auto local selection" >&2
+    exit 2
+  fi
+else
+  if [[ "$resolve_pr_base" == true ]]; then
+    if [[ -n "$base_ref" ]]; then
+      echo "use either --base or --resolve-pr-base, not both" >&2
+      exit 2
+    fi
+    if ! command -v gh >/dev/null 2>&1; then
+      echo "--resolve-pr-base requires gh" >&2
+      exit 1
+    fi
+    if ! pr_lines=$(gh pr view --json baseRefName,url --jq '[.baseRefName, .url] | @tsv' 2>/dev/null); then
+      echo "unable to resolve the current PR base with gh" >&2
+      exit 1
+    fi
+    base_name=${pr_lines%%$'\t'*}
+    pr_url=${pr_lines#*$'\t'}
+    if [[ -z "$base_name" ]]; then
+      echo "gh returned no PR base" >&2
+      exit 1
+    fi
+    base_ref="origin/$base_name"
+  fi
+
+  if [[ -z "$base_ref" ]]; then
+    base_ref=origin/main
+  fi
+fi
+
+review_cmd=("$codex_bin")
+if [[ -n "$review_model" ]]; then
+  review_cmd+=(--model "$review_model")
+fi
+review_cmd+=(review
+  -c "model_reasoning_effort=\"$reasoning_effort\""
+  -c 'sandbox_mode="read-only"'
+  -c "developer_instructions=$review_prompt_toml")
+
+if [[ "$review_kind" == local ]]; then
+  review_cmd+=(--uncommitted)
+else
+  review_cmd+=(--base "$base_ref")
+fi
+
+printf 'codex-review target: %s\n' "$review_kind"
+printf 'branch: %s\n' "${current_branch:-detached}"
+printf 'target root: %s\n' "$target_root"
+printf 'instruction root: %s\n' "$instruction_root"
+printf 'review context:\n'
+printf '  %s\n' "${review_context_files[@]}"
+if [[ -n "$pr_url" ]]; then
+  printf 'pr: %s\n' "$pr_url"
+fi
+printf 'review:'
+for review_arg in "${review_cmd[@]}"; do
+  display_arg=$review_arg
+  if [[ "$display_arg" == developer_instructions=* ]]; then
+    display_arg='developer_instructions="<canonical-review-context>"'
+  fi
+  printf ' %q' "$display_arg"
+done
+printf '\n'
+if [[ -n "$parallel_tests" ]]; then
+  printf 'tests: %s\n' "$parallel_tests"
+fi
+if [[ "$review_kind" == branch && "$fetch_refs" == true ]]; then
+  printf 'fetch: git fetch origin --quiet\n'
+fi
+if [[ -n "$output" ]]; then
+  printf 'output: %s\n' "$output"
+fi
+
+if [[ "$dry_run" == true ]]; then
+  exit 0
+fi
+
+if [[ "$review_kind" == branch && "$fetch_refs" == true ]]; then
+  git fetch origin --quiet || {
+    echo "git fetch origin failed; refusing to review a target requested with --fetch" >&2
+    exit 1
+  }
+fi
+
+if [[ "$review_kind" == branch ]] && ! git rev-parse --verify --quiet "$base_ref^{commit}" >/dev/null; then
+  echo "base ref is unavailable or stale: $base_ref; synchronize refs or pass a valid --base" >&2
+  exit 1
+fi
+
+run_review() {
+  if [[ -n "$output" ]]; then
+    mkdir -p "$(dirname "$output")"
+    "${review_cmd[@]}" </dev/null 2>&1 | tee "$output"
+  else
+    "${review_cmd[@]}" </dev/null
+  fi
+}
+
+if [[ -z "$parallel_tests" ]]; then
+  run_review
+  exit $?
+fi
+
+set +e
+run_review &
+review_pid=$!
+bash -lc "$parallel_tests" &
+tests_pid=$!
+
+wait "$review_pid"
+review_status=$?
+wait "$tests_pid"
+tests_status=$?
+set -e
+
+printf 'codex-review exit: %s\n' "$review_status"
+printf 'tests exit: %s\n' "$tests_status"
+
+if [[ "$review_status" != 0 || "$tests_status" != 0 ]]; then
+  exit 1
+fi

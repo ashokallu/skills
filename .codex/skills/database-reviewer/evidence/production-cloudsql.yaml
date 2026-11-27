@@ -1,0 +1,511 @@
+# Illustrative fixture. Values are synthetic and cannot establish environment readiness.
+schema_version: 1
+snapshot_id: production-cloudsql-20200716T172419Z
+environment: production
+project: example-app-prod
+observed_at: "2020-07-16T17:24:19Z"
+valid_until: "2020-07-23T17:24:19Z"
+maximum_validity_days: 7
+status: illustrative_fixture
+declared_source_commit: 1f822f35a1ccd88af2a28e40d21a44501eb45e2b # pragma: allowlist secret
+collector:
+  id: production-cloudsql-context-v1
+  path: production-cloudsql-collector.sql
+  sha256: 550aa30ea964ff3f67c357263c4b7450f99e458eb78a0478bdbe634221be07ba # pragma: allowlist secret
+  query_ids:
+    - production_database_identity_v1
+    - production_live_observed_settings_v1
+    - production_physical_relation_summary_v1
+    - production_largest_physical_relations_v1
+non_sql_collector:
+  id: cloudsql-environment-metadata-v1
+  path: cloudsql-metadata-collector.yaml
+  sha256: 415ac04cc59ea2f1d9d01549ab2e178327e5cb123b69fb4e46f63c48fa0fb7dd # pragma: allowlist secret
+  query_ids:
+    - cloudsql_instance_metadata_v1
+    - cloudsql_disk_used_v1
+    - production_access_preflight_v1
+collection_bounds:
+  source: confirmed_read_replica
+  transaction_mode: read_only
+  statement_timeout_ms: 10000
+  relation_limit: 20
+  system_schemas_excluded: true
+  partition_parents_excluded: true
+  exact_counts_run: false
+  explain_analyze_run: false
+  row_samples_read: false
+  payloads_read: false
+invalidators:
+  - deployment
+  - migration
+  - instance_resize_or_storage_growth
+  - failover_or_replica_topology_change
+  - engine_or_configuration_change
+  - statistics_reset
+  - material_workload_or_data_shape_change
+invalidation_check:
+  value: null
+  classification: unavailable
+  reason: No bounded deploy, migration, failover, resize, configuration, statistics-reset, and workload-change inventory accompanies this snapshot.
+  consumer_action: Collect current target and environment evidence before making an operational decision.
+
+declared_topology:
+  classification: configured
+  source_commit: 1f822f35a1ccd88af2a28e40d21a44501eb45e2b # pragma: allowlist secret
+  fields:
+    project:
+      value: example-app-prod
+      classification: configured
+      source: infrastructure/prd/locals.tf:3
+    region:
+      value: us-central1
+      classification: configured
+      source: infrastructure/prd/locals.tf:4
+    primary_name:
+      value: app-api
+      classification: configured
+      source: infrastructure/modules/example-app/sql.tf:24
+    replica_name:
+      value: app-api-replica
+      classification: configured
+      source: infrastructure/modules/example-app/sql.tf:86
+    engine_major:
+      value: POSTGRES_14
+      classification: configured
+      source: infrastructure/modules/example-app/sql.tf:26
+    tier:
+      value: db-f1-micro
+      classification: configured
+      source: infrastructure/modules/example-app/sql.tf:29
+    initial_disk_gb:
+      value: 30
+      classification: configured
+      source: infrastructure/prd/main.tf:71
+      limitation: Terraform ignores later disk-size drift after auto-growth.
+    max_connections:
+      value: 50
+      classification: configured
+      source: infrastructure/modules/example-app/sql.tf:10-11
+    backup_enabled:
+      value: true
+      classification: configured
+      source: infrastructure/prd/main.tf:69
+    point_in_time_recovery_enabled:
+      value: true
+      classification: configured
+      source: infrastructure/prd/main.tf:70
+    backend_max_instances:
+      value: 10
+      classification: configured
+      source: infrastructure/prd/main.tf:66
+    backend_write_pool_per_instance:
+      value: 4
+      classification: configured
+      source: backend/internal/shared/cmd/connect.go:24-27
+
+live_observed:
+  access_preflight:
+    provenance:
+      query_id: production_access_preflight_v1
+      observed_at: "2020-07-16T17:24:19Z"
+    vpn_smoke_passed: { value: true, classification: observed }
+
+  instance_metadata:
+    provenance:
+      query_id: cloudsql_instance_metadata_v1
+      observed_from: "2020-07-16T17:24:14Z"
+      observed_to: "2020-07-16T17:24:16Z"
+    primary:
+      name: app-api
+      role: { value: primary, classification: observed }
+      state: { value: RUNNABLE, classification: observed }
+      engine_major: { value: POSTGRES_14, classification: observed }
+      installed_version: { value: POSTGRES_14_22, classification: observed }
+      region: { value: us-central1, classification: observed }
+      tier: { value: db-f1-micro, classification: observed }
+      availability_type: { value: ZONAL, classification: observed }
+      allocated_disk_gb: { value: 30, classification: observed }
+      disk_type: { value: PD_SSD, classification: observed }
+      storage_auto_resize: { value: true, classification: observed }
+      storage_auto_resize_limit_gb:
+        value: 0
+        classification: observed
+        limitation: Zero means no configured limit; it is not headroom proof.
+      backup_enabled: { value: true, classification: observed }
+      point_in_time_recovery_enabled: { value: true, classification: observed }
+      gcp_deletion_protection_enabled:
+        { value: false, classification: observed }
+      ssl_mode: { value: ENCRYPTED_ONLY, classification: observed }
+    replica:
+      name: app-api-replica
+      role:
+        value: read_replica
+        classification: observed
+        evidence: Cloud SQL metadata plus SQL recovery-state proof.
+      sql_recovery_state:
+        value: true
+        classification: observed
+        observed_at: "2020-07-16T17:20:08Z"
+      state: { value: RUNNABLE, classification: observed }
+      engine_major: { value: POSTGRES_14, classification: observed }
+      installed_version: { value: POSTGRES_14_22, classification: observed }
+      region: { value: us-central1, classification: observed }
+      tier: { value: db-f1-micro, classification: observed }
+      availability_type: { value: ZONAL, classification: observed }
+      allocated_disk_gb: { value: 30, classification: observed }
+      disk_type: { value: PD_SSD, classification: observed }
+      storage_auto_resize: { value: true, classification: observed }
+      storage_auto_resize_limit_gb:
+        value: 0
+        classification: observed
+        limitation: Zero means no configured limit; it is not headroom proof.
+      backup_enabled: { value: false, classification: observed }
+      point_in_time_recovery_enabled: { value: false, classification: observed }
+      gcp_deletion_protection_enabled:
+        { value: false, classification: observed }
+      ssl_mode:
+        { value: ALLOW_UNENCRYPTED_AND_ENCRYPTED, classification: observed }
+
+  monitoring:
+    provenance:
+      query_id: cloudsql_disk_used_v1
+      metric: cloudsql.googleapis.com/database/disk/bytes_used
+      window_minutes: 30
+      point_timestamp: "2020-07-16T17:22:00Z"
+    primary_disk_used_bytes: { value: 13000000000, classification: observed }
+    replica_disk_used_bytes: { value: 13000000000, classification: observed }
+
+  database:
+    provenance:
+      query_id: production_database_identity_v1
+      observed_at: "2020-07-16T17:20:08Z"
+      target_instance: app-api-replica
+      transaction_mode: read_only
+      statement_timeout_ms: 10000
+    name: { value: example_app, classification: observed }
+    server_version: { value: "14.22", classification: observed }
+    is_replica: { value: true, classification: observed }
+    database_bytes:
+      value: 13000000000
+      classification: exact
+      limitation: Exact on the replica at observation time only.
+
+  settings:
+    provenance:
+      query_id: production_live_observed_settings_v1
+      observed_at: "2020-07-16T17:20:08Z"
+      target_instance: app-api-replica
+      transaction_mode: read_only
+      statement_timeout_ms: 10000
+    max_connections:
+      { value: 50, classification: observed, source: configuration file }
+    lock_timeout_ms: { value: 0, classification: observed, source: default }
+    idle_in_transaction_session_timeout_ms:
+      { value: 0, classification: observed, source: default }
+    autovacuum: { value: true, classification: observed, source: default }
+    track_counts: { value: true, classification: observed, source: default }
+
+  relation_summary:
+    provenance:
+      query_id: production_physical_relation_summary_v1
+      observed_at: "2020-07-16T17:20:08Z"
+      target_instance: app-api-replica
+      transaction_mode: read_only
+      statement_timeout_ms: 10000
+    physical_relation_count: { value: 46, classification: exact }
+    user_relation_total_bytes: { value: 12622600000, classification: exact }
+    heap_total_bytes: { value: 7300000000, classification: exact }
+    index_total_bytes: { value: 5300000000, classification: exact }
+    toast_total_bytes: { value: 20000000, classification: exact }
+    auxiliary_total_bytes: { value: 2600000, classification: exact }
+    listed_relation_count: { value: 20, classification: exact }
+    omitted_relation_count:
+      value: 26
+      classification: exact
+      limitation: Omission never proves an affected relation is small.
+
+  largest_physical_relations:
+    provenance:
+      query_id: production_largest_physical_relations_v1
+      observed_at: "2020-07-16T17:20:08Z"
+      target_instance: app-api-replica
+      transaction_mode: read_only
+      statement_timeout_ms: 10000
+      ordering: total_bytes_descending
+      row_estimate_source: replicated pg_class.reltuples
+      statistics_timestamps: unavailable_on_replica
+    rows:
+      - relation: public.xp_import_stage_rows
+        total_bytes: { value: 4200695900, classification: exact }
+        heap_bytes: { value: 2500000000, classification: exact }
+        index_bytes: { value: 1700000000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 690000, classification: exact }
+        estimated_live_rows: { value: 11000000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.content_user_progress
+        total_bytes: { value: 2460465900, classification: exact }
+        heap_bytes: { value: 1600000000, classification: exact }
+        index_bytes: { value: 860000000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 460000, classification: exact }
+        estimated_live_rows: { value: 4800000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.user_experience_totals
+        total_bytes: { value: 2300345900, classification: exact }
+        heap_bytes: { value: 1200000000, classification: exact }
+        index_bytes: { value: 1100000000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 340000, classification: exact }
+        estimated_live_rows: { value: 5700000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.xp_import_stage_users
+        total_bytes: { value: 1930335900, classification: exact }
+        heap_bytes: { value: 1200000000, classification: exact }
+        index_bytes: { value: 730000000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 330000, classification: exact }
+        estimated_live_rows: { value: 7200000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.content_user_experience
+        total_bytes: { value: 1570215900, classification: exact }
+        heap_bytes: { value: 720000000, classification: exact }
+        index_bytes: { value: 850000000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 210000, classification: exact }
+        estimated_live_rows: { value: 4100000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.user_badges
+        total_bytes: { value: 62034900, classification: exact }
+        heap_bytes: { value: 30000000, classification: exact }
+        index_bytes: { value: 32000000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 29000, classification: exact }
+        estimated_live_rows: { value: 260000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.user_genesis_ids
+        total_bytes: { value: 55034900, classification: exact }
+        heap_bytes: { value: 25000000, classification: exact }
+        index_bytes: { value: 30000000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 29000, classification: exact }
+        estimated_live_rows: { value: 350000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.xp_import_ledger_overlay_materialized_rows
+        total_bytes: { value: 21124000, classification: exact }
+        heap_bytes: { value: 11000000, classification: exact }
+        index_bytes: { value: 3600000, classification: exact }
+        toast_bytes: { value: 6500000, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 9200, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.xp_import_effective_xp_overlays
+        total_bytes: { value: 19924000, classification: exact }
+        heap_bytes: { value: 10000000, classification: exact }
+        index_bytes: { value: 3500000, classification: exact }
+        toast_bytes: { value: 6400000, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 9200, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.xp_import_ledger_classification_rows
+        total_bytes: { value: 19824000, classification: exact }
+        heap_bytes: { value: 10000000, classification: exact }
+        index_bytes: { value: 2700000, classification: exact }
+        toast_bytes: { value: 7100000, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 9700, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.content_structures
+        total_bytes: { value: 7829900, classification: exact }
+        heap_bytes: { value: 3700000, classification: exact }
+        index_bytes: { value: 4100000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 10000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.xp_import_apply_deduped_valid_ledger_rows
+        total_bytes: { value: 4729900, classification: exact }
+        heap_bytes: { value: 3300000, classification: exact }
+        index_bytes: { value: 1400000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 3800, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.user_progress
+        total_bytes: { value: 4329900, classification: exact }
+        heap_bytes: { value: 3100000, classification: exact }
+        index_bytes: { value: 1200000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 7200, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.xp_import_exceptions
+        total_bytes: { value: 3909900, classification: exact }
+        heap_bytes: { value: 3500000, classification: exact }
+        index_bytes: { value: 380000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 10000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.delayed_queue
+        total_bytes: { value: 2617900, classification: exact }
+        heap_bytes: { value: 0, classification: exact }
+        index_bytes: { value: 2600000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 12000, classification: exact }
+        estimated_live_rows: { value: 0, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.course_enrollments
+        total_bytes: { value: 1759900, classification: exact }
+        heap_bytes: { value: 1400000, classification: exact }
+        index_bytes: { value: 330000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 3000, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.mongoid_to_sanityid
+        total_bytes: { value: 1129900, classification: exact }
+        heap_bytes: { value: 730000, classification: exact }
+        index_bytes: { value: 370000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 5200, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.xp_import_apply_excluded_unresolved_ledger_rows
+        total_bytes: { value: 373900, classification: exact }
+        heap_bytes: { value: 210000, classification: exact }
+        index_bytes: { value: 140000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 18000, classification: exact }
+        estimated_live_rows: { value: 260, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.course_pod_users
+        total_bytes: { value: 359900, classification: exact }
+        heap_bytes: { value: 190000, classification: exact }
+        index_bytes: { value: 140000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 1900, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+      - relation: public.xp_import_validate_progress
+        total_bytes: { value: 331900, classification: exact }
+        heap_bytes: { value: 290000, classification: exact }
+        index_bytes: { value: 12000, classification: exact }
+        toast_bytes: { value: 5900, classification: exact }
+        auxiliary_bytes: { value: 24000, classification: exact }
+        estimated_live_rows: { value: 0, classification: estimated }
+        statistics_at:
+          {
+            value: null,
+            classification: unavailable,
+            reason: Primary statistics timestamps are not replicated.,
+          }
+
+limitations:
+  - SQL was read from the replica only; primary relation bytes were not queried.
+  - Row cardinalities are pg_class estimates, not exact counts.
+  - Primary statistics timestamps and dead-row estimates are unavailable on the replica.
+  - The top-20 list omits 26 smaller-at-observation physical relations.
+  - Disk-used metrics include storage outside the named database relations.
+  - Workload heat, query latency, lock pressure, replica lag, aggregate pool demand, and growth rate were not collected.
+failed_probes:
+  - field: live_observed.largest_physical_relations.statistics_timestamps
+    value: null
+    classification: unavailable
+    reason: Primary statistics timestamps are not replicated to the read replica.
