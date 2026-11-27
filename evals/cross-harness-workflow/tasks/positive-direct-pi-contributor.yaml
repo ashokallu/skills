@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-direct-pi-contributor
+name: Positive - explicit Pi bounded contributor
+description: An explicit Pi workhorse request reaches the candidate adapter without changing admission.
+tags: [trigger, positive]
+inputs:
+  prompt: "Use Pi CLI as the cross-harness workhorse with gpt-5.6-terra to return a bounded patch for these exact files in the assigned linked worktree."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pi_contributor
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

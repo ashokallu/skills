@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-negative-database-test-authoring
+name: Negative - author database test harness
+description: Writing database test infrastructure belongs to authoring, not the read-only database reviewer.
+tags: [trigger, negative, verification, authoring]
+inputs:
+  prompt: "Build a database migration test harness, add fault-injection fixtures, implement concurrent-writer tests, and update CI to run them."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_database_test_authoring
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: negative
+      threshold: 0.9

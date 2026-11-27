@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-migration-negative-write-migration
+name: Negative - write migration
+description: Writing a migration should route to backend codegen rather than read-only review.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Create a new Postgres migration pair for a backend schema change and regenerate any affected sqlc code."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_write_migration
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: negative
+      threshold: 0.76

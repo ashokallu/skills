@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-positive-confluence-cql-pagination
+name: Positive - Confluence CQL pagination
+description: Broad Confluence searches should route to the Confluence workflow skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Search Confluence for every onboarding page in the DEMO space with CQL and handle pagination
+    or mark incomplete results Pending Verification."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_confluence_cql_pagination
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

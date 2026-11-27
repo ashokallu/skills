@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-negative-generic-sentry-advice
+name: Negative - generic Sentry advice
+description: Generic Sentry advice with no example-app repo context should not trigger the repo workflow dispatcher.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "In a generic Node app, what is a sensible way to triage a Sentry issue?"
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_generic_sentry_advice
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: negative
+      threshold: 0.8

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-skill-inception
+name: Positive - improve skill through harness inception
+description: The skill should trigger when the user asks the multi-harness system to review and improve this same planning skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use Claude, Codex high, Grok, and Muse in separate worktrees to review .codex/skills/cross-harness-workflow/SKILL.md and propose changes to make the skill better."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_skill_inception
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

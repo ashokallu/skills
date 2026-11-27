@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: skill-quality-evals-positive-real-model-behavior-grader
+name: Positive - real-model behavior grader
+description: Real-model Waza behavior grading should activate the skill-quality workflow.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run one real-model Waza behavior case with its prompt grader, verify that the canonical skill was invoked, and report whether the grader passed."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_real_model_behavior_grader
+    type: trigger
+    config:
+      skill_path: .codex/skills/skill-quality-evals/SKILL.md
+      mode: positive
+      threshold: 0.6

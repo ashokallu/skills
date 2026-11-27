@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-luna-scout
+name: Positive - Luna scouting
+description: The umbrella should trigger when bounded read-only scout work can be delegated to Luna.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this non-trivial Codex change, first find a Luna-sized scout task to map callers, tests, TODOs, or stale docs before the parent edits."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_luna_scout_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

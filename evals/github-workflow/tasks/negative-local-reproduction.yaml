@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-negative-local-reproduction
+name: Negative - local CI reproduction
+description: Concrete local CI reproduction should route to the PR CI worktree skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "The PR has a failing Backend - Validate check. Create a disposable worktree, reproduce the failing lane locally, fix it, and prepare validation."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_local_reproduction
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: negative
+      threshold: 0.85

@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-author-self-review-database
+name: Behavior - conditional database self-review
+description: Database consequence probes prepare evidence without replacing the independent database reviewer.
+tags: [behavior, self-review, database, evidence]
+inputs:
+  prompt: |
+    You authored a substantive migration plus generated SQL query change. The
+    stable authoring handoff includes expand/copy/validate/contract phases,
+    rollback boundaries, scale assumptions, representative tests, and current
+    validation. An ordinary independent reviewer and the independent database
+    reviewer sibling are required. Apply author self-review before dispatch.
+
+    State what database material you inspect, who may collect environment
+    evidence, and what remains independently reviewed. Do not perform a live
+    database query.
+graders:
+  - name: author_self_review_database_boundary
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response activates database self-review because the
+        diff proves migration/generated-query surfaces; uses database-reviewer
+        consequence lanes only as prevention and evidence-readiness probes;
+        checks invariants, scale, failure/recovery, and evidence packaging;
+        leaves environment reads to the parent through readonly-data-access;
+        performs no autonomous query; preserves the independent database
+        reviewer sibling and its full verdict ownership; and records only new
+        dispositions in the author self-review delta. Fail if it waives the
+        database reviewer, emits a database verdict, or restates the entire
+        authoring handoff.

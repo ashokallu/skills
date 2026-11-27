@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: agent-personality-positive-explanation-depth
+name: Positive - explanation depth and warmth
+description: The skill should trigger when a user asks for a deeper explanation with warm directness and useful humor.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Explain this confusing example-app workflow to me like a sharp teammate: warm, concise, a little funny if it fits, but serious about tradeoffs and risks."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_depth_and_warmth
+    type: trigger
+    config:
+      skill_path: .codex/skills/agent-personality/SKILL.md
+      mode: positive
+      threshold: 0.6

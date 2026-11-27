@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-loop-control-conditional-activation
+name: Behavior - distinguish first failure from repeated no-progress work
+description: The dispatcher uses ordinary recovery for a first failure and loop control only after repeated non-narrowing attempts.
+tags: [behavior, routing, recovery, loop-control, proportionality]
+inputs:
+  prompt: |
+    Compare the next workflow route for these two example-app situations. Do
+    not run commands or contact another agent; explain only the route and stop
+    condition.
+
+    A. A repo-owned wrapper fails once because authentication is missing.
+    B. The same wrapper has been retried twice with the same target and inputs,
+       produced the same authentication failure, and added no new evidence. The
+       agent proposes an identical third retry and another reviewer for advice.
+
+    Explain whether loop control activates in each case and what the next move
+    must establish.
+graders:
+  - name: loop_control_requires_repeated_non_narrowing_work
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/loop-control-conditional-activation.md

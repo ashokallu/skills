@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-backup-restore-scope
+name: Behavior - backup restore evidence scope
+description: Require scoped recovery proof without forbidding bounded read-only evidence.
+tags: [behavior, backup, restore, evidence]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review conceptual target
+    `restore-plan-v2` against base `restore-plan-v1` without editing files:
+
+    - PITR is configured, but the last drill restored only one shard;
+    - encryption-key recovery and failback fencing were not exercised;
+    - the claimed RTO excludes integrity validation and traffic restoration;
+    - deleted tenant data may reappear from the restored snapshot;
+    - bounded read-only catalog and backup metadata are available through the
+      sanctioned read-only data-access path.
+
+    Return the complete Database review packet and verdict.
+graders:
+  - name: backup_restore_scope_and_readonly_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [evals/database-reviewer/graders/behavior_contract.py, backup-restore]

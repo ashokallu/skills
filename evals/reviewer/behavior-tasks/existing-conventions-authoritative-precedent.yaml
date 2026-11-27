@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-existing-conventions-authoritative-precedent
+name: Behavior - authoritative convention precedent
+description: One owning helper can establish a convention after a bounded competing-pattern search.
+tags: [behavior, conventions, precedent, bounded-search]
+inputs:
+  prompt: |
+    Treat the facts below as the complete case. Do not inspect the repository or run tools.
+    Review a stable implementation diff that adds a second cache-write helper.
+    The owning shared cache package already exposes one documented helper for
+    this exact job, and a bounded search of that package finds no competing
+    current pattern. The new helper changes cancellation and error behavior in
+    a way that can affect background cache completion. Apply the existing-
+    conventions lens and return the disposition.
+    End with exactly one field per line using these allowed values:
+    Convention disposition: FINDING or NO_FINDING
+    Standard state: AUTHORITATIVE, CONFLICTING, JUSTIFIED, NONE, or NIT
+    Search scope: OWNER_BOUNDED when package/owner evidence is used, otherwise INPUT_SUFFICIENT
+    Finding owner: CONVENTIONS, SECURITY_PRIVACY, or NONE
+    Pending verification: YES or NO
+    Reason: one sentence supporting every field without hypothetical findings.
+graders:
+  - name: authoritative_precedent_is_sufficient
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/reviewer/graders/existing_conventions_contract.py,
+          authoritative-precedent,
+        ]

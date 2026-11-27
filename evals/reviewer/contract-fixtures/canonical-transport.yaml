@@ -1,0 +1,147 @@
+schema_version: 3
+transport_id: reviewer-contract-transport-v3
+
+# This fixture transport is the minimum fail-closed skeleton and mode-routing
+# subset. It does not replace the full packet contract or semantic verdict,
+# evidence, REH, variance-ledger, production, freshness, or ownership law.
+# Those remain owned by docs/agents/pr-review-packet-format.md, reviewer,
+# and the runtime reviewer roles.
+
+required_route_fields:
+  - mode
+  - target
+  - side_effects
+  - risk_class
+  - success_evidence
+
+review_modes:
+  github_pr:
+    requires_pr_packet: true
+    required_fields:
+      - Verdict
+      - Review mode
+      - Review target
+      - Scope basis
+      - Coverage
+      - Confidence
+      - Session hygiene
+      - P0/P1 findings
+      - P2/P3 findings
+      - Strongest proof checked
+      - Variance ledger
+      - Pending Verification
+      - Would flip verdict if
+      - Next owner
+      - Plain-language summary
+      - Selected reviewer lenses
+      - Not loaded
+    finding_block:
+      required_when_formal_findings: true
+      first_content_prefix: "Finding P"
+      required_fields:
+        - Severity
+        - Confidence
+        - Category
+        - Location
+        - Target relevance
+        - Decision affected
+        - Problem
+        - Impact
+        - Evidence
+        - Fix shape
+    first_content_prefix: "Verdict:"
+    terminator: "Packet ends."
+    terminator_must_be_final: true
+  branch_local:
+    requires_pr_packet: false
+    required_fields:
+      - stable_target
+      - selected_lenses
+      - evidence
+      - findings
+      - confidence
+      - unresolved_central_proof
+      - next_owner
+  direct_sql:
+    requires_pr_packet: false
+    required_fields:
+      - named_stable_target
+      - selected_safety_lenses
+      - evidence
+      - findings
+      - production_applicability_map
+      - pending_verification
+
+evidence_response_packet:
+  purpose: parent_to_reviewer_reassessment
+  verdict_packet: false
+  first_content_prefix: "Evidence Response Packet:"
+  required_fields:
+    - Evidence Response Packet
+    - Original concern ID
+    - Emitting review target
+    - Evidence target
+    - Evidence lane
+    - Environment
+    - Safety boundary
+    - Result
+    - Artifact
+    - Raw artifact or transcript
+    - Redactions
+    - Remaining Pending Verification
+    - Reassessment request
+
+review_comments:
+  output_contracts:
+    - canonical packet with conditional review comments
+    - verdict-only canonical packet
+  default_policy: required_if_findings
+  section_heading: "Review comments:"
+  review_event_prefix: "Review event:"
+  unanchored_prefix: "Unanchored findings:"
+  comment_prefix: "Comment C-"
+  fixed_after: finding_blocks
+  # Closing boundaries for the review-comment section. The section must precede
+  # every present evidence boundary, not merely one later boundary.
+  fixed_before:
+    - "CI state:"
+    - "Variance ledger:"
+    - "Residual risk:"
+    - "Risk Evidence Handoff:"
+    - "Plain-language summary:"
+  # Variance ledger rows carry no repeated section label. Match only their
+  # canonical review-id shape so unrelated numbered prose cannot close the
+  # review-comment section accidentally.
+  fixed_before_patterns:
+    - '\A\d+\. review_id='
+  # Deterministic subset of docs/agents/pr-comment-conventions.md. Semantic
+  # shape remains reviewer-owned.
+  body_first_line_pattern: '\A`(issue|suggestion|question|todo|nitpick|note)\((blocking|non-blocking)\)`[[:space:]]+\S'
+  forbidden_body_patterns:
+    absolute_local_path: '(\A|[[:space:](`])/(home|Users|tmp|var)/'
+    file_url: "file://"
+    em_dash: "\u2014"
+  review_events:
+    - REQUEST_CHANGES
+    - COMMENT
+  body_transport: pipe_prefixed_literal
+  decoded_text: UTF-8
+  trailing_newline: clip
+  unprefixed_lines_forbidden: true
+  summary_literal_field: Summary
+  comment_fields:
+    - Finding
+    - Anchor JSON
+  comment_literal_field: Body
+
+closeout_categories:
+  - consequence_advisory
+  - simplification
+  - documentation_truth
+  - naming_readability
+
+verdicts:
+  - PASS
+  - PASS_WITH_FINDINGS
+  - FAIL
+  - BLOCKED

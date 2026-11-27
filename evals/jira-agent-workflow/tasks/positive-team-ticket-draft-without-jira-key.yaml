@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-team-ticket-draft-without-jira-key
+name: Positive - team ticket draft without Jira key
+description:
+  The skill should trigger when rough engineering work needs to become a team-standard ticket even before
+  an issue key exists.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Turn this production defect into a backlog Bug draft. Mark unknown reproduction and
+    owner details as TBC, show the complete ticket before filing it, and do not invent labels."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_team_ticket_draft_without_jira_key
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

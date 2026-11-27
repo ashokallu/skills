@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: readonly-data-access-positive-production-mongo-readonly
+name: Positive - Production Mongo readonly
+description: The skill should trigger for VPN-gated Production Mongo secondary reads and bounded XP comparison evidence.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use the example-app Production Mongo secondary to read mp.app_experience for a bounded XP comparison after checking VPN and without printing MIGRATION_JOB_MONGO_URI."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_production_mongo_readonly
+    type: trigger
+    config:
+      skill_path: .codex/skills/readonly-data-access/SKILL.md
+      mode: positive
+      threshold: 0.6

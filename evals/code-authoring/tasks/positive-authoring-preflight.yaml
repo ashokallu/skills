@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-authoring-preflight
+name: Positive - authoring preflight
+description: Final-shape readiness before handoff should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before opening this example-app code branch as a PR, run the code authoring preflight and coding task handoff checklist so we cover build/run proof, passing tests, instruction clarity, docs truth, structure/readability, test quality, maintenance posture, simplification, safety, and changed-line cleanup."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_preflight
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

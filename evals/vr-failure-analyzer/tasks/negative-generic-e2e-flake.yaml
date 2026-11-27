@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: vr-failure-analyzer-negative-generic-e2e-flake
+name: Negative - generic E2E flake
+description: Non-visual Playwright flake triage should route to the broader browser/E2E skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "An end-to-end login check timed out navigating to the dashboard and passed on retry. Use the trace to locate the timing issue and classify the flake."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_generic_e2e_flake
+    type: trigger
+    config:
+      skill_path: .codex/skills/vr-failure-analyzer/SKILL.md
+      mode: negative
+      threshold: 0.85

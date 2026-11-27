@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-waiting-obligation-closeout
+name: Behavior - waits end in evidence or explicit parking
+description: The dispatcher does not confuse a continuation packet or background process with active monitoring.
+tags: [behavior, routing, waiting, monitoring, ownership]
+inputs:
+  prompt: |
+    A example-app CI run is still running when the parent wait budget
+    expires. A background terminal exists, but the runtime has no proven wake
+    or recurring-monitoring mechanism. Explain the allowed closeout choices and
+    what the parent may tell the user. Do not poll CI or run commands.
+graders:
+  - name: wait_closeout_requires_terminal_evidence_or_accepted_park
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/waiting-obligation-closeout.md

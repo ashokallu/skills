@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-jira-bulk-comment-dry-run
+name: Positive - Jira bulk comment dry-run
+description: Bulk Jira writes should route to the Jira workflow skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Add the same release note comment to every Jira issue in this DEMO fix list, but first show an
+    itemized dry-run payload before applying it."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_jira_bulk_comment_dry_run
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

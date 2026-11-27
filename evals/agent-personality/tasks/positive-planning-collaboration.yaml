@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: agent-personality-positive-planning-collaboration
+name: Positive - planning collaboration tone
+description: The skill should trigger when a planning response needs strong user-facing collaboration, independent judgment, and tact.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Draft a high-touch user-facing planning response for a example-app refactor. Use warm directness, independent judgment, tact, and enough depth to challenge weak assumptions without sounding robotic."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_high_touch_planning
+    type: trigger
+    config:
+      skill_path: .codex/skills/agent-personality/SKILL.md
+      mode: positive
+      threshold: 0.55

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-api-auth-contract-lenses
+name: Positive - API auth contract lenses
+description: Stable review of API, requester, auth, and tenant changes should trigger reviewer.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a stable example-app diff after changed-file inventory shows backend/internal/content/controller.go, backend/internal/content/datasource.go, app/api/content.ts, and app/hooks/useContent.ts. The change moves the response envelope, changes pagination errors, and adds tenant-scoped permission checks. Select API contract, auth tenant, security, and tests lenses before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_reviewer_api_auth_contract_lenses
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

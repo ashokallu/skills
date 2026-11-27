@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-sql-production-scale-audit
+name: Positive - production-scale SQL audit review
+description: The reviewer skill should trigger for an SQL review focused on uncapped audit and reconciliation query risk.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a example-app PR after changed-file inventory shows backend/internal/shared/sql/queries/xp_import.sql. The diff adds an uncapped audit query with MATERIALIZED CTEs, GROUP BY over content_user_experience, and a FULL OUTER JOIN, while nearby validation queries have chunked ForUserChunk variants. Select the reviewer lenses and call out production-scale SQL safety risks."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_sql_production_scale_audit_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

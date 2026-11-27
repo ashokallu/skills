@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-final-adr-authoring-dispatch
+name: Positive - final ADR authoring dispatcher
+description: Writing a final ADR from an accepted decision should enter the workflow dispatcher without implying ADR research.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Write the final ADR for the already-approved lazy-loaded reviewer role decision using the accepted option and update docs/adrs."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_final_adr_authoring_dispatch
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.6

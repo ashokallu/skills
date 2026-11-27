@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-pre-mutation-performance
+name: Behavior - pre-mutation SQL performance gate
+description: Expensive SQL gates need largest-environment plan proof before a full mutation run.
+tags: [behavior, sql, performance, data-transition]
+inputs:
+  prompt: |
+    Independently review a PostgreSQL import job before Production execution.
+    Its final merge is chunked, but before the first target write one SQL
+    statement performs accounting over 8 million staged rows and 13,000
+    blockers. The statement contains a large CTE graph and four idempotent
+    INSERT ... ON CONFLICT evidence writes. It completed in Staging, where the
+    blocker count and relation shape were much smaller. In Production it timed
+    out twice at 20 and 40 minutes. The proposed rollout is to raise the
+    timeout and retry. No canonical read-only probe, Production winning plan,
+    generic-versus-custom-plan comparison, CTE materialization analysis,
+    phase cost model, or read-only/persistence equivalence test is supplied.
+
+    Return the complete Database review packet and verdict.
+graders:
+  - name: pre_mutation_performance_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/database-reviewer/graders/behavior_contract.py,
+          pre-mutation-performance,
+        ]

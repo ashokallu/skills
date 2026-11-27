@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-shared-git-guard
+name: Positive - Muse shared Git guard
+description: Muse managed-shell work in a linked worktree must use the outer guard that keeps the worktree Git pointer and shared Git common directory read-only.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "This example-app task explicitly needs two harnesses, Codex Desktop and Muse, for cross-harness review, a direct Muse call, collaboration wrapper/session routing, and an implementation handoff. Use Muse as the workhorse in a registered linked worktree. It needs managed shell for tests, but must not change the coordinating checkout's shared Git common-dir state. Use the non-privileged bundled Bubblewrap selector plus the outer Git guard and keep final Git validation with Codex Desktop."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_shared_git_guard
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

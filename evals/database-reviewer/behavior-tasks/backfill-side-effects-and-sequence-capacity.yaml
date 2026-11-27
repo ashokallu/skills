@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-backfill-side-effects-and-sequence-capacity
+name: Behavior - backfill amplification and sequence capacity
+description: Recall hidden per-row bulk side effects and identity exhaustion.
+tags: [behavior, backfill, triggers, capacity]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review conceptual target
+    `database-backfill-v2` against base `database-backfill-v1` without editing
+    files. Treat those immutable labels as the complete target/base identity:
+
+    - a job updates 100 million parent rows;
+    - each update fires a row trigger that inserts an audit row, recalculates a
+      generated value, and performs foreign-key checks with a possible cascade;
+    - validation used only a 100-row fixture and the rollout claims bounded WAL
+      and lock impact;
+    - the audit table uses a 32-bit identity whose current maximum is close to
+      its type ceiling, but no growth rate or exhaustion forecast is supplied.
+
+    Return the complete Database review packet and verdict.
+graders:
+  - name: backfill_amplification_and_sequence_capacity_contract
+    type: program
+    config:
+      command: python3
+      args: [evals/database-reviewer/graders/behavior_contract.py, backfill]

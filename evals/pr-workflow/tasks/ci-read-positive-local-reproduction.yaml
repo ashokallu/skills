@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-ci-read-local-reproduction
+name: Positive - local reproduction routes through umbrella
+description: Local reproduction should trigger the umbrella and route to the CI worktree lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The PR has a concrete failing Backend - Validate lane. Reproduce it locally in a disposable worktree and prepare a scoped fix."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_local_repro
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

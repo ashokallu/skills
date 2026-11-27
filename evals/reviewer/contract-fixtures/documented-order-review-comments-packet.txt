@@ -1,0 +1,70 @@
+Verdict: PASS_WITH_FINDINGS artifact: fixture packet for review-comment-contract regression, 1 P3 finding below
+Head alias: H=1111111111111111111111111111111111111111
+Review mode: FULL
+Review target: PR #1 example/repo, base main 2222222222222222222222222222222222222222, head 1111111111111111111111111111111111111111
+Scope basis: fixture intent; changed-file inventory from git diff in a fixture worktree; limit is static-only
+Coverage: reviewed in full at @H are app/example.ts:1-10 and app/example.spec.ts:1-20; sampled surfaces none
+Confidence: MEDIUM artifact: local file reads at @H; no command executed in this fixture
+Session hygiene: fresh reviewer session on a stable target; no contamination observed
+P0/P1 findings: 0
+P2/P3 findings: 1 (P3 example finding title)
+Strongest proof checked: app/example.ts:5@H
+Variance ledger: 1 review object enumerated below
+Pending Verification: (1) the fixture intentionally executes no validation
+Would flip verdict if: the documented packet section order or the transport boundary contract changes
+Next owner: parent artifact: the fixture has no live operator owner
+Finding P3: example finding title
+- Severity: P3
+- Confidence: MEDIUM
+- Category: correctness
+- Location: app/example.ts:5@H
+- Target relevance: The reviewed change introduces the guarded branch this finding depends on.
+- Decision affected: implementation correctness
+- Problem: The guard omits the tab form of the same input class at the reviewed head.
+- Impact: Callers receive structurally different output than the parallel renderer produces.
+- Evidence:
+  - app/example.ts:5@H handles only the space form.
+  - app/example.spec.ts:12@H locks the space case and has no tab case.
+- Fix shape: normalize the tab form beside the space form and add a spec case that asserts the corrected output at head.
+Review comments:
+Review event: COMMENT
+Unanchored findings: none
+Summary:
+  | Reviewed the fixture at the current head. Nothing here blocks merge.
+  |
+  | **Verdict**
+  |
+  | One non-blocking item below.
+  |
+  | **What I checked**
+  |
+  | - The guard and its spec coverage as one class rather than case by case.
+  |
+  | **Pending Verification**
+  |
+  | - This fixture executes no validation, so the numbers are not mine.
+Comment C-1:
+- Finding: 1
+- Anchor JSON: {"line":5,"path":"app/example.ts","side":"RIGHT","start_line":null,"start_side":null,"subject_type":"line"}
+- Body:
+  | `issue(non-blocking)` the guard misses the tab form
+  |
+  | **What happens:** the guard matches only the space form, so the tab form passes through untouched.
+  |
+  | **Why it matters:** the emitted structure diverges from what the parallel renderer produces.
+  |
+  | **Suggested fix:** normalize the tab form beside the space form so both collapse identically.
+  |
+  | **How to verify:** add a spec case whose input begins with a tab and assert the output.
+CI state:
+- Example Validate artifact: run_id=1, conclusion=success artifact: status=completed, head_sha=1111111111111111111111111111111111111111
+1. review_id=1, reviewer=example, submitted=2026-09-02T00:00:00Z, commit_oid=1111111111111111111111111111111111111111, disposition=out_of_scope
+Residual risk:
+- The fixture does not exercise runtime behavior and is not evidence about any real change.
+Plain-language summary:
+- This fixture follows the documented packet section order with review comments present, so it fails if the transport boundary and the documented order drift apart again.
+Selected reviewer lenses:
+- review-intent-understanding-lens.md: mandatory for a PR verdict; the fixture finding is retained.
+Not loaded:
+- migration-safety-lens.md: no SQL, schema, or migration surface exists in the fixture.
+Packet ends.

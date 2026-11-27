@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: connect-backend-services-positive-restart-dev-server
+name: Positive - restart connect-backend dev_server
+description: Managing connect-backend mp/dev_server processes should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Restart connect-backend for app-local auth. Check dev_server, stop stale make watch and yarn dev processes if needed, start server make watch and view_server yarn dev, then verify the logs."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_connect_backend_restart
+    type: trigger
+    config:
+      skill_path: .codex/skills/connect-backend-services/SKILL.md
+      mode: positive
+      threshold: 0.65

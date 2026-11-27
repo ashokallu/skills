@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-positive-pr-url-orientation
+name: Positive - PR URL orientation
+description: The skill should trigger when a example-app PR URL needs authenticated state and routing.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Here is a example-app GitHub PR URL. Parse the owner, repo, and PR number, read authenticated PR metadata, checks, and comments, then route to the right narrower skill."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_url_orientation
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

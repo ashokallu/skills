@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-safe-additive
+name: Behavior - bounded safe additive migration
+description: Preserve clean findings and lazy lane selection for a proven metadata-only change.
+tags: [behavior, safe-pattern, lazy-load]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review conceptual target
+    `safe-additive-v2` against base `safe-additive-v1` without editing files.
+    Treat those immutable labels as the complete target/base identity for this
+    scenario. The migration adds one nullable text column with no default to a
+    currently proven small table. Current PostgreSQL-version evidence says this
+    is metadata-only. Old and new binaries ignore or tolerate the column. The
+    paired down only drops the unused nullable column. No backfill, index, query,
+    sensitive data, or operator job changes. Return the complete Database review
+    packet and verdict.
+graders:
+  - name: safe_additive_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [evals/database-reviewer/graders/behavior_contract.py, safe-additive]

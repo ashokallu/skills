@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-backup-restore-review
+name: Positive - backup and restore safety review
+description: Read-only recovery review should trigger the database specialist.
+tags: [trigger, positive, backup, recovery]
+inputs:
+  prompt: "Independently review a stable example-app disaster-recovery plan that relies on PITR, key recovery, failover/failback, cross-shard consistency, deletion behavior after restore, and a measured RPO/RTO. Do not implement or run it."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_backup_restore_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.5

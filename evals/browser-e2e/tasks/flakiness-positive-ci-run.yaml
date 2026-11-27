@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: browser-e2e-positive-ci-run
+name: Positive - red E2E CI run
+description: The skill should trigger for a failing E2E GitHub Actions run that needs classification.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "This example-app e2e/pd GitHub Actions run is red. Pull the Playwright artifacts and classify each failing spec as regression, test bug, environment flake, infra outage, or snapshot drift."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_e2e_ci_triage
+    type: trigger
+    config:
+      skill_path: .codex/skills/browser-e2e/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-brokered-research
+name: Positive - Muse brokered research
+description: Current research delegated to Muse should keep source collection and network authority with Codex while Muse analyzes provenance-labelled bundles.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run a direct cross-harness Muse CLI research handoff for the expensive analysis in this current task. Codex should collect and timestamp the sources, pass provenance-labelled bundles to Muse, and keep native Muse web and unrestricted network disabled."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_brokered_research
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

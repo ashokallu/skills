@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-same-response-review-comments
+name: Behavior - ordinary reviewer returns comments with its first verdict
+description: A default whole-target ordinary review returns minimal review-comment data with findings without digest ceremony or a second turn.
+tags: [behavior, review, comments, economy, transport]
+inputs:
+  prompt: |
+    You are closing a default whole-target PR review with one anchored P1
+    finding and one unanchored P3 finding. The parent has not requested GitHub
+    publication. Explain the complete reviewer output contract, including when
+    `Review comments:` appears or is omitted, the only explicit verdict-only or
+    triage exception, and an enumeration of the `Review comments:` section's
+    exact minimal fields (`Review event`, `Unanchored findings`, `Summary`, and
+    each Comment's `Finding`, `Anchor JSON`, and `Body`). Also explain finding
+    coverage, event selection for P0/P1 and for P2/P3-only findings, ownership
+    of wording, whether a later
+    comment-only turn is required, whether the reviewer emits base64, byte
+    counts, or SHA-256 digests, and whether returning comments authorizes
+    publication. State the finding-bearing and clean-review branches and both
+    severity-event branches explicitly rather than leaving either implicit. Do
+    not review code or invent another finding.
+graders:
+  - name: ordinary_reviewer_same_response_comment_contract
+    type: program
+    config:
+      command: python3
+      args:
+        - evals/pr-workflow/graders/review_dispatch_economy_contract.py
+        - reviewer

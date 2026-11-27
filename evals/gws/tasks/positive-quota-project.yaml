@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: gws-positive-quota-project
+name: Positive - gws quota-project diagnosis
+description: The skill should trigger when diagnosing quota attribution by the gws CLI.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "The gws CLI returns a serviceusage.services.use 403 for its quota project even though the same
+    OAuth token works directly. Diagnose the difference."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_gws_quota_project
+    type: trigger
+    config:
+      skill_path: .codex/skills/gws/SKILL.md
+      mode: positive
+      threshold: 0.4

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-positive-branch-plan
+name: Positive - branch improvement plan
+description: Asking for a read-only branch audit and handoff plan should trigger improve.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use improve branch on the current example-app branch and produce a self-contained plan for any introduced issue, but do not edit code."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_branch_plan
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-case-study-transfer-immutable-closeout
+name: Behavior - case-study closeout cannot rewrite the beginning
+description: Later evidence attaches to frozen commitments instead of creating a convenient retrospective story.
+tags: [behavior, case-study, closeout, immutability]
+inputs:
+  prompt: |
+    Before evidence, the author froze this row:
+
+    `C1 | operational lesson=selected lanes need observable probes | task risk=the new retry path is only happy-path tested | changed decision/probe/stop=exercise cancellation before handoff | self-violation signature=calling the success test sufficient`
+
+    During implementation the author discovers a separate cache invalidation
+    risk that was not anticipated. At closeout it wants to rewrite C1 to be
+    about caches and add C2 claiming the cache lesson was embodied. Return the
+    correct disposition.
+graders:
+  - name: case_study_transfer_preserves_prospective_commitments
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response must not add or rewrite a commitment,
+        preserves C1's lesson, risk, promised probe, and self-violation
+        signature, and routes the newly discovered cache risk through normal
+        lane and variance handling. It may attach evidence and one allowed
+        status to C1 only after checking the promised cancellation probe. Fail
+        if it retroactively turns the cache discovery into a beginning lesson
+        or manufactures a successful mentorship story.

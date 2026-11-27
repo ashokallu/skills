@@ -118,7 +118,7 @@ Accepted `FULL` scope activates one additional beginning-to-middle admission
 condition for a separately assigned, newly admitted whole-target initial
 ordinary review. Before evidence-heavy analysis, the current reviewing session
 must read the live
-`docs/agents/pr-4713-review-thoroughness-case-study.md` through EOF, continuing
+`docs/agents/initial-review-thoroughness-primer.md` through EOF, continuing
 through every page or chunk, and privately record the immutable identity of the
 bytes read. Grep hits, excerpts, first-N-line peeks, summaries, injected
 context, memory, prior sessions, and another agent's read are not substitutes.

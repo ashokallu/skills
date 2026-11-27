@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-negative-smoke-setup
+name: Negative - smoke-test Jira and Confluence MCP setup
+description: Setup and smoke-test requests should not route to the reusable Confluence work skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt:
+    "Smoke-test the configured Jira and Confluence MCPs in Claude Code using Haiku 4.5 and report
+    which read tools work."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_atlassian_mcp_smoke_setup
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

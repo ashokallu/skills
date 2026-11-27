@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-re-review-rewrite-proof
+name: Behavior - re-review rewrite proof
+description: Squash rewrites require tree-equivalence proof and fresh target-bound evidence.
+tags: [behavior, re-review, rewrite, evidence]
+inputs:
+  prompt: |
+    Reviewer A resolved its scoped loop. The parent squashed the branch and
+    proved the old and new trees are equal. Existing CI, review threads, and
+    reviewer artifacts refer to the old SHAs. Explain the next review state and
+    whether the old evidence remains current.
+graders:
+  - name: rewrite_invalidates_sha_bound_evidence
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response requires tree-equivalence proof but still
+        invalidates old SHA-bound CI, thread, and reviewer evidence, then routes
+        the rewritten stable target to a fresh neutral full reviewer. Fail if
+        tree equality permits same-session scoped reuse or carries old target
+        evidence forward as current.

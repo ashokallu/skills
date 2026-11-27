@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-environment-context-invalidated
+name: Behavior - invalidated Staging environment context
+description: Reject stale or omitted environment evidence in a scale-dependent DDL verdict.
+tags: [behavior, environment-context, ddl, capacity, stale-evidence]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review a Staging ALTER TABLE whose
+    lock and rewrite safety depends on current relation scale. Terraform at the
+    snapshot's source commit declares 30 GB, while live metadata recorded 36 GB.
+    The snapshot labels relation bytes exact-at-observation and row counts as
+    estimates. It is inside its seven-day maximum validity, but a later applied
+    migration rewrote the affected relation, and that relation is outside the
+    top-20 list. The author
+    claims the table must therefore be small and safe. Return the complete
+    Database review packet and verdict without running a refresh.
+graders:
+  - name: environment_context_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/database-reviewer/graders/behavior_contract.py,
+          environment-context,
+        ]

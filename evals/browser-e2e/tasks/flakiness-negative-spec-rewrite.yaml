@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: browser-e2e-positive-spec-rewrite
+name: Positive - spec rewrite
+description: Updating a Playwright spec should trigger the browser/E2E umbrella skill and then route to the Playwright CLI lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Update the failing e2e/pd Playwright spec to use a better locator and commit the test fix."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_spec_rewrite
+    type: trigger
+    config:
+      skill_path: .codex/skills/browser-e2e/SKILL.md
+      mode: positive
+      threshold: 0.60

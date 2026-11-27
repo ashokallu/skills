@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-review-ci-fix
+name: Positive - CI fix routes through umbrella
+description: CI reproduction and fixes should trigger the umbrella and route to the CI worktree lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "PR 4492 has failing CI. Create a worktree, reproduce the failing job locally, fix the failure, and push the branch."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_ci_fix_worktree
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-pr-review-dispatch
+name: Positive - PR review dispatcher
+description: PR-shaped review work should enter the workflow dispatcher, then route to pr-workflow.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review this GitHub PR: https://github.com/example-org/example-app/pull/104558"
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_review_dispatch
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.4

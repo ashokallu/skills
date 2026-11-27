@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-forward-analysis-production-unblock
+name: Behavior - forward analysis rejects an unsupported Production unblock
+description: Workflow planning must prove downstream acceptance before spending another PR or Production run.
+tags: [behavior, forward-analysis, planning, production]
+inputs:
+  prompt: |
+    A migration change passed a functional Staging run for the newest policy
+    bucket. The team proposes one more PR and wants to call Production
+    unblocked. Production cardinality and concurrency, older runbook gates, and
+    the next materialization and validate phases have not been checked. Give
+    the planning decision before implementation or another environment run.
+graders:
+  - name: forward_analysis_production_unblock
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/forward-analysis-production-unblock.md

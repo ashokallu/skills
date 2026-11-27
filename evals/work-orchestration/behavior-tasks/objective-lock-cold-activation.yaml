@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-objective-lock-cold-activation
+name: Behavior - raw authority change locks intent before solution challenge
+description: A cold source-authority request with unresolved safety semantics must enter the owner contract before solution work.
+tags: [behavior, objective-lock, cold-start, source-authority]
+inputs:
+  prompt: |
+    Change the existing XP read path so Postgres becomes primary. Keep Mongo
+    involved as a safety net, and do the safest thing whenever the stores
+    disagree. Start by challenging the direction and preparing implementation.
+    Do not inspect files, run commands, load implementation playbooks, or edit;
+    explain only the first workflow decision and its stop condition.
+graders:
+  - name: objective_lock_response_is_schema_only
+    type: text
+    config:
+      regex_match:
+        - "Objective-lock first response:"
+        - "(?i)Mongo.*exact role unresolved"
+        - "- stop condition: every material pending row resolved by its owner or evidence"
+      regex_not_match:
+        - "(?i)\\b(I recommend|we recommend|preferred option|best option|safer than|should choose|must choose)\\b"
+        - "(?i)\\b(first safe step|safe next step|safest route|right first stop)\\b"
+  - name: raw_contract_change_activates_objective_lock_first
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/objective-lock-cold-activation.md

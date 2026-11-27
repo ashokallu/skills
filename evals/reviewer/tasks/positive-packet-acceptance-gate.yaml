@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-packet-acceptance-gate
+name: Positive - review packet acceptance gate
+description: The reviewer skill should trigger when the parent needs to reject an invalid reviewer packet and request missing FULL mode, lenses, or REH rows.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app reviewer returned PASS_WITH_FINDINGS on a production blast-radius SQL import PR, but the packet used STANDARD mode, did not list selected lenses, and has a P1 without an REH-n Risk Evidence Handoff row. Use the reviewer workflow to reject the packet and request a corrected review."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_packet_acceptance_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

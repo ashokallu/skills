@@ -1,0 +1,40 @@
+{
+  "expect_pass": true,
+  "options": {
+    "require_modes": ["code-authoring", "validation", "reviewer"]
+  },
+  "transcript": [
+    {
+      "type": "tool.execution_start",
+      "tool_name": "skill",
+      "arguments": { "skill": "work-orchestration" }
+    },
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: defect\nRoute/mode: code-authoring; edit\nRoute rationale: code authoring owns the requested product fix\nWork ownership: parent-only: no net-positive child identified\nTarget: target.go\nSide effects: local repository edits and focused validation\nRisk: medium\nProof/evidence: stable reviewed candidate\nNext checkpoint: stable candidate"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "target.go" }
+    },
+    {
+      "type": "assistant.message",
+      "content": "Route/mode: validation; validate\nNext checkpoint: focused check"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "bash",
+      "arguments": { "command": "focused-check" }
+    },
+    {
+      "type": "assistant.message",
+      "content": "Route/mode: reviewer; review\nNext checkpoint: findings-first verdict"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "final.diff" }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-orchestration-conformance-pre-code
+name: Behavior - author blocks edits without current orchestration conformance
+description: Authoring must not begin from critic approval that lacks current-source workflow conformance.
+tags: [behavior, authoring, orchestration-conformance, objective-lock, critic]
+inputs:
+  prompt: |
+    Use code-authoring's code-change intake for a parent-authored
+    reliability fix. The critic said the plan looks technically sound, but the
+    handoff has no orchestration conformance attestation, no objective-lock
+    result, and no forward-analysis result. This is missing decision substance,
+    not merely a missing heading. The parent says those checks were probably
+    done earlier and asks you to start editing now.
+
+    Give the code-change intake decision and one batched next action. Do not ask
+    for governing-source paths or hashes.
+graders:
+  - name: missing_conformance_blocks_meaningful_edits
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/code-authoring/rubrics/orchestration-conformance-pre-code.md

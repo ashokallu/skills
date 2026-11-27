@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-targeted-followup-lineage-circuit-breaker
+name: Behavior - targeted follow-up lineage circuit breaker
+description: Repeated same-boundary failures must stop redispatch without losing semantic lineage history.
+tags: [behavior, re-review, circuit-breaker, lineage]
+inputs:
+  prompt: |
+    A reused reviewer reports REMAINS for boundary `timeout-cleanup` at H1.
+    Validation then fails because the test runner is unavailable. At H2 the
+    author renames the boundary `detached-finalization`, but the reviewer proves
+    the same canceled-context cleanup invariant REGRESSED. A separate new issue
+    is outside the impact cone. What does the append-only ledger record, and
+    what may the parent dispatch next? Cover both an adequate recovery artifact
+    and a case where focused proof cannot be obtained.
+graders:
+  - name: same_boundary_history_cannot_be_evaded
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response keeps both names in one semantic boundary
+        lineage, counts REMAINS and REGRESSED as two same-boundary failures,
+        does not count runner unavailability, and transitions to
+        AUTHORING_RESET_REQUIRED with no automatic reviewer redispatch. It must
+        route the outside-cone issue independently and choose broad review only
+        when the cone or domains expand. Adequate recovery must include a
+        rebuilt failure model, bounded sibling-path search, focused proof,
+        complete accepted-finding batch, and explicit classification; any new
+        targeted request keeps the non-resetting count. If proof is unavailable,
+        the result is Pending Verification plus blocked or owner escalation,
+        not another review call.

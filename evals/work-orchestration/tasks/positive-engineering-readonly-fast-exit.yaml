@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-engineering-readonly-fast-exit
+name: Positive - engineering readonly fast-exit
+description: Read-only repo summarization should enter the workflow dispatcher and fast-exit or route without loading the engineering-judgment lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Read the active PR description and summarize the user-visible change without editing any files."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_engineering_readonly_fast_exit
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.6

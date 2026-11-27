@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-concrete-rollout-plan
+name: Positive - concrete database rollout plan
+description: A stable runbook that claims readiness for live database work requires the database specialist.
+tags: [trigger, positive, planning, operations]
+inputs:
+  prompt: "Review this finalized example-app runbook as a read-only database safety gate. It approves an online index build and production backfill, specifies a maintenance window and abort threshold, and claims the rollout is ready. Do not edit it."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_concrete_database_rollout_plan
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.5

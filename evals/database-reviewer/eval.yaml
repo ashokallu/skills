@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/eval.schema.json
+name: database-reviewer-trigger-eval
+description: Trigger regression checks for the example-app database-reviewer skill.
+skill: database-reviewer
+version: "0.1"
+
+config:
+  trials_per_task: 1
+  timeout_seconds: 120
+  parallel: false
+  executor: mock
+  model: mock-trigger-grader
+  skill_directories:
+    - ../../.codex/skills
+
+metrics:
+  - name: trigger_precision
+    weight: 1
+    threshold: 0.8
+    description: The skill should trigger for read-only Postgres migration safety review, not for writing migrations or fixing sqlc code.
+
+tasks:
+  - tasks/*.yaml

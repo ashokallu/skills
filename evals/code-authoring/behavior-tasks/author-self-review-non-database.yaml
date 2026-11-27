@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-author-self-review-non-database
+name: Behavior - author self-review delta and fix loop
+description: Author self-review adds only undispositioned reviewer probes and refreshes stale proof after a material fix.
+tags: [behavior, self-review, review-readiness, efficiency]
+inputs:
+  prompt: |
+    You authored a substantive Go handler change. Mandatory authoring closeout
+    is complete for commit H0 and an independent reviewer is required before
+    publication. The authoring handoff already covers callers, API behavior,
+    error paths, focused tests, documentation truth, validation, and remaining
+    Pending Verification. Apply the final author self-review gate.
+
+    A reviewer resilience lens exposes one undispositioned probe: the new
+    fallback returns success after a dependency timeout. You fix it so the
+    timeout propagates and update the focused test, producing H1. Describe the
+    required delta and whether independent dispatch may proceed.
+graders:
+  - name: author_self_review_delta_and_fix_recompute
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response admits author self-review for this stable,
+        agent-authored, independent-review-bound target; selects the resilience
+        reviewer lens as a preventive probe without assuming reviewer role;
+        records only the undispositioned timeout probe and its fix instead of
+        copying unchanged coverage, variance, validation, or Pending
+        Verification ledgers; identifies H1 as the new exact target; reruns the
+        affected authoring/preflight rows and material validation before
+        recomputing the delta; and allows dispatch only after those artifacts
+        and fresh-context isolation are proved. Fail if it emits severity,
+        confidence, PASS/BLOCKED/NEEDS_INPUT, Verdict, or a review packet.

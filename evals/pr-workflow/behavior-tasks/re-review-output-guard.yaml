@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-re-review-output-guard
+name: Behavior - re-review output guard
+description: Compact output must remain non-parser, provenance-bound, and finding-complete.
+tags: [behavior, re-review, output, parser]
+inputs:
+  prompt: |
+    Draft the compact result for exact reviewer session r-7 checking H0..H1.
+    F1 remains because the fix does not address its cancellation mechanism.
+    Include the fields and detail required by the re-review contract.
+graders:
+  - name: compact_output_is_non_signoff_and_complete
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response begins `Re-review result: NEEDS_CHANGES`,
+        includes exact session provenance, H0, H1, fix range and ancestry,
+        scope, impact cone, closure proof, expansion probes, F1 disposition,
+        validation, escalation, and exactly `Whole-PR signoff: not granted`.
+        F1 must retain severity/confidence, location, mechanism, impact,
+        evidence, correction direction, and focused verification. Fail if the
+        response contains a line beginning `Verdict:`, `Packet ends.`, a PASS,
+        readiness/approval claim, or omits provenance or ancestry.

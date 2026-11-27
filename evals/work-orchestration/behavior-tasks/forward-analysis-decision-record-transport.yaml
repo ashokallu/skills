@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-forward-analysis-decision-record-transport
+name: Behavior - forward analysis exposes one record and briefs a fresh critic
+description: Material planning remains steerable while critic transport stays compact and decision-focused.
+tags: [behavior, forward-analysis, planning, critic, handoff]
+inputs:
+  prompt: |
+    We want to change a shared agent workflow so authors expose the reasoning
+    basis for material plans before a fresh critic reviews them. This could
+    change future planning, review, and CI behavior across the repository.
+
+    Prepare the planning decision and the critic consultation brief now. Give me
+    enough visibility to steer a misunderstood plan, but do not expose hidden
+    chain-of-thought or raw scratchpad. The critic will start in a separate
+    session with no access to this conversation. Do not duplicate the full
+    decision record inside the critic brief or add governing-source paths and
+    hashes. Do not edit files, run a paid evaluation, or start the critic.
+graders:
+  - name: forward_analysis_decision_record_transport
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/forward-analysis-decision-record-transport.md

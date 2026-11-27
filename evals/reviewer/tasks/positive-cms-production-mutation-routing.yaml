@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-cms-production-mutation-routing
+name: Positive - CMS production mutation routing
+description: Concrete reviewer routing for production Sanity dataset mutation evidence should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a stable example-app PR after changed-file inventory shows app/sanity/migrations/publishCourse.ts, app/sanity.types.ts, backend/internal/content/webhook.go, and docs/runbooks/sanity-content-migration.md. The change adds a Sanity production dataset bulk patch, dry-run report, backup and rollback notes, and webhook cache invalidation. Select reviewer lenses for CMS/Sanity, security/privacy, tests, observability/ops, and production blast-radius evidence before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_cms_production_mutation_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

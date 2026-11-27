@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-negative-ordinary-fix-plan
+name: Negative - ordinary fix plan
+description: A concrete bug-fix plan should stay with the normal work orchestration lanes.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Plan the smallest safe code fix for the failing learner-progress handler, then wait for approval before editing."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_ordinary_fix_plan
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: negative
+      threshold: 0.7

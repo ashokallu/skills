@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: claude-code-configuration-positive-existing-setup-validate
+name: Positive - validate existing Claude Code setup
+description: The skill should trigger when Claude Code is already installed and the user wants the agent to validate instead of reinstalling.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "I already have Claude Code and .claude/settings.local.json set up on local-dev-reference. Check that everything is configured correctly, run claude doctor if my token is real, and report the current state without reinstalling or overwriting anything."
+expected:
+  should_trigger: true
+graders:
+  - name: agents_skill_should_trigger_existing_setup
+    type: trigger
+    config:
+      skill_path: .agents/skills/claude-code-configuration/SKILL.md
+      mode: positive
+      threshold: 0.6
+  - name: claude_skill_should_trigger_existing_setup
+    type: trigger
+    config:
+      skill_path: .claude/skills/claude-code-configuration/SKILL.md
+      mode: positive
+      threshold: 0.6

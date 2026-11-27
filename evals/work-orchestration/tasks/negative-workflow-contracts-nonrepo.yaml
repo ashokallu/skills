@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-negative-workflow-contracts-nonrepo
+name: Negative - non-repo scaffold packet
+description: Generic scaffold or packet wording outside example-app repo work should not trigger the dispatcher.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Create an event-team handoff packet for a generic marketing campaign, with sections for owner, current state, risks, evidence, and next actions. This is not for software repository work."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_nonrepo_workflow_contracts
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: negative
+      threshold: 0.8

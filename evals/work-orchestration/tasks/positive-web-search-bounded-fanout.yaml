@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-web-search-bounded-fanout
+name: Positive - bounded cross-source search fanout
+description: Cross-platform current sentiment research should trigger the dispatcher that selects and joins bounded search arms.
+tags: [trigger, positive, web-search, fanout]
+inputs:
+  prompt: "Compare current sentiment across X, Reddit, and the broader web for an application dependency; use exact sources and explain conflicting evidence."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_work_orchestration_for_cross_source_fanout
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.35

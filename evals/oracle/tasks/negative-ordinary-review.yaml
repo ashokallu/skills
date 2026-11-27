@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: oracle-negative-ordinary-review
+name: Negative - ordinary local review
+description: Ordinary local code review should not trigger Oracle unless a second-model browser review is requested.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Review the local example-app diff yourself and report bugs, regressions, and missing tests. Do not use an external second model."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_local_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/oracle/SKILL.md
+      mode: negative
+      threshold: 0.75

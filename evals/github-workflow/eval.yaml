@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/eval.schema.json
+name: github-workflow-trigger-eval
+description: Trigger regression checks for authenticated GitHub PR reads, operations, and gh fallback routing.
+skill: github-workflow
+version: "0.1"
+
+config:
+  trials_per_task: 1
+  timeout_seconds: 120
+  parallel: false
+  executor: mock
+  model: mock-trigger-grader
+  skill_directories:
+    - ../../.codex/skills
+
+metrics:
+  - name: trigger_precision
+    weight: 1
+    threshold: 0.8
+    description: The skill should trigger for authenticated GitHub read/write/auth primitives, not local reproduction, PR publication, or PR workflow execution lanes.
+
+tasks:
+  - tasks/*.yaml

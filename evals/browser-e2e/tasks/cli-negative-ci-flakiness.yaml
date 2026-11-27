@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: browser-e2e-positive-ci-flakiness-from-cli
+name: Positive - E2E CI flakiness triage
+description: Read-only CI flakiness classification should trigger the browser/E2E umbrella skill and then route to the flakiness lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app Playwright GitHub Actions run failed and then passed on retry. Classify whether it is a regression, test bug, or environmental flake."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_ci_flakiness
+    type: trigger
+    config:
+      skill_path: .codex/skills/browser-e2e/SKILL.md
+      mode: positive
+      threshold: 0.75

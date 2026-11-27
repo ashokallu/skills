@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-pr-phase-return
+name: Positive - PR phase return
+description: Long-running implementation that ends in PR publication should trigger the PR workflow publication lane before reviewer-facing metadata is written.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The implementation is done after a long session. Now push it and create the GitHub PR with the right example-app title, body, reviewer guide, dependencies, risks, and verification sections."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_phase_return
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

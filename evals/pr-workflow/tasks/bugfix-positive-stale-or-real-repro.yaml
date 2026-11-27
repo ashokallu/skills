@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-stale-or-real-repro
+name: Positive - stale or real bug triage
+description: The skill should trigger when a PR bug report may need local reproduction to decide whether it is still real.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "This example-app PR says it fixes a regression from a linked issue, but the discussion may be stale. Check whether the bug still exists on the PR/current code and use local dev repro if needed."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_stale_or_real_repro
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

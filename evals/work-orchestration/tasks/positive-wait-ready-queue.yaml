@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-wait-ready-queue
+name: Positive - wait ready-queue scan
+description: A bounded wait should delegate monitoring and start already identified independent work without inventing tangents.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "While example-app CI is running, scan the existing routing ledger for ready independent work, delegate the bounded watch if useful, and state why any remaining work must wait. Do not invent a new task just to look busy."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_work_conserving_wait
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

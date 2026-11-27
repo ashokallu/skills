@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-case-study-transfer-transport-boundaries
+name: Behavior - case-study transfer respects transport boundaries
+description: Optional narratives and strict packets do not inherit the interactive transfer trace.
+tags: [behavior, case-study, transport, packet]
+inputs:
+  prompt: |
+    A headless one-response authoring run read an optional forward-analysis
+    narrative for extra context and completed a private transfer preflight for
+    its mandatory agreement study. Its next consumer accepts only a strict
+    parser-facing review packet. Decide where the optional read acknowledgement,
+    beginning rows, material updates, and closeout reconciliation belong.
+graders:
+  - name: case_study_transfer_preserves_packet_and_optional_boundaries
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if optional narrative provenance or acknowledgement is not
+        emitted, the transfer trace remains private or parent-facing in the
+        headless run, and beginning, middle, and closeout trace text must not
+        enter the strict packet. Verdict-relevant consequences may use only
+        fields already allowed by the packet contract. Fail if the response
+        adds packet fields, prepends or appends prose, or requires optional
+        case-study recital.

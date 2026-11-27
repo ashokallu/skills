@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-sharding-distribution
+name: Positive - sharding and distribution review
+description: Shard routing, distributed uniqueness, and partial-fleet rollout require the database specialist.
+tags: [trigger, positive, sharding, distribution]
+inputs:
+  prompt: "Independently review a stable example-app database design that introduces tenant sharding, local unique constraints, cross-shard pagination, and a partial-fleet resharding rollout. Return a read-only safety verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_sharding_and_distribution
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.5

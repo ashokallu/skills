@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-validation-truth-vs-mutation
+name: Behavior - validation truth differs from mutation eligibility
+description: Detect false-clean parity caused by reusing write freshness predicates.
+tags: [behavior, sql, parity, regression]
+inputs:
+  prompt: |
+    Independently review a data-movement change. Apply intentionally refuses to
+    overwrite a target whose version timestamp is newer than the source.
+    Validate re-reads the source and reports parity, but its target-only and
+    amount-mismatch queries reuse the same source-newer predicate and exclude
+    NULL target timestamps. The newer target is a safe reason not to overwrite,
+    but it must remain visible as an explained validation difference. A
+    preflight delete count can be zero while
+    concurrent writes add candidates before the transaction. The transaction
+    rolls back when affected rows exceed a threshold, and the design claims
+    that rollback makes the operation operationally bounded even though
+    candidate selection and locking before that check have no cap. Return a
+    complete Database review verdict.
+graders:
+  - name: validation_truth_and_authoritative_mutation_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [evals/database-reviewer/graders/behavior_contract.py, validation-truth]

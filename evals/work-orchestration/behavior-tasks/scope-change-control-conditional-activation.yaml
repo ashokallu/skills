@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-scope-change-control-conditional-activation
+name: Behavior - classify material scope deltas only after a phase starts
+description: The dispatcher separates initial ambiguity, in-scope detail, material mid-phase deltas, objective changes, and tangents.
+tags: [behavior, routing, scope, proportionality]
+inputs:
+  prompt: |
+    Compare the next workflow route for these example-app situations. Do not
+    inspect files or execute work; explain only the route and stop condition.
+
+    A. Before implementation starts, "update this workflow" could mean either
+       a local documentation edit or a Production default change.
+    B. During an already accepted implementation phase, source inspection shows
+       one additional generated consumer must change for the accepted behavior
+       to remain compatible.
+    C. During that phase, a new suggestion would change the owner-approved
+       Production default and fallback semantics.
+    D. During that phase, the user asks an unrelated question and intends to
+       return to the unfinished implementation afterward.
+
+    Explain whether scope-change-control activates in each case, what it may
+    decide, and which owner receives the result. Also state how the workflow
+    treats ordinary implementation details, optional cleanup, an already-known
+    broad initiative, and any authority that scope-change-control does not
+    possess.
+graders:
+  - name: scope_change_control_is_mid_phase_and_non_circular
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/scope-change-control-conditional-activation.md

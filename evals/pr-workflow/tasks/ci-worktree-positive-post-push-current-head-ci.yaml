@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-post-push-current-head-ci
+name: Positive - post-push current-head CI follow-up
+description: The skill should trigger when a pushed PR still has pending or failing current-head CI that needs watch-or-fix follow-through.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "I pushed the PR branch but its current-head required checks are still running and one may have failed. Watch the live PR CI, inspect logs if it fails, fix the proven issue, and do not sign off until the new head is green."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_post_push_current_head_ci
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

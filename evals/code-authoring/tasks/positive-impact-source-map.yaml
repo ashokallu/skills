@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-impact-source-map
+name: Positive - impact and source map
+description: Cross-stack or source-truth-dependent implementation work should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before implementing this example-app change from a Sentry issue and a framework behavior claim, map the changed symbol's callers and tests, verify the repo-pinned version plus official docs, and mark any deployed-code or source gaps Pending Verification."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_impact_source_map
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

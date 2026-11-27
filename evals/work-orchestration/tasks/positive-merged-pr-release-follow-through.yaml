@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-merged-pr-release-follow-through
+name: Positive - merged PR release follow-through
+description: A recently merged example-app PR should trigger release ancestry and live Cloud Run synchronization before environment-dependent next steps.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The example-app PR we just finished is merged. Before planning the next Staging step, fetch origin/main, find the latest published release, prove whether it contains the PR, and verify the relevant Cloud Run service or job commit, image, readiness, and traffic. Distinguish a normal tagged release from a manual branch deploy."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_merged_pr_release_follow_through
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.6

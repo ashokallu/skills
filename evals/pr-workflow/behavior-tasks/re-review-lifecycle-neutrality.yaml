@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-re-review-lifecycle-neutrality
+name: Behavior - re-review lifecycle neutrality
+description: A resolved compact result must route through stabilization to a neutral full reviewer before signoff.
+tags: [behavior, re-review, lifecycle, neutrality]
+inputs:
+  prompt: |
+    Exact reviewer A returned a clean scoped result for its own fixes. Describe
+    the next review states and the prompt for reviewer B. The parent wants to
+    tell B that this is the final pass and summarize A's resolved findings.
+graders:
+  - name: resolved_scoped_result_routes_to_neutral_full_review
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response says A's compact result is non-signoff,
+        retires A after stabilization, and dispatches fresh whole-PR reviewer B
+        with no prior findings, focus hints, `final`/completion label, or expected
+        verdict. Only B's canonical packet bound to the exact stable current
+        target may be terminal evidence. Fail if A's result closes the review.

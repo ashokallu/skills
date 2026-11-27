@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-pr-comment-code-fix
+name: Positive - PR comment code fix phase
+description: After PR comment triage accepts backend code/test changes, code-authoring should own the implementation phase.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Implement the accepted Copilot review fixes for a example-app backend Go PR. The live-thread triage and PR worktree setup are already complete. Change datasource.go and testutil.go only as needed, preserve the datasource contract, map the code-change todos before editing, and add focused regression tests for the accepted backend implementation change."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_for_pr_comment_code_fix_phase
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.7

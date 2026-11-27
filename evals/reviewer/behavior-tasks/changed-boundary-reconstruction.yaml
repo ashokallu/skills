@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-changed-boundary-reconstruction
+name: Behavior - independent changed-boundary reconstruction
+description: Reviewer residual analysis must find config-presence, SQL-cardinality, and cleanup-context defects independently.
+tags: [behavior, config, sql, transactions, residual-review]
+inputs:
+  prompt: |
+    Review this stable example-app backend diff independently. Do not rely on
+    an author checklist or prior comments. The central state-machine tests pass.
+
+    ```go
+    fs.Int64Var(&cfg.maxRows, "max-rows", 0, "maximum rows")
+    if cfg.maxRows != 0 {
+        rejectCapOutsideMode()
+    }
+    ```
+
+    ```sql
+    SELECT array_agg(claim.category_id)
+    FROM running_claims AS claim
+    JOIN requested_rows AS requested
+      ON requested.user_id = claim.user_id
+     AND requested.category_id = claim.category_id;
+    ```
+
+    ```go
+    defer func() {
+        _ = tx.Rollback(context.WithoutCancel(ctx))
+    }()
+    ```
+
+    The product expects one logical claim per user/category, but stale duplicate
+    physical rows are possible and the SQL is intended to tolerate them. Return
+    the material findings from the independent residual pass.
+graders:
+  - name: changed_boundary_reviewer_detection
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response reports all three material defect classes as
+        concrete findings or explicit blockers, not as generic checklist prose:
+        (1) parsed maxRows cannot distinguish omitted from explicitly supplied
+        zero, allowing presence-based validation to be bypassed; (2) duplicate
+        physical claim rows can duplicate array_agg output unless the query
+        proves uniqueness or deduplicates by the logical key; (3)
+        context.WithoutCancel removes caller cancellation/deadline but provides
+        no bound, so rollback can hang and strand pooled transaction state
+        without a fresh narrow timeout. The response must identify targeted
+        boundary tests or exact source proof for each and must not treat passing
+        central happy-path tests as sufficient.

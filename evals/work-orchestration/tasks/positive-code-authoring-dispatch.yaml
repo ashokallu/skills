@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-code-authoring-dispatch
+name: Positive - code authoring dispatch
+description: The umbrella should trigger first for repo work and dispatch code writing phases to code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Go ahead and implement the example-app backend cleanup, but show me the selected workflow lane and route code hygiene through code-authoring before editing."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_work_orchestration_code_authoring_dispatch
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.7

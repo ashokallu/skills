@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-workflow-explanation
+name: Positive - workflow explanation for PR review
+description: Asking for the full step-by-step PR review workflow should trigger the PR review worktree skill even without an actual PR URL.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "If I share you a GitHub PR link and ask you to review it, share me the full workflow step by step you are going to do by explaining the rationale for the step by citing the source of instruction in the project's instructions and skill files."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_review_workflow_explanation
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

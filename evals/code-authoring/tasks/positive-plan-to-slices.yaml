@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-plan-to-slices
+name: Positive - broad plan to slices
+description: Broad code work that needs reviewable vertical slices should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use code-authoring's plan-to-slices lane for a reviewable learner-progress cleanup across backend, frontend, tests, and rollout docs. Break it into vertical slices before coding."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_plan_to_slices_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

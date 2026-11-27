@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-council-pr-review
+name: Positive - explicit council review
+description: The skill should trigger when the user explicitly asks for a multi-harness council review of the same PR or artifact.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Get the PR review from all four cross-harness-workflow council members: Claude, Codex Review, Grok, and Muse. Keep each review read-only and write outputs under tmp/council-pr-4558."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_explicit_council_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

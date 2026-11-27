@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-negative-muse-silent-default
+name: Negative - no silent Muse default
+description: A request to conserve parent-model usage without selecting an external harness should stay with generic delegation and must not silently choose Muse.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Conserve reasoning budget on this implementation by using ordinary in-house subagents. Stay within normal local delegation."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_a_silent_muse_default
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: negative
+      threshold: 0.7

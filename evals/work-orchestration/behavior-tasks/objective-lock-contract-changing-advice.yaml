@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-objective-lock-contract-changing-advice
+name: Behavior - contract-changing review advice returns to the owner
+description: A related reviewer suggestion must not silently redefine a locked source-of-truth contract.
+tags: [behavior, objective-lock, scope, review]
+inputs:
+  prompt: |
+    We agreed that enabling a flag makes Postgres the XP source for an existing
+    endpoint while unrelated Mongo-backed fields stay unchanged. A reviewer now
+    recommends synchronously reading Mongo on every request and returning an
+    error whenever Mongo disagrees with Postgres. Treat the reviewer as
+    advisory and explain the next workflow action before editing.
+graders:
+  - name: contract_changing_advice_returns_to_objective_owner
+    type: text
+    config:
+      regex_match:
+        - "objective-lock"
+        - "(?i)intent owner|owner decision|owner explicitly"
+      regex_not_match:
+        - "(?i)next workflow action:.*idea-challenge"
+        - "(?i)belongs as an asynchronous|if we still want extra safety"
+  - name: contract_changing_advice_requires_owner
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/objective-lock-contract-changing-advice.md

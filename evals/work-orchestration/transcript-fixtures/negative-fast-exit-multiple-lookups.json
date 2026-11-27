@@ -1,0 +1,21 @@
+{
+  "expect_pass": false,
+  "expected_error": "fast-exit permits exactly one bounded lookup",
+  "options": {},
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification: fast-exit; investigation; read-only; no repository or external mutation"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "first.go" }
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "second.go" }
+    }
+  ]
+}

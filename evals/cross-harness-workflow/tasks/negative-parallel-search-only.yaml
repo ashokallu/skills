@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-negative-parallel-search-only
+name: Negative - parent-native Parallel Search only
+description: A broad-web request explicitly limited to parent-native Parallel Search should not trigger cross-harness collaboration.
+tags: [trigger, negative, web-search, parallel]
+inputs:
+  prompt: "Use the configured Parallel Search MCP to find broad current primary sources for example-app."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_cross_harness_for_parallel_only
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: negative
+      threshold: 0.7

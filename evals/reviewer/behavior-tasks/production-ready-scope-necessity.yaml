@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-production-ready-scope-necessity
+name: Behavior - reviewer challenges speculative production machinery
+description: Reviewers must assess whether durable mechanisms are necessary, not only whether they are internally correct.
+tags: [behavior, scope, production-readiness, reviewer]
+inputs:
+  prompt: |
+    Review a stable target whose requested outcome is to retain sampled
+    mismatch evidence without changing the API response. Its protected
+    invariant is "at most one current mismatch row per user," but the acceptance
+    criteria do not require a uniqueness constraint. Current source evidence
+    proves two concurrent upserts can both insert a current row because no
+    uniqueness constraint exists. The diff adds that constraint plus episode
+    history, automatic resolution, recurrence windows, cleanup jobs, rollback
+    coordination state, and decommission workflows. The lifecycle mechanisms
+    are well tested but absent from the acceptance criteria and mandatory
+    current contracts. Return the scope portion of the review decision.
+graders:
+  - name: production_ready_scope_necessity
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the reviewer states the requested outcome, required
+        mechanisms, speculative mechanisms, and a disposition, and reports a
+        scope finding or plan reset instead of approving the oversized design
+        because tests pass. It must explicitly classify the uniqueness
+        constraint as protective, cite the named at-most-one-current-row
+        invariant and concurrent-upsert causal evidence, and keep the
+        constraint without inventing an acceptance criterion. It must defer or
+        remove unsupported lifecycle machinery and avoid case-study citations
+        or read acknowledgements.

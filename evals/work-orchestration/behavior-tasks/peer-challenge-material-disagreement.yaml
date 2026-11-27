@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-peer-challenge-material-disagreement
+name: Behavior - resolve a material specialist disagreement without hierarchy
+description: A parent must preserve specialist ownership while bounding evidence-led disagreement.
+tags: [behavior, collaboration, conflict-resolution, verdict]
+inputs:
+  prompt: |
+    An ordinary reviewer says a retry loop can double-submit work. The database
+    reviewer says the transaction boundary prevents the duplicate. The parent
+    wants to choose the stricter verdict immediately or ask a third agent to
+    vote. The target commit and active objective have not changed. Explain the
+    workflow action and termination rule.
+graders:
+  - name: peer_challenge_preserves_roles_and_terminates
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/peer-challenge-material-disagreement.md

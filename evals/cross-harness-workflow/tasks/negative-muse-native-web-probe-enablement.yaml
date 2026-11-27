@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-negative-muse-native-web-probe-enablement
+name: Negative - Muse web probe is not authority
+description: Merely mentioning a successful future Muse web probe must not select cross-harness Muse work or grant network authority without an explicit Muse task.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Record that a future local CLI probe might expose a web tool. Do not use Muse or delegate this task, and do not enable any network-capable profile."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_or_enable_muse_from_probe_evidence
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: negative
+      threshold: 0.7

@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-planning-philosophy-structural-transfer
+name: Behavior - planning philosophy transfers structure beyond named examples
+description: An unfamiliar multi-actor remediation proposal is translated into a changed decision, reversing condition, and observable falsifier.
+tags: [behavior, planning, philosophy, extrapolation, coordination]
+inputs:
+  prompt: |
+    Several services are about to react independently whenever shared request
+    latency rises. One will increase concurrency, another will restart a
+    dependency, and a third will shift traffic. Each reaction improved its own
+    isolated test, but nobody has mapped their combined actions, timing, or
+    shared state. The team proposes enabling all reactions fleet-wide. Give the
+    planning decision before implementation, using ordinary engineering
+    language rather than a list of conceptual lenses. Do not inspect files,
+    edit anything, or run a model council.
+graders:
+  - name: planning_philosophy_requires_structural_transfer
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/planning-philosophy-structural-transfer.md

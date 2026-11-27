@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-comments-worktree-positive-copilot-fix-pr-body-staleness
+name: Positive - Copilot fix PR body staleness closeout
+description: Copilot comment fixes require live PR body staleness checks before handoff.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Copilot left review comments on my example-app PR. Fix the valid comment, amend the PR commit, force-push, reply and resolve the Copilot thread, wait for current-head CI to turn green, and before handoff check whether the PR description is stale: old head, pending CI text, stale validation commands, stale reviewer guide, dependency drift, or local path leakage."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_copilot_fix_pr_body_staleness_closeout
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

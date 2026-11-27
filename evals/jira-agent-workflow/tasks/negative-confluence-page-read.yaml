@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-negative-confluence-page-read
+name: Negative - Confluence page read
+description: Confluence page reads should route to the Confluence workflow skill, not Jira.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Use the Confluence MCP to search for the onboarding page and summarize its latest content."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_confluence_page_read
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

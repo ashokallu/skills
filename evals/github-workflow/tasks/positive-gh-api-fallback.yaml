@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-positive-gh-api-fallback
+name: Positive - gh api fallback
+description: The skill should trigger when GitHub MCP is missing a required operation and gh CLI must use repo auth.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The GitHub MCP response is missing the field I need. Use the repo gh auth helper to call gh api for the example-app PR details without sourcing .envrc."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_gh_api_fallback
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

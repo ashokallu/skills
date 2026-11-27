@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-mixed-frontend-workflow-routing
+name: Positive - mixed frontend workflow lens routing
+description: Concrete post-diff reviewer lens routing for mixed frontend and workflow changes should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Given this local git diff --name-only output for a example-app PR: app/components/LessonCard.tsx, app/package.json, .github/workflows/frontend-validate.yml. Select the conservative reviewer lens set before issuing the reviewer verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_mixed_frontend_workflow_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

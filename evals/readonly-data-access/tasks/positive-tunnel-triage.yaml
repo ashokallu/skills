@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: readonly-data-access-positive-tunnel-triage
+name: Positive - staging Mongo tunnel triage
+description: The skill should trigger when the staging Mongo MCP cannot connect through the local tunnel.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The example-app staging Mongo MCP returns ECONNREFUSED on 127.0.0.1:37017. Verify the readonly tunnel and fix the connection without printing secrets."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_staging_mongo_tunnel
+    type: trigger
+    config:
+      skill_path: .codex/skills/readonly-data-access/SKILL.md
+      mode: positive
+      threshold: 0.6

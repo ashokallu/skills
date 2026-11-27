@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-negative-fix-ci-worktree
+name: Negative - fix CI in worktree
+description: CI reproduction and fixes should route to the PR CI worktree skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "This PR has a failing Frontend - Validate check. Create the disposable worktree, reproduce the lane locally, fix it, and prepare a push."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_ci_fix
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

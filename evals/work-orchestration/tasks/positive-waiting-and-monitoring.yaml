@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-waiting-and-monitoring
+name: Positive - waiting and monitoring
+description: Bounded waits on example-app external progress should trigger the dispatcher.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Wait for the example-app PR CI and Copilot review to finish, set a bounded polling contract, and do not claim ready until the terminal states are read back."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_waiting_and_monitoring_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.6

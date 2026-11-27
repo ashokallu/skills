@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-backend-sql-pr-routing
+name: Positive - backend SQL PR lens routing
+description: Concrete post-diff reviewer lens routing for a backend and SQL PR should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Given this local git diff --name-only output for a example-app PR: backend/internal/learning/content.go, backend/internal/shared/sql/queries/content.sql, backend/internal/shared/sql/migrations/20260609120000_add_content.sql. Select the reviewer lenses to load before applying the reviewer role."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_backend_sql_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

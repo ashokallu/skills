@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-negative-generic-programming-advice
+name: Negative - generic programming advice
+description: Generic non-repo programming advice should not trigger the example-app code authoring skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Explain the difference between unit tests and integration tests in general."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_code_authoring_generic_programming_advice
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: negative
+      threshold: 0.5

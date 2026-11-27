@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-entry-and-explanation-routing
+name: Behavior - preserve one gate-order owner and proportional explanation routes
+description: Deterministic Route Precedence owns applicable gate ordering while explanation work stays proportional to its owner and evidence needs.
+tags: [behavior, routing, planning, explanation, proportionality]
+inputs:
+  prompt: |
+    The loaded example-app dispatcher is the governing source for this
+    self-contained routing comparison.
+
+    Compare the next workflow route for these three example-app requests.
+    Explain only; do not inspect the repository.
+
+    A. "What value is assigned to one named constant in this file?"
+    B. "Explain how this repo's specialist-owned PR publication workflow works
+       across its instruction files."
+    C. "Explain how an internal non-specialist subsystem works across several
+       repository files."
+
+    Also explain which dispatcher section owns precedence when more than one
+    pre-route gate applies.
+graders:
+  - name: explanation_routing_and_gate_precedence_have_single_owners
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/entry-and-explanation-routing.md

@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-peer-challenge-disputed-finding
+name: Behavior - verify and challenge a disputed finding
+description: An author must neither obey nor discard a materially disputed finding by authority alone.
+tags: [behavior, authoring, collaboration, review-fix]
+inputs:
+  prompt: |
+    A reviewer reports that the changed retry helper leaks a transaction. The
+    author has current source and focused test evidence that every attempt
+    closes its transaction, but the disagreement remains material. The target
+    commit and objective are stable. Explain what the author does before
+    editing or redispatching review.
+graders:
+  - name: disputed_finding_uses_bounded_peer_challenge
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response verifies and classifies the finding against
+        the stable target and active objective, avoids silently applying or
+        discarding it, sends the evidence through the bounded peer challenge
+        contract, leaves one reassessment and verdict ownership with the
+        original reviewer, does not use REH for generic disagreement, and
+        blocks reviewer redispatch until the finding has a disposition and
+        focused proof record.

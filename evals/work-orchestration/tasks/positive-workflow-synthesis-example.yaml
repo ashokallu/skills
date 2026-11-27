@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-workflow-synthesis-example
+name: Positive - workflow synthesis example
+description: The umbrella should trigger and route unknown production monitoring workflow explanations to the workflow-synthesis example lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "If I share you a Sentry issue from example-app and ask you to plan how to fix it, share the full workflow step by step with rationale and cite the project instructions and skill files."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_workflow_synthesis_example
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

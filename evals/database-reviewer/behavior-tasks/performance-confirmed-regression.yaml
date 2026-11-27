@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-performance-confirmed-regression
+name: Behavior - measured performance regression
+description: Comparable evidence supports a bounded actionable advisory finding.
+tags: [behavior, performance, evidence]
+inputs:
+  prompt: |
+    Perform an advisory performance assessment. A production-shaped fixture and
+    identical parameters show the baseline at 80 ms p95 and the candidate at
+    640 ms p95 across repeated runs, with the same result cardinality and
+    buffers captured. Return the complete Database review packet with a bounded
+    P2 finding rejecting the performance claim. This advisory verdict does not
+    independently block merge or a Production operation.
+graders:
+  - name: confirmed_performance_regression_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/database-reviewer/graders/behavior_contract.py,
+          performance-confirmed-regression,
+        ]

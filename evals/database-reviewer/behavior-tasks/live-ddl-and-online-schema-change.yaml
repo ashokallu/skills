@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-live-ddl
+name: Behavior - live DDL and online schema change
+description: Select additive live-DDL lanes and recall execution hazards without displacing physical design.
+tags: [behavior, ddl, locking, online-schema-change]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review immutable target
+    `live-ddl-v2` against `live-ddl-v1` without editing files:
+
+    - PostgreSQL ALTER TABLE validates a new constraint on a populated,
+      write-heavy relation during startup migrations;
+    - the runner wraps migrations in a transaction, while the proposed online
+      index form may reject that wrapper;
+    - statement timeout is set but lock timeout, retry duration, cancellation,
+      and algorithm fallback behavior are not established;
+    - long transactions can block the DDL and failed attempts may leave an
+      invalid index or partially validated catalog object;
+    - the plan claims an existing index is sufficient without a representative
+      query plan or capacity evidence.
+
+    Return the complete Database review packet and verdict.
+graders:
+  - name: live_ddl_contract
+    type: program
+    config:
+      command: python3
+      args: [evals/database-reviewer/graders/behavior_contract.py, live-ddl]

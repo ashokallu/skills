@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-negative-validation-only
+name: Negative - validation-only PR gate
+description: Validation command selection after code is already written should stay in the orchestration validation or PR local-ci lanes.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "For this prepared example-app PR worktree, choose and run the local pull_request validation gates. The code is already written; do not edit code and do not write tests. I only need build, lint, typecheck, existing test command selection, and result reporting."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_code_authoring_validation_only
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: negative
+      threshold: 0.9

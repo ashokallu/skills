@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-pre-code-critic-assignment
+name: Positive - pre-code critic assignment
+description: Non-trivial risky implementation plans should trigger code authoring and the pre-code critic assignment lane before edits.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Implement a example-app XP migration live-write change that touches production data, generated SQL, operator gates, and validation. Before editing, classify whether the pre-code critic assignment is required, explain selected lanes and confidence, and preserve just-in-time lane reads."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_pre_code_critic_assignment
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

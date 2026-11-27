@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-review-fix-bounded-sibling-search
+name: Behavior - review fix bounded sibling search
+description: Finding-directed fixes must batch same-family sibling defects and choose proportionate proof.
+tags: [behavior, review-fix, impact-cone, tests]
+inputs:
+  prompt: |
+    Reviewer findings F1 and F2 identify the same nil-collaborator panic in two
+    sibling handlers reached through one router. F1 has a stable public handler
+    test seam. F2 is generated glue with no meaningful executable seam, but a
+    deterministic generator contract rejects the unsafe shape. Prepare the
+    authoring-preflight Review-fix proof before reused-reviewer redispatch.
+graders:
+  - name: accepted_findings_are_batched_with_potent_proof
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response records both stable finding IDs, restates the
+        shared failure mechanism, names the changed symbols, and bounds sibling
+        search to the router impact cone. It must choose a regression test for
+        F1 that would fail for the original panic and the deterministic
+        generator rejection for F2, rather than forcing a low-value test. It
+        must detect any new correctness boundary, give every accepted finding a
+        disposition, and block redispatch until the batch is complete. Fail on
+        repository-wide or Git-branch archaeology.

@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-jira-server-dc-rest-boundary
+name: Positive - Jira Server DC REST boundary
+description: Jira Server/Data Center REST work should route to the Jira workflow skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "For jira.example.com, use the Atlassian MCP or Jira REST helper to transition DEMO-2911 after
+    discovering the live Server/Data Center transition ids."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_jira_server_dc_rest_boundary
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-negative-generic-parallel-project
+name: Negative - generic parallel project planning
+description: Generic team scheduling outside example-app repo work must not trigger the repo orchestrator.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Help me split a generic marketing campaign into parallel workstreams for writers, designers, and event coordinators."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_generic_parallel_project
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: negative
+      threshold: 0.8

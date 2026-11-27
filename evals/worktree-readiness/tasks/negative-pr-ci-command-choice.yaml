@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: worktree-readiness-negative-pr-ci-command-choice
+name: Negative - PR CI command selection
+description: Choosing local commands for PR-triggered CI should route to the pr-workflow local-ci lane.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "The worktree already exists. Decide which pull_request GitHub Actions gates to reproduce locally for the app and backend changes before handoff."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_pr_ci_commands
+    type: trigger
+    config:
+      skill_path: .codex/skills/worktree-readiness/SKILL.md
+      mode: negative
+      threshold: 0.9

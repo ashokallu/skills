@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-positive-confluence-lookup
+name: Positive - Confluence MCP lookup
+description: The skill should trigger for Confluence page/search work through the Atlassian MCP.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Use the Atlassian MCP to search Confluence for the current onboarding page and read it without
+    making changes."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_confluence_lookup
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-stacked-parent-gate
+name: Positive - stacked parent safety gate
+description: The reviewer skill should trigger when a stacked child PR verdict depends on unresolved parent production-risk evidence.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A stacked example-app child PR reviewer wants to pass apply-mode finalization, but the parent audit-gate PR still has an unresolved parent REH-n row for production SQL safety. Use the reviewer workflow to enforce the stack-parent verdict gate before accepting the review."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_stacked_parent_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: gws-positive-drive-upload
+name: Positive - gws Drive upload
+description: The skill should trigger for the gws Drive upload helper.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Use gws drive +upload to upload report.pdf to the approved parent folder and preserve its
+    filename."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_gws_drive_upload
+    type: trigger
+    config:
+      skill_path: .codex/skills/gws/SKILL.md
+      mode: positive
+      threshold: 0.4

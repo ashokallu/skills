@@ -1,0 +1,30 @@
+{
+  "expect_pass": true,
+  "options": {},
+  "transcript": [
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "tool_call_id": "call-agents",
+      "arguments": { "path": "AGENTS.md" }
+    },
+    { "type": "tool.execution_complete", "tool_call_id": "call-agents" },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "tool_call_id": "call-skill",
+      "arguments": { "path": ".codex/skills/work-orchestration/SKILL.md" }
+    },
+    { "type": "tool.execution_complete", "tool_call_id": "call-skill" },
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: investigation\nRoute/mode: code-authoring; inspect\nRoute rationale: code authoring owns bounded pre-edit target inspection\nWork ownership: parent-only: no net-positive child identified\nTarget: target.go\nSide effects: read-only local inspection\nRisk: low\nProof/evidence: bounded target evidence\nNext checkpoint: bounded target evidence"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "tool_call_id": "call-target",
+      "arguments": { "path": "target.go" }
+    }
+  ]
+}

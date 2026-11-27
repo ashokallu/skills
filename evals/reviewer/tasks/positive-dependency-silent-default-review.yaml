@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-dependency-silent-default-review
+name: Positive - dependency silent default review
+description: Concrete reviewer routing for dependency upgrades with silent behavior-change risk should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review the stable diff for app/package.json, yarn.lock, backend/go.mod, and backend/go.sum. No application source files changed, and the dependency bumps are claimed safe because tests pass, but release notes mention changed auth-refresh defaults, telemetry payloads, timeout defaults, and error handling. Select reviewer lenses for supply chain, security/privacy, performance, and validation before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_dependency_silent_default_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-dependencies-and-upgrades
+name: Positive - dependencies and upgrades
+description: Dependency upgrades with changelog, lockfile, scan, behavior, and rollback concerns should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Upgrade a package in app/package.json and yarn.lock, review release notes for behavior changes, run audit/type-check/tests, and document rollback for the dependency change."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_dependencies_and_upgrades
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

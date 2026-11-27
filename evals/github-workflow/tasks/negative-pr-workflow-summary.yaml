@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-negative-pr-workflow-summary
+name: Negative - PR workflow summary
+description: A PR URL/number read-only summary should route to pr-workflow, not the GitHub primitive skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Summarize this example-app pull request from its GitHub URL, including metadata, changed files, reviews, comments, and current check state. Do not edit files."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_pr_workflow_summary
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: negative
+      threshold: 0.95

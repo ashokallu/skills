@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-existing-conventions-selection
+name: Behavior - bounded existing-convention selection
+description: Authors choose current owners without inventing standards or leaving accidental concurrent paths.
+tags: [behavior, conventions, ownership, maintainability]
+inputs:
+  prompt: |
+    You are deciding how to author three independent example-app changes.
+    Apply the existing-conventions authoring lane to each scenario. Return a
+    separate compact convention record for A, B, and C.
+
+    A. A shared module exposes one documented environment-normalization helper
+    used by all current callers and covered by its owning tests. A bounded
+    search of that module finds no competing current owner pattern. The planned
+    change proposes a new feature-local helper for the same job.
+
+    B. Two nearby test packages use different fixture styles. Neither is
+    documented or owned as the standard. The nearest shared test-support
+    package also establishes no common fixture contract. The planned change
+    needs one small fixture for its own package.
+
+    C. The current retry helper is proven unsafe for cancellation. A replacement
+    helper has a clear shared owner and focused proof. The planned change can
+    migrate every caller and remove the old helper in the same coherent change.
+
+    For each scenario, decide the implementation action without performing
+    repository-wide archaeology.
+graders:
+  - name: bounded_existing_conventions_authoring
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response gives a separate five-field authoring record
+        for each of A, B, and C: problem class and owning surface; bounded
+        evidence/search scope; standard state; selected implementation action;
+        and concurrent-path disposition.
+
+        Scenario A must accept the one authoritative shared owner only after
+        the bounded no-competitor evidence, conform to it, and reject the new
+        duplicate local path. Scenario B must stop after the nearest shared
+        owner establishes no standard, label the state conflicting or no clear
+        standard, avoid inventing a repo convention, and choose only a small
+        requirement-backed local action or explicit defer. Scenario C must
+        treat the replacement as justified, keep the new owner discoverable,
+        migrate all callers, and leave no accidental old/new path.
+
+        Fail if any scenario relies on repository-wide searching, nearby copy
+        count alone, or reviewer-facing machinery such as formal findings,
+        severity, deduplication ownership, verdict packets, or parser fields.

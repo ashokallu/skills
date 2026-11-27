@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-re-review-provenance-fallback
+name: Behavior - re-review provenance fallback
+description: Alias-only, missing-artifact, or non-ancestral follow-up requests must fall back to fresh full review.
+tags: [behavior, re-review, fallback, provenance]
+inputs:
+  prompt: |
+    Re-review PR 4810 after fixes. Start a new reviewer called the same name as
+    the earlier reviewer. I do not have its exact thread ID or prior result
+    artifact, and the branch was squashed so H0 is not an ancestor of H1. Tell
+    me which review lane and prompt contract apply.
+graders:
+  - name: rejects_ambiguous_reuse
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response rejects scoped re-review and selects a fresh
+        neutral full review because nickname/name reuse is not session provenance,
+        the prior immutable artifact is missing, and H0 is non-ancestral. The
+        fresh prompt must omit historical findings, focus hints, completion
+        labels, and expected verdict. Fail if tree equivalence or an alias is
+        accepted as enough to reuse the prior reviewer.

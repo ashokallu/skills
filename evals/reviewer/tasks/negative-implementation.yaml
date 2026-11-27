@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-negative-implementation
+name: Negative - implementation work
+description: Implementation requests should use implementation and work-start skills, not reviewer lens selection.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Create a backend handler and its specs."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_implementation
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: negative
+      threshold: 0.9

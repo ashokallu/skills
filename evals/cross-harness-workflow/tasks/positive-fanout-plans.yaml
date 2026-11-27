@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-fanout-plans
+name: Positive - fan out plans to harnesses
+description: The skill should trigger when planning must be fanned out across Claude, Codex, Grok, and Muse worktrees.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Create separate main-based worktrees for Claude Code, Codex, Grok, and Muse, have each write its own architecture-options plan, then bring the final docs back under docs/plans/architecture-options."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_multi_harness_fanout
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

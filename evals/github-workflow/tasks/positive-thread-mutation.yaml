@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-positive-thread-mutation
+name: Positive - review thread mutation
+description: The skill should trigger when PR review-thread replies or resolution need authenticated GitHub IDs.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this example-app PR, resolve a review thread after replying on-thread. Use authenticated GitHub tools and fetch missing PRRT or comment IDs through github-workflow if needed."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_thread_mutation_tools
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-controller-dogfood
+name: Positive - controller dogfood
+description: The skill should trigger when the user asks to dogfood the Claude plan, Codex execute, Claude review loop.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Dogfood the Claude-Codex bridge by running a Claude plan -> Codex execute -> Claude review controller smoke."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_controller_dogfood
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

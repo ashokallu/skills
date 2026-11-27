@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-web-search-x-routing
+name: Positive - X-native web-search routing
+description: Current X URL and reply research should trigger the dispatcher that owns source-capable search routing.
+tags: [trigger, positive, web-search, x]
+inputs:
+  prompt: "For example-app research, summarize this x.com post and its reply thread with current dated sources."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_work_orchestration_for_x_research
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.35

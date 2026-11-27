@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-cross-repository-existing-checkout
+name: Behavior - cross-repository review from supplied checkout
+description: A review must inspect and reuse an exact supplied checkout and retain the canonical packet.
+tags: [behavior, checkout, cross-repository, packet]
+inputs:
+  prompt: |
+    Review a GitHub PR in a sibling repository using the exact existing
+    checkout path I supplied. The checkout is clean, has the correct remote, and
+    is already pinned to the requested PR head and base. Use the example-app
+    PR review workflow and return its normal verdict. Do not create another
+    checkout or clone.
+graders:
+  - name: existing_checkout_and_packet_contract
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response makes a local-only inspection of repository
+        identity, remotes, cleanliness, branch, and head in the supplied
+        checkout the first task action. That preflight must happen before
+        repository defaulting, GitHub metadata reads, git fetches, cloning, or
+        worktree creation, and later remote operations must use the repository
+        resolved from the checkout plus any explicit PR URL. It must reuse the
+        checkout when those facts hold and preserve the canonical review packet
+        as the final verdict shape because the example-app PR review
+        workflow was selected, even though the target repository is different.
+        Fail if any remote read or local creation precedes the preflight, or if
+        it returns a generic Markdown review summary.

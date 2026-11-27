@@ -1,0 +1,35 @@
+{
+  "expect_pass": false,
+  "options": {
+    "require_branch_join": true,
+    "require_dispatch_lifecycle": true
+  },
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: maintenance\nRoute/mode: delegation; review\nRoute rationale: a required critic owns plan review\nWork ownership: mixed: see Dispatch\nTarget: stable workflow plan\nSide effects: read-only critic dispatch\nRisk: medium\nProof/evidence: joined critic disposition\nDelegation ID: critic-plan-v1\nDelegation decision: required gate\nDispatch:\n- parent critical path: hold target stable\n- active delegations:\n  - critic-plan-v1: owner=critic; state=launched\n- scope=duplicate plan scope\n- input revision=head-sha\n- join consumer=implementation\n- join boundary: no edit before critic join"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "spawn_agent",
+      "tool_call_id": "call-critic-plan-v1",
+      "arguments": { "task": "review the stable plan" }
+    },
+    {
+      "type": "tool.execution_complete",
+      "tool_call_id": "call-critic-plan-v1"
+    },
+    {
+      "type": "assistant.message",
+      "content": "Dispatch:\n- parent critical path: consume critic result\n- active delegations:\n  - critic-plan-v1: owner=critic; state=returned\n- join boundary: no edit before critic join"
+    },
+    {
+      "type": "assistant.message",
+      "content": "Join result: critic-plan-v1 returned"
+    },
+    {
+      "type": "assistant.message",
+      "content": "Work ownership: parent-only: joined"
+    }
+  ]
+}

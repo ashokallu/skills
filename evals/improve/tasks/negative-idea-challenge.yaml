@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-negative-idea-challenge
+name: Negative - proposed direction challenge
+description: Challenging a proposed solution belongs to idea-challenge, not improve.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Challenge whether we should replace the current cache layer with Redis before anyone implements that proposal."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_proposed_direction_challenge
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: negative
+      threshold: 0.72

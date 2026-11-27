@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: vr-failure-analyzer-positive-vr-vision-analysis
+name: Positive - VR image cause analysis
+description: The skill should trigger when a failed VR run needs expected/actual/diff image inspection and human cause summary.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The staging visual-regression GitHub Actions run failed. Download the Playwright HTML report and JSON artifacts, inspect expected/actual/diff images with a vision-language model, and summarize whether the failures are Sanity content drift, frontend regression, baseline drift, or test instability."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_vr_vision_analysis
+    type: trigger
+    config:
+      skill_path: .codex/skills/vr-failure-analyzer/SKILL.md
+      mode: positive
+      threshold: 0.6

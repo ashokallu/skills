@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-work-item-profile-large-contained
+name: Behavior - keep a large contained refactor out of production-wide classification
+description: File count alone must not inflate complexity or runtime impact.
+tags: [behavior, routing, work-item-profile, refactor, proportionality]
+inputs:
+  prompt: |
+    A example-app maintenance task will refactor a private test-fixture
+    builder used by eighteen tests in one backend package. The change spans
+    many test files, preserves production behavior, has one package owner, and
+    can be reverted normally. Current source proves there are no runtime or
+    cross-package consumers.
+
+    Give the Work Item Profile and proportional review/validation route. Do not
+    edit files.
+graders:
+  - name: contained_refactor_uses_evidence_backed_profile_tokens
+    type: text
+    config:
+      regex_match:
+        - "(?i)Complexity[^\\n]*standard"
+        - "(?i)Impact scope[^\\n]*(contained|component)"
+        - "(?i)Review forecast[^\\n]*STANDARD"
+  - name: file_count_does_not_invent_blast_radius
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/work-item-profile-large-contained.md

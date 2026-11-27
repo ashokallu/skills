@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-bugfix-ci-only
+name: Positive - CI-only failure routes through umbrella
+description: A concrete failing check run should trigger the umbrella and route to the CI worktree lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "https://github.com/example-org/example-app/pull/101234 has a failing Frontend - Validate check. Inspect live CI and reproduce the concrete failing lane in a disposable worktree."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_ci_only
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

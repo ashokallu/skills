@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-source-of-truth-live-intent-conformance
+name: Behavior - reviewer catches a teammate PR source-contract rewrite
+description: Reviewers must use live PR intent without manufacturing a retroactive objective lock.
+tags: [behavior, reviewer, objective-conformance, source-of-truth, pr-intent]
+inputs:
+  prompt: |
+    Review a teammate's stable PR. Its live body says that enabling an existing
+    flag makes Postgres the XP source for one response field, leaves unrelated
+    Mongo-backed fields unchanged, and keeps shadow comparison non-blocking.
+    The diff reads the Postgres value, then synchronously reads Mongo and
+    returns an error whenever Mongo disagrees. No owner-approved intent changes
+    that source, availability, or error contract.
+
+    Return the direction and evidence portion of the reviewer verdict.
+graders:
+  - name: live_pr_intent_exposes_contract_changing_implementation
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the reviewer uses the live PR body to aim review while
+        treating the pinned diff and source as implementation proof. It must
+        identify the synchronous Mongo veto as a material code defect because
+        it changes source authority, error or availability semantics, and
+        runtime dependencies without owner authority. It must classify that
+        implementation delta as contract-changing, require restoration of the
+        stated behavior or an explicit owner decision, and avoid manufacturing
+        or demanding a retroactive objective lock for the teammate PR. It must
+        not require or cite the source-of-truth-scope-rewrite case study.

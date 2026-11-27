@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-peer-challenge-reassessment
+name: Behavior - reassess a challenged finding once
+description: A reviewer must respond to material contrary evidence without surrendering verdict ownership.
+tags: [behavior, reviewer, collaboration, reassessment]
+inputs:
+  prompt: |
+    You emitted a P2 finding that a changed worker can submit twice. The parent
+    returns a peer challenge with the same target, the active objective, source
+    showing an idempotency guard, and a focused concurrency test. This is not
+    an REH response. Reassess the finding.
+graders:
+  - name: reviewer_reassessment_is_evidence_led_and_bounded
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the reviewer checks target identity and objective
+        relevance, chooses accept, modify, stand, Pending Verification, or
+        escalate, cites the governing evidence and smallest evidence that would
+        change the result, retains ownership of the verdict, gives exactly one
+        reassessment, and does not relabel the generic dispute as REH or defer
+        judgment merely to satisfy the parent.

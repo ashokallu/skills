@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-pr-body-refresh-publish-lane
+name: Positive - PR body refresh uses publish lane
+description: Existing PR title/body refresh after a rewrite should trigger the PR workflow publication lane before any GitHub mutation.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The open example-app PR was squashed and force-pushed. Refresh the PR title/body so the What, Why, reviewer guide, dependencies, risks, and verification match the current diff and current-head CI before reporting it ready."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_publish_lane_for_pr_body_refresh
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.7

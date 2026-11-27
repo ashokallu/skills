@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-parallel-approval-window
+name: Positive - approval-window parallel dispatch
+description: A example-app deadline with independent evidence work should enter orchestration and its delegation dispatch decision before deep parent discovery.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app reviewer is available for only the next hour. Preserve six independent read-only evidence surfaces and prepare the council packet efficiently. Decide what can launch in parallel, what stays on the parent critical path, and where the evidence must join."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_parallel_approval_window
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

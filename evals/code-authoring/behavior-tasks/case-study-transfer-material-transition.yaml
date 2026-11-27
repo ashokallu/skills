@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-case-study-transfer-material-transition
+name: Behavior - case-study rehearsal is material and bounded
+description: Commitment updates appear only when they change an action at a natural phase transition.
+tags: [behavior, case-study, transition, token-discipline]
+inputs:
+  prompt: |
+    The author has frozen C1-C3. It runs six ordinary file reads and formatting
+    commands that do not change its plan. At the validation boundary, evidence
+    from C2 causes it to replace a vacuous snapshot check with a focused
+    behavior assertion. Describe what transfer updates should be emitted.
+graders:
+  - name: case_study_transfer_updates_only_on_material_change
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response emits no per-command repetition for the six
+        routine actions and produces one compact C2 applied update at the
+        natural validation transition, naming the changed probe and evidence
+        or Pending Verification. It must not restate C1-C3, narrate private
+        reasoning, or invent updates for commitments that did not influence an
+        action.

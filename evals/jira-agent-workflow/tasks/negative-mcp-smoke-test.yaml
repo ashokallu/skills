@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-negative-mcp-smoke-test
+name: Negative - MCP smoke test
+description: MCP setup and smoke-test requests should not route to the Jira workflow orchestration skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Smoke-test the configured Jira and Confluence MCPs and tell me which tools are available."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_mcp_smoke_test
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

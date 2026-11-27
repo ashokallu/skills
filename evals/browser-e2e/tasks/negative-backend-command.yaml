@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: browser-e2e-negative-backend-command
+name: Negative - backend command failure
+description: A non-browser backend command failure should route to work-orchestration rather than browser/E2E tooling.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "The backend go test command fails in backend/internal/learning with a nil pointer panic. Diagnose the root cause and fix it."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_backend_command_failure
+    type: trigger
+    config:
+      skill_path: .codex/skills/browser-e2e/SKILL.md
+      mode: negative
+      threshold: 0.75

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-parent-owned-local-review
+name: Positive - parent-owned local review
+description: A direct local review plus commit and push should trigger orchestration without implying a second reviewer.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review the current working-directory changes yourself, fix only findings you verify, then commit and push the final diff. I am not asking for a subagent, independent reviewer, second model, or council."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_parent_owned_local_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-debugging-and-repro
+name: Positive - debugging and repro
+description: Bug fixes with reproduction, root cause, debug cleanup, and regression proof should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Fix a example-app UI bug, but first reproduce it, capture before/after evidence, identify root cause, remove console.log probes, and add a regression test."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_debugging_and_repro
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

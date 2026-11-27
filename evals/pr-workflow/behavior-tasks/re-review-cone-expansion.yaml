@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-re-review-cone-expansion
+name: Behavior - re-review impact-cone expansion
+description: Re-review must follow reachable contracts and escalate when reachability cannot be bounded.
+tags: [behavior, re-review, impact-cone, escalation]
+inputs:
+  prompt: |
+    Exact reused reviewer A is checking an ancestral fix to a handler. The fix
+    also changes a generated response type consumed through config-selected
+    plugins, and the repository cannot enumerate every runtime consumer. The
+    parent asks A to inspect only the two changed files to save tokens.
+graders:
+  - name: expands_then_escalates_unbounded_cone
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response refuses the two-file cap, expands through the
+        generated/public contract, config, plugins, consumers, tests, and source
+        ownership, records search/dependency probes, preserves reviewer autonomy,
+        and returns or routes to `ESCALATE_FULL_REVIEW` because dynamic plugin
+        reachability cannot be bounded. Fail if time, tokens, file count, or
+        prior clean evidence is used to close the cone.

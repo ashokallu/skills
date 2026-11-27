@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-positive-issues
+name: Positive - explicit issue publication modifier
+description: An improve planning request with --issues should trigger improve.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run a quick read-only performance improvement audit for later execution and use --issues for the selected advisor plans."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_issues_modifier
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: positive
+      threshold: 0.55

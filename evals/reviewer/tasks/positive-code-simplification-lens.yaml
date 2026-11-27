@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-code-simplification-lens
+name: Positive - code simplification lens
+description: The canonical closeout lens should trigger simplification while the legacy code-simplification filename remains an alias.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app PR review already has a pinned head, changed-file inventory, and local diff. Load review-closeout-lens.md once and apply its simplification category for behavior-preserving simplification and unsafe over-simplification. Treat code-simplification-lens.md as a compatibility alias, not an additional pass."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_simplification_lens
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

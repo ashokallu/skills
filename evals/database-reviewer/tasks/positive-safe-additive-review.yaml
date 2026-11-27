@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-safe-additive-review
+name: Positive - safe additive migration still receives bounded review
+description: A likely-safe additive migration should select the specialist without demanding every lane.
+tags: [trigger, positive, safe-pattern]
+inputs:
+  prompt: "Perform a read-only DBA safety review of a pending Postgres migration under backend/internal/shared/sql/migrations. It is a metadata-only nullable column addition compatible with old and new binaries; select only relevant lanes and preserve a clean result when evidence supports it."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_bounded_safe_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.5

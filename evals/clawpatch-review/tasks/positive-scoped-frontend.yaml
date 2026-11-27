@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: clawpatch-review-positive-scoped-frontend
+name: Positive - scoped frontend Clawpatch review
+description: The skill should trigger when an agent needs to configure Clawpatch mapper paths for a frontend PR branch.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run Clawpatch on this frontend PR worktree using a scoped mapper config for the changed app component and review the selected features."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_scoped_frontend_clawpatch
+    type: trigger
+    config:
+      skill_path: .codex/skills/clawpatch-review/SKILL.md
+      mode: positive
+      threshold: 0.6

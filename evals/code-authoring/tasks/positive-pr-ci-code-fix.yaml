@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-pr-ci-code-fix
+name: Positive - PR CI code fix phase
+description: Once a PR CI failure has a proven code root cause, code-authoring should own the implementation phase.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app PR CI backend test is failing because the Go implementation changed a datasource contract. The root cause is proven, and the accepted fix requires editing backend Go implementation and focused tests before rerunning validation."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_for_pr_ci_code_fix_phase
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.7

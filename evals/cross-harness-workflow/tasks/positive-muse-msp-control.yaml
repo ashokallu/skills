@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-msp-control
+name: Positive - Muse live Meta MSP refusal
+description: A request for live Meta MSP control should trigger the Muse lane, fail closed on the missing safe server credential channel, and route real work to exact guarded headless turns.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run a direct cross-harness Muse CLI workhorse through the repository collaboration wrapper/session route for this private example-app task across two phases. Keep Codex Desktop as orchestrator. Do not launch live Meta MSP because muse serve lacks safe stdin credential transport, do not resume private or TUI-owned state, and use fresh guarded headless turns with only the approved phase context re-injected."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_msp_control
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-objective-lock-verified-contract-skip
+name: Behavior - verified unchanged contract avoids duplicate objective ceremony
+description: A localized fix under an approved unchanged contract should reuse the lock without suppressing existing gates.
+tags: [behavior, objective-lock, scope, efficiency]
+inputs:
+  prompt: |
+    Continue a localized implementation fix under the current approved
+    objective lock cutover-read-source@v2. The fix restores one failing branch
+    to the already-specified behavior and does not change authority, fallback,
+    dependencies, phase sequence, acceptance criteria, invariants, or non-goals.
+    Explain the next workflow action.
+graders:
+  - name: verified_contract_reuse_avoids_duplicate_locking
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/objective-lock-verified-contract-skip.md

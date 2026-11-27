@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-authoring-core
+name: Positive - authoring core
+description: Beginning non-trivial code work with target, context, proof, and production posture should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before changing this example-app data import job, start with the code authoring core discipline: define the target contract, inspect callers and operator docs, name the central production failure to prevent, and identify the proof needed before handoff."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_core
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

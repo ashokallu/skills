@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-re-review-unrelated-redesign-fallback
+name: Behavior - unrelated redesign re-review fallback
+description: Unrelated edits and cross-layer redesigns must reset to full review.
+tags: [behavior, re-review, redesign, fallback]
+inputs:
+  prompt: |
+    Reviewer A asked for a local guard and focused test. H1 includes that fix,
+    a new cross-service abstraction, an unrelated dependency upgrade, and a
+    workflow change. Continue A and keep the review scoped to its finding.
+graders:
+  - name: redesign_resets_full_review
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response refuses bounded re-review and selects
+        `ESCALATE_FULL_REVIEW` or the fresh-full reset because the target contains
+        unrelated edits and a cross-layer redesign beyond the agreed correction.
+        It must not suppress those surfaces as previously clean or finding-external.

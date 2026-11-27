@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-aggregation-table
+name: Positive - aggregate review rating tables
+description: The skill should trigger when the user asks Codex to aggregate rating tables from multiple harness review folders.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Aggregate the Rating Table sections from docs/plans/reviews/grok, docs/plans/reviews/muse, docs/plans/reviews/claude, and docs/plans/reviews/codex into one model eval table."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_multi_harness_aggregation
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

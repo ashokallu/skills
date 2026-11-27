@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-production-ready-review-followup-classification
+name: Behavior - PR follow-ups use append-only proportional review rounds
+description: PR orchestration must classify changed targets and stop before an unjustified third broad round.
+tags: [behavior, pr, review, scope, circuit-breaker]
+inputs:
+  prompt: |
+    A production-ready PR has an append-only action-item ledger. Broad round 1
+    ran the ordinary reviewer and database reviewer in parallel. Broad round 2
+    ran after a multi-domain redesign. Classify each next event:
+
+    1. README wording is corrected with no runtime or operator decision change.
+    2. Transaction isolation semantics change in one reviewed database boundary.
+    3. The author changes objective and mechanism revisions and asks for another
+       full ordinary plus database review of the whole PR.
+
+    Return the parent routing decision and required ledger updates.
+graders:
+  - name: production_ready_review_followup_classification
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response counts round-1 parallel reviewers as one broad
+        round, preserves both broad rounds across objective or mechanism
+        revision, sends event 1 to validation/direct readback with no reviewer,
+        sends event 2 to a targeted follow-up on the changed transaction
+        boundary and fix delta, and blocks event 3 until the third-round circuit
+        breaker is completed: keep/defer/remove ledger, objective/mechanism
+        reset record, author self-audit,
+        validation, and explicit justification that targeted review is
+        insufficient. It must not require or emit a case-study reread
+        acknowledgement. Exact-SHA, objective revision, or mechanism revision
+        alone must not force broad redispatch.

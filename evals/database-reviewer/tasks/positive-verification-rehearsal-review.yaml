@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-verification-rehearsal-review
+name: Positive - production-shaped database rehearsal review
+description: Read-only judgment of cross-lane rehearsal evidence should trigger database-reviewer.
+tags: [trigger, positive, verification, rehearsal]
+inputs:
+  prompt: "Independently review whether this stable database rollout has production-shaped rehearsal, independent reconciliation, concurrent-writer and partial-failure injection, and harness parity sufficient for its readiness claim. Do not edit tests or execute the rollout."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_verification_rehearsal_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.45

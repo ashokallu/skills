@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-negative-ordinary-pr-review
+name: Negative - ordinary PR review
+description: A normal single-branch PR review should not trigger the multi-harness planning workflow.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Review PR #4527 for bugs and missing tests. Use the normal repo review process and leave findings in chat."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_ordinary_pr_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: negative
+      threshold: 0.7

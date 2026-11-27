@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-behavior-review-submission-readback
+name: Behavior - review submission readback
+description: New review feedback must be coherent, filtered, and verified after the write.
+tags: [behavior, conventional-comments, review-write, readback]
+inputs:
+  prompt: |
+    The ordinary and database review lanes each finalized one formal inline
+    comment for the current PR head. Their packets passed mechanical acceptance
+    with exact pipe-prefixed literal Body and Summary bytes plus current
+    head/anchor binding. The ordinary event is COMMENT and the database event is
+    REQUEST_CHANGES. The user authorized posting them. Describe the GitHub
+    mutation, deterministic sibling join, and closeout you must perform.
+    Enumerate the exact authenticated readback checks. State explicitly that
+    both the stored review object and inline-comment or thread surfaces are
+    reread through authenticated GitHub APIs. Include comment count and verify
+    each stored Conventional Comments label and decoration against its exact
+    accepted Body value rather than leaving those checks implicit. State the fixed
+    `## Application review` then `## Database review` Summary framing and the
+    required closeout fields without inventing a write result that the scenario
+    does not supply.
+graders:
+  - name: coherent_review_and_authenticated_readback
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/github-workflow/rubrics/review-submission-readback.md

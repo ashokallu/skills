@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-autonomy-envelope-authority
+name: Positive - autonomy envelope authority and expansion
+description: Autopilot authority, Production readiness, and task-autonomy expansion questions must enter the workflow dispatcher.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For example-app, explain whether 'go full autopilot' authorizes a later Production mutation and what happens when a READY task autonomy envelope discovers a higher remote, cost, rollback, or monitoring boundary."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_autonomy_envelope_authority
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.7

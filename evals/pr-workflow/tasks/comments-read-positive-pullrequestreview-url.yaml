@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-pullrequestreview-url
+name: Positive - pullrequestreview URL maps to inline threads
+description: The skill should trigger for a review-summary URL because agents must map it to inline review threads.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "https://github.com/example-org/example-app/pull/104602#pullrequestreview-6467366163 is the comment thread"
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pullrequestreview_thread_mapping
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

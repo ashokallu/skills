@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-codex-sol-routing
+name: Positive - explicit Codex Sol council routing
+description: The skill should trigger when council planning needs the bounded Sol reasoning policy and a cache-unavailable fallback.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run a cross-harness council plan with Claude, Grok, Muse, and Codex. Configure every Codex lane using gpt-5.6-sol at high, including bounded follow-ups. Permit xhigh, max, or ultra only when the current user explicitly requests it and require the wrapper's user-authorization flag. Keep the explicit model when the local model cache is unavailable and let the Codex CLI validate it."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_codex_sol_council_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

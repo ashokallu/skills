@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: browser-e2e-positive-retry-healed
+name: Positive - retry-healed Playwright test
+description: The skill should trigger when a green workflow still needs flaky-test classification.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app Playwright workflow ended green, but the JSON result shows retry-healed failures. Inspect the evidence before calling it healthy."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_retry_healed_triage
+    type: trigger
+    config:
+      skill_path: .codex/skills/browser-e2e/SKILL.md
+      mode: positive
+      threshold: 0.6

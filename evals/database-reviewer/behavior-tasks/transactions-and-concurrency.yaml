@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-transactions-and-concurrency
+name: Behavior - transaction concurrency review
+description: Route application write races to the concurrency lane and require exact proof.
+tags: [behavior, transactions, concurrency, isolation]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review conceptual target
+    `database-concurrency-v2` against base `database-concurrency-v1` without
+    editing files. Treat those immutable labels as the complete target/base
+    identity for this scenario:
+
+    - the application reads an account balance and later writes a replacement
+      value in a transaction at the database default isolation level;
+    - another path locks two accounts in the opposite order;
+    - deadlock and serialization failures retry the whole handler, which also
+      emits an external notification;
+    - the transaction calls a remote service while holding row locks, and a
+      lost commit acknowledgement is retried without an idempotency key;
+    - production uses transaction-pooled connections and the handler relies on
+      session advisory locks;
+    - 20 service instances each allow 40 database connections, autoscaling can
+      reach 30 instances, the database limit is 500 including reserved roles,
+      and no acquisition-wait or leak metric is available.
+
+    Return the complete Database review packet and verdict.
+graders:
+  - name: transaction_concurrency_contract
+    type: program
+    config:
+      command: python3
+      args: [evals/database-reviewer/graders/behavior_contract.py, transactions]

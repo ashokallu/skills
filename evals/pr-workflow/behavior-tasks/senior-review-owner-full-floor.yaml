@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-senior-review-owner-full-floor
+name: Behavior - senior review owner receives bounded FULL signoff
+description: A teammate whole-target PR verdict receives FULL and high without leaking into narrower PR intents.
+tags: [behavior, pr, review, scope, effort]
+inputs:
+  prompt: |
+    First invoke and follow the pr-workflow skill. I am the senior
+    engineer responsible for reviewing every PR opened by my teammates. First,
+    I ask: "Review this PR" and provide a teammate PR URL. Compare it with a
+    whole-target review that also asks to publish surviving inline findings,
+    and with these separate narrower asks: summarize the PR, show current CI,
+    reply to one review thread, fix one comment, explain the review workflow,
+    and re-review one provenance-bound fix commit.
+
+    State the initial review depth, topology, Codex reasoning default, database
+    reviewer relationship, and whether each narrower ask activates the same
+    floor. Also explain whether diff size can demote the floor; how supported
+    explicit effort overrides, including xhigh, max, and ultra, are governed; what
+    evidence boundaries keep FULL from becoming unbounded; and when topology
+    may escalate to council. Do not perform a review or mutate GitHub.
+graders:
+  - name: senior_review_owner_floor_is_bounded
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/pr-workflow/rubrics/senior-review-owner-full-floor.md

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-positive-quick-focus
+name: Positive - quick focused advisory audit
+description: A focused read-only audit for later planning should trigger improve.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Quickly audit example-app authentication code for high-confidence improvement opportunities. Produce a durable ranked backlog for a later session; do not implement."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_quick_focused_audit
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: positive
+      threshold: 0.55

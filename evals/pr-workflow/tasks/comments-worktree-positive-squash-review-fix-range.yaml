@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-squash-review-fix-range
+name: Positive - squash only review-fix commit range
+description: The skill should trigger when an owner PR needs a history rewrite that preserves feature commits and combines only adjacent review-fix commits.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this example-app stacked PR, the base changed and the top two Copilot review-fix commits should be squashed into one, but the original feature commit must stay separate. Rebase the branch, force-push, update the PR body if needed, and watch current-head CI."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_commit_shape_comment_workflow
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

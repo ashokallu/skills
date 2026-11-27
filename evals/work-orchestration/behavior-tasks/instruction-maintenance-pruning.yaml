@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-instruction-maintenance-pruning
+name: Behavior - prune instructions before adding structure
+description: Instruction maintenance removes no-ops, deduplicates triggers, and sharpens completion criteria before splitting.
+tags: [behavior, instructions, pruning, progressive-disclosure]
+inputs:
+  prompt: |
+    Apply example-app instruction maintenance to these proposed changes.
+    Explain the disposition of A, B, C, and D without editing files.
+
+    A. Add “Be thorough and use best practices” to a lane whose existing rules
+       already require exact evidence, bounded scope, and validation.
+    B. Change a skill description to “Use when improving docs, revising docs,
+       or polishing docs.” All three phrases route to the same docs branch.
+    C. Split a seven-step workflow after agents sometimes leave its inventory
+       step early. The current completion criterion is only “review the files.”
+    D. Replace repeated decision rules with the word “sharp,” but give the word
+       no operational definition or checkable effect.
+
+    Keep current skill and route ownership unchanged.
+graders:
+  - name: instruction_pruning_changes_behavior_without_sprawl
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/instruction-maintenance-pruning.md

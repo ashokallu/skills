@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-luna-validation-plan
+name: Positive - Luna validation plan scout
+description: The umbrella should trigger for a bounded read-only validation-plan draft.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before I implement, have Luna inspect repo-owned manifests and draft the narrowest validation commands for a backend sqlc change. Read-only only."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_luna_validation_planning
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

@@ -1,0 +1,497 @@
+schema_version: 4
+contract_id: reviewer-control-plane-v4
+
+depths:
+  - LITE
+  - STANDARD
+  - FULL
+
+topologies:
+  - single
+  - council
+
+scope_control_messages:
+  - REVIEW_SCOPE_PROPOSAL
+  - REVIEW_SCOPE_ACCEPTED
+  - REVIEW_SCOPE_ESCALATION
+  - ESCALATION_ACCEPTED
+  - SCOPE_EVIDENCE_CORRECTION
+  - CORRECTED_AND_ACCEPTED
+  - SCOPE_DISPUTE_BLOCKED
+
+strict_packet_forbidden_tokens:
+  - REVIEW_SCOPE_PROPOSAL
+  - REVIEW_SCOPE_ACCEPTED
+  - REVIEW_SCOPE_ESCALATION
+  - ESCALATION_ACCEPTED
+  - SCOPE_EVIDENCE_CORRECTION
+  - CORRECTED_AND_ACCEPTED
+  - SCOPE_DISPUTE_BLOCKED
+  - REVIEW_PROGRESS
+
+progress_contract:
+  token: REVIEW_PROGRESS
+  reviewer_kinds: [ordinary, database]
+  delivery: pull_only
+  safe_boundary_required: true
+  strict_packet: false
+  autonomous_periodic: false
+  repeat_unchanged: false
+  time_band_authority: advisory_metadata_only
+  closeout_authority: closure_and_stop_proof_only
+  fields:
+    - exact target
+    - phase
+    - completed surfaces
+    - remaining surfaces
+    - active candidates
+    - blockers
+    - scope changes
+    - next milestone
+    - advisory time band
+
+semantic_ownership:
+  reviewer_owns:
+    - target understanding
+    - finding and advisory judgment
+    - exact review comment and summary bytes
+  parent_owns:
+    - target and packet integrity
+    - finding ordinal partition
+    - literal-block UTF-8 anchor event and decoration validation
+    - head anchor duplicate and thread state
+    - sibling join integrity
+    - publication and readback
+  parent_forbidden:
+    - parallel whole target semantic review
+    - independent defect rediscovery
+    - severity or confidence rewrite
+    - comment body rewrite
+    - invented review feedback
+  semantic_return: same_reviewer
+  second_semantic_review_triggers:
+    - malformed_or_blocked_reviewer
+    - material_contradiction
+    - target_change
+    - explicit_independent_review_request
+
+packet_acceptance:
+  lifecycle: [RETURNED, VALIDATING, ACCEPTED, REJECTED]
+  trusted_inputs:
+    - exact target
+    - review mode
+    - review-comments contract
+  accepted_unlocks:
+    - sibling join
+    - bounded closeout
+    - publication
+    - packet-compliance claim
+  rejected_unlocks: []
+  repair_owner: same reviewer
+  repair_attempts: 1
+  corrected_packet_revalidation: full
+  repeated_malformed_terminal: terminal-malformed-or-replacement
+  parent_semantic_reconstruction: forbidden
+
+common_closure:
+  - exact_target_and_base
+  - admitted_surface_inventory
+  - changed_contract_and_immediate_effects
+  - mandatory_floor_detection
+  - claimed_proof_assessment
+  - per_surface_disposition
+  - impact_cone_closure
+  - stop_proof
+
+mandatory_full_floors:
+  - auth_security_privacy
+  - shared_database_contract
+  - migration_data_integrity
+  - public_contract
+  - infrastructure_release
+  - production_blast_radius
+  - cross_system_ownership
+  - central_missing_proof
+  - unbounded_or_contested_cone
+  - senior_pr_owner_whole_target
+
+named_floor_cases:
+  - id: senior-owner-teammate-whole-target
+    route: teammate_whole_target_pr_review
+    depth: FULL
+    topology: single
+    demotable: false
+    excluded_intents:
+      - summary
+      - metadata
+      - ci
+      - existing_comments_only
+      - triage
+      - fix
+      - workflow_explanation
+      - targeted_re_review
+
+packet_carriers:
+  ordinary:
+    - Review mode
+    - Scope basis
+    - Coverage
+    - Selected reviewer lenses
+    - Not loaded
+  database:
+    - Selected lanes
+    - Not selected
+    - Not reviewed
+
+ordinary_depth_cases:
+  - id: ordinary-lite-contained
+    depth: LITE
+    trigger: contained_reversible_one_boundary
+    required_work:
+      - exact_change_and_immediate_effect
+      - one_hop_callers_consumers
+      - targeted_validation_claim
+      - bounded_conventions_micro_probe
+      - every_triggered_lens
+    forbidden_without_trigger:
+      - unrequired_background_read
+      - full_initial_review_primer
+      - full_ai_large_change_lens
+      - full_existing_conventions_lens
+      - pr_stack_followup_thread_lens
+      - independent_residual_pass
+    residual: false
+    escalation: none
+  - id: ordinary-standard-bounded
+    depth: STANDARD
+    trigger: substantive_bounded_change
+    required_work:
+      - nearby_callers_consumers
+      - relevant_tests_config_docs_generated
+      - compact_dimension_trigger_probe
+      - every_triggered_lens
+    forbidden_without_trigger:
+      - unrequired_background_read
+      - full_initial_review_primer
+      - independent_residual_pass
+    residual: false
+    escalation: none
+  - id: ordinary-standard-bounded-instruction
+    depth: STANDARD
+    trigger: bounded_workflow_instruction
+    required_work:
+      - instruction_skill_agent_doc_lens
+      - nearby_instruction_consumers
+      - every_triggered_lens
+    forbidden_without_trigger:
+      - full_initial_review_primer
+      - full_ai_large_change_lens
+      - independent_residual_pass
+    residual: false
+    escalation: none
+  - id: ordinary-full-public-boundary
+    depth: FULL
+    trigger: public_contract_floor
+    required_work:
+      - cross_boundary_states
+      - compatibility_and_failure_recovery
+      - rollout_rollback_operator_evidence
+      - every_triggered_lens
+      - independent_residual_pass
+      - full_initial_review_primer
+    forbidden_without_trigger: []
+    residual: true
+    escalation: FULL
+  - id: ordinary-lite-floor-escalation
+    depth: LITE
+    trigger: auth_security_privacy
+    required_work:
+      - mandatory_floor_detection
+    forbidden_without_trigger: []
+    residual: false
+    escalation: FULL
+
+database_depth_cases:
+  - id: database-lite-advisory
+    depth: LITE
+    trigger: bounded_nonproduction_advisory
+    required_work:
+      - immediate_database_effect
+      - every_triggered_lane
+    forbidden_without_trigger:
+      - unrequired_background_read
+      - broad_residual_sweep
+    residual: false
+    escalation: none
+  - id: database-standard-bounded
+    depth: STANDARD
+    trigger: bounded_nonproduction_database_consequence
+    required_work:
+      - all_reachable_database_consequences
+      - nearby_callers_generated_tests_docs
+      - every_triggered_lane
+    forbidden_without_trigger:
+      - broad_residual_sweep
+    residual: false
+    escalation: none
+  - id: database-full-migration
+    depth: FULL
+    trigger: migration_data_integrity
+    required_work:
+      - cross_boundary_compatibility
+      - operational_and_recovery_proof
+      - affected_consumers
+      - every_triggered_lane
+      - independent_residual_sweep
+    forbidden_without_trigger: []
+    residual: true
+    escalation: FULL
+  - id: database-lite-floor-escalation
+    depth: LITE
+    trigger: shared_database_contract
+    required_work:
+      - mandatory_floor_detection
+    forbidden_without_trigger: []
+    residual: false
+    escalation: FULL
+
+expansion_cases:
+  - id: reachable-consumer-expansion
+    trigger: reachable_caller_or_consumer
+    evidence: changed public response field is consumed by backend/client.go
+    added_boundary: generated backend client
+    missed_defect_class: public response compatibility regression
+    allowed: true
+  - id: mandatory-floor-expansion
+    trigger: mandatory_floor
+    evidence: changed SQL migration activates the shared_database_contract floor
+    added_boundary: shared database consumers
+    missed_defect_class: mixed-version data integrity failure
+    allowed: true
+  - id: reviewer-preference-is-not-evidence
+    trigger: generic_thoroughness
+    evidence: ""
+    added_boundary: unrelated repository architecture
+    missed_defect_class: ""
+    allowed: false
+
+negative_mutations:
+  - id: collapsed-depth-obligations
+  - id: missing-common-closure
+  - id: missing-full-floor
+  - id: suppressed-triggered-coverage
+  - id: scope-token-in-strict-packet
+  - id: parent-suppresses-escalation
+  - id: evidence-free-expansion
+  - id: missing-full-primer
+  - id: missing-preservation-row
+  - id: progress-in-strict-packet
+  - id: autonomous-progress
+  - id: repeated-unchanged-progress
+  - id: timer-derived-closeout
+  - id: parent-semantic-rewrite
+  - id: parent-parallel-review
+  - id: database-join-loss
+
+projection_cases:
+  - id: single-lite
+    depth: LITE
+    topology: single
+    ordinary_pr_mode: LITE
+    retained_parent_depth: LITE
+  - id: single-standard
+    depth: STANDARD
+    topology: single
+    ordinary_pr_mode: STANDARD
+    retained_parent_depth: STANDARD
+  - id: single-full
+    depth: FULL
+    topology: single
+    ordinary_pr_mode: FULL
+    retained_parent_depth: FULL
+  - id: council-full-floor
+    depth: FULL
+    topology: council
+    ordinary_pr_mode: COUNCIL
+    retained_parent_depth: FULL
+
+scope_cases:
+  - id: bounded-proposal-accepted
+    reviewer: ordinary
+    trigger: bounded_standard
+    terminal: REVIEW_SCOPE_ACCEPTED
+    corrections: 0
+  - id: mandatory-floor-escalation
+    reviewer: database
+    trigger: shared_database_consequence
+    terminal: ESCALATION_ACCEPTED
+    corrections: 0
+  - id: correction-accepted-by-reviewer
+    reviewer: ordinary
+    trigger: parent_counter_evidence
+    terminal: CORRECTED_AND_ACCEPTED
+    corrections: 1
+  - id: unresolved-narrowing
+    reviewer: database
+    trigger: reviewer_stands_on_database_evidence
+    terminal: SCOPE_DISPUTE_BLOCKED
+    corrections: 1
+  - id: repeated-correction-forbidden
+    reviewer: ordinary
+    trigger: second_parent_correction
+    terminal: SCOPE_DISPUTE_BLOCKED
+    corrections: 2
+
+candidate_cases:
+  - id: ordinary-pass-clean
+    reviewer: ordinary
+    verdict: PASS
+    findings: []
+    central_missing_proof: false
+    caveat: false
+    next_action: false
+    candidate: CLEAN
+  - id: ordinary-pass-with-residual-caveat
+    reviewer: ordinary
+    verdict: PASS_WITH_FINDINGS
+    findings: []
+    central_missing_proof: false
+    caveat: true
+    next_action: false
+    candidate: CAVEATS
+  - id: ordinary-pass-with-p2
+    reviewer: ordinary
+    verdict: PASS_WITH_FINDINGS
+    findings: [P2]
+    central_missing_proof: false
+    caveat: false
+    next_action: true
+    candidate: ACTION
+  - id: ordinary-fail-p1
+    reviewer: ordinary
+    verdict: FAIL
+    findings: [P1]
+    central_missing_proof: false
+    caveat: false
+    next_action: true
+    candidate: DEFECT
+  - id: ordinary-fail-intent
+    reviewer: ordinary
+    verdict: FAIL
+    findings: []
+    central_missing_proof: false
+    caveat: false
+    next_action: true
+    candidate: DEFECT
+  - id: ordinary-blocked-p1-and-evidence
+    reviewer: ordinary
+    verdict: BLOCKED
+    findings: [P1]
+    central_missing_proof: true
+    caveat: false
+    next_action: true
+    candidate: DEFECT
+  - id: ordinary-blocked-evidence
+    reviewer: ordinary
+    verdict: BLOCKED
+    findings: []
+    central_missing_proof: true
+    caveat: false
+    next_action: true
+    candidate: EVIDENCE
+  - id: database-pass-clean
+    reviewer: database
+    verdict: PASS
+    findings: []
+    central_missing_proof: false
+    caveat: false
+    next_action: false
+    candidate: CLEAN
+  - id: database-pass-with-caveat
+    reviewer: database
+    verdict: PASS
+    findings: []
+    central_missing_proof: false
+    caveat: true
+    next_action: false
+    candidate: CAVEATS
+  - id: database-pass-with-p2
+    reviewer: database
+    verdict: PASS
+    findings: [P2]
+    central_missing_proof: false
+    caveat: false
+    next_action: true
+    candidate: ACTION
+  - id: database-blocked-p1-and-evidence
+    reviewer: database
+    verdict: BLOCKED
+    findings: [P1]
+    central_missing_proof: true
+    caveat: false
+    next_action: true
+    candidate: DEFECT
+  - id: database-blocked-evidence-only
+    reviewer: database
+    verdict: BLOCKED
+    findings: []
+    central_missing_proof: true
+    caveat: false
+    next_action: true
+    candidate: EVIDENCE
+  - id: database-needs-input
+    reviewer: database
+    verdict: NEEDS_INPUT
+    findings: []
+    central_missing_proof: false
+    caveat: false
+    next_action: true
+    candidate: INPUT
+  - id: contradictory-pass-p1
+    reviewer: database
+    verdict: PASS
+    findings: [P1]
+    central_missing_proof: false
+    caveat: false
+    next_action: true
+    candidate: INPUT
+
+join_cases:
+  - id: input-precedes-defect
+    candidates: [INPUT, DEFECT]
+    join: JOIN_NEEDS_INPUT
+    preserve: [DEFECT]
+  - id: defect-precedes-evidence
+    candidates: [DEFECT, EVIDENCE]
+    join: JOIN_BLOCKED_DEFECT
+    preserve: [EVIDENCE]
+  - id: database-action-preserved-under-ordinary-defect
+    candidates: [DEFECT, ACTION]
+    join: JOIN_BLOCKED_DEFECT
+    preserve: [ACTION]
+  - id: evidence-precedes-action
+    candidates: [EVIDENCE, ACTION]
+    join: JOIN_BLOCKED_EVIDENCE
+    preserve: [ACTION]
+  - id: action-precedes-caveats
+    candidates: [ACTION, CAVEATS]
+    join: JOIN_ACTION_REQUIRED
+    preserve: [CAVEATS]
+  - id: caveats-precede-clean
+    candidates: [CAVEATS, CLEAN]
+    join: JOIN_READY_WITH_CAVEATS
+    preserve: [CAVEATS]
+  - id: all-clean
+    candidates: [CLEAN, CLEAN]
+    join: JOIN_READY_CLEAN
+    preserve: []
+  - id: same-claim-contradiction
+    candidates: [DEFECT, CLEAN]
+    conflict: same_claim
+    join: JOIN_NEEDS_INPUT
+    preserve: [DEFECT, CLEAN]
+  - id: unresolved-scope-dispute
+    candidates: [INPUT]
+    conflict: SCOPE_DISPUTE_BLOCKED
+    join: JOIN_NEEDS_INPUT
+    preserve: [INPUT]

@@ -1,0 +1,14 @@
+{
+  "expect_pass": false,
+  "expected_error": "complete Classification receipt must precede the first meaningful action",
+  "options": {},
+  "transcript": [
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": {
+        "paths": ["CLAUDE.md", "runtime-contract.md"]
+      }
+    }
+  ]
+}

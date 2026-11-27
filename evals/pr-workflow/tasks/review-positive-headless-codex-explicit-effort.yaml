@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-headless-codex-explicit-effort
+name: Positive - headless Codex explicit effort
+description: The skill should trigger when the parent asks for headless Codex PR review with an explicit reasoning effort.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use headless Codex with high reasoning effort to review PR 4492."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_headless_codex_explicit_effort
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

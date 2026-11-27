@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-negative-general-planning
+name: Negative - general planning brainstorm
+description: General improvement planning without a stable concrete database target is not a database-reviewer verdict.
+tags: [trigger, negative, planning]
+inputs:
+  prompt: "Brainstorm general ways our engineering team could improve planning quality next quarter. Draft options and questions, but do not review or approve a concrete database change, migration, runbook, or rollout target."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_general_planning
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: negative
+      threshold: 0.8

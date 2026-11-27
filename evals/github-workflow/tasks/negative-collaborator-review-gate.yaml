@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-negative-collaborator-review-gate
+name: Negative - PR review collaborator gate
+description: A full PR review with collaborator gating should route to pr-workflow, not the GitHub primitive skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Review https://github.com/example-org/example-app/pull/104454, try to share the findings through the repo-approved collaborator workflow before editing, but continue if the collaborator is unavailable."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_pr_collaborator_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

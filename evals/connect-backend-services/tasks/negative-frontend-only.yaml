@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: connect-backend-services-negative-frontend-only
+name: Negative - frontend-only local work
+description: Frontend-only app-local UI work should not trigger connect-backend service management.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Debug a React layout issue on app-local using Playwright screenshots; do not touch connect-backend or dev_server processes."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_frontend_only_browser_work
+    type: trigger
+    config:
+      skill_path: .codex/skills/connect-backend-services/SKILL.md
+      mode: negative
+      threshold: 0.8

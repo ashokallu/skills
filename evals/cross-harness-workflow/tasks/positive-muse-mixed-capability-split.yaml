@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-mixed-capability-split
+name: Positive - split mixed Muse capabilities
+description: A Muse request containing shell work and current research should trigger the adapter so it can select sandboxed workhorse plus brokered-source lanes without granting native web or parent verdict authority.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use muse-spark-1.3-contributor as the direct cross-harness Muse CLI implementation workhorse while Codex Desktop remains the orchestrator. Have Muse inspect and edit these files and run local tests in its isolated worktree; have Codex collect provenance-labelled current sources, perform Git readback, and own the final validation claim without enabling native Muse web."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_capability_split
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

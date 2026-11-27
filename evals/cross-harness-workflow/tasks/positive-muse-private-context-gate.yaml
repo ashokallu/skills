@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-private-context-gate
+name: Positive - Muse private context gate
+description: Contributor-model offload involving proprietary code should trigger parent-owned context selection and automatic wrapper acknowledgement without a second user ceremony, while forbidden data remains blocked.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use muse-spark-1.3-contributor on this private repository task. Codex should select only the non-secret files needed for the task and supply the wrapper acknowledgement automatically without asking me again. Never pass credentials, auth state, PII, production data, private logs, or secrets; keep the run ephemeral and non-resumable."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_private_context_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

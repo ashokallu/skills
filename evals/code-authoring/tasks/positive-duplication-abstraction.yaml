@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-duplication-abstraction
+name: Positive - duplication and abstraction
+description: Code work focused on repeated logic, abstraction pressure, or drift-prone copy-paste should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Clean up repeated guards across example-app backend handlers, but use the duplication-and-abstraction lane to decide whether a helper removes real duplication without hiding different invariants."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_duplication_abstraction
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

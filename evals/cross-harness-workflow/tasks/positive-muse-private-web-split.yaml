@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-private-web-split
+name: Positive - Muse private web split
+description: Muse work over private or mixed repository context should trigger a split that keeps native web disabled and brokers sources through Codex.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use Muse on this private cross-harness repository investigation and include current external sources. Keep Muse native web disabled because the mounted target is not wholly public; have Codex collect provenance-labelled source bundles and pass only the selected non-secret snapshots to Muse."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_private_web_split
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

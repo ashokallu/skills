@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-negative-operational-workflow
+name: Negative - operational workflow planning
+description: Unknown operational planning belongs to workflow synthesis, not improve.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Plan how to investigate a new example-app production monitoring alert and identify the next safe operational evidence source."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_operational_workflow
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: negative
+      threshold: 0.72

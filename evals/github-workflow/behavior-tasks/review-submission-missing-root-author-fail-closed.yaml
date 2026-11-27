@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-behavior-review-submission-missing-root-author-fail-closed
+name: Behavior - missing root review author fails closed
+description: A missing root review-comment author login blocks a new review because thread ownership cannot be proved foreign.
+tags: [behavior, review-write, threads, fail-closed]
+inputs:
+  prompt: |
+    You are authenticated to GitHub as `alice`. A PR has one unresolved and
+    unaddressed review thread whose root review comment has no author login. A
+    later reply is authored by `bob`. The review lane produced one accepted
+    review-comment payload, and the user authorized posting it. Describe the
+    next GitHub action.
+graders:
+  - name: missing_root_author_fails_closed
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/github-workflow/rubrics/review-submission-missing-root-author-fail-closed.md

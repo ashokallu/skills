@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-add-review-comments
+name: Positive - add PR review comments
+description: The skill should trigger when the user asks to review a PR and post findings as review comments.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Open a review worktree for PR 4558, inspect it with the reviewer instructions, and add GitHub review comments for any real findings."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_review_comments_workflow
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

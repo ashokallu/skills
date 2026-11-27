@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-web-search-source-native-routing
+name: Behavior - route web research by source capability with bounded fanout
+description: A cold agent should select Grok, parent web tools, Parallel Search, or bounded fanout without duplicating evidence ownership or using external search for local code.
+tags: [behavior, routing, web-search, cross-harness]
+inputs:
+  prompt: |
+    Use the loaded example-app dispatcher and its selected web-search lane
+    as the governing source. Explain the route for each case without calling
+    tools, launching collaborators, or performing the searches.
+
+    A. Summarize a literal x.com post and its replies.
+    B. Find current Reddit threads and sentiment about a newly released tool.
+    C. Google-search the live web for current reactions to that tool.
+    D. Find broad primary web sources comparing current vendor claims.
+    E. Compare sentiment across X, Reddit, and the broader web.
+    F. Use only Parallel Search for an X URL; do not call Grok.
+    G. Grok is unavailable, but complete X reply-thread coverage is required.
+    H. Search the local Go backend for the implementation of course progress.
+
+    For every applicable web case, name the primary route, required capability,
+    whether fanout is allowed, failure behavior, evidence/conflict owner, and
+    sufficient-evidence stop. Keep explicit user surface constraints intact.
+graders:
+  - name: web_search_routes_by_source_capability_and_stops_boundedly
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/web-search-source-native-routing.md

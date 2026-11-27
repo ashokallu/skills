@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-inline-advisory-pass
+name: Positive - inline advisory pass after changed-file inventory
+description: The canonical closeout lens should trigger consequence advisory while the legacy inline-advisory filename remains an alias.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app PR review already has a pinned head and changed-file inventory. Load review-closeout-lens.md once and apply consequence_advisory for bounded work, operator evidence, stale assumptions, and wrong-green tests. Treat inline-advisory-review.md as a compatibility alias, not an additional pass."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_inline_advisory_pass
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

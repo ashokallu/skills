@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-positive-review-plan
+name: Positive - review existing plan
+description: Critiquing an existing improve plan should trigger improve.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use improve review-plan advisor-plans/003-cache-cleanup.md and tighten it for a cold executor with no session context."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_review_plan
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: positive
+      threshold: 0.55

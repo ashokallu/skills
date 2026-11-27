@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-sandbox-failure
+name: Positive - Muse sandbox failure handling
+description: A Muse managed-shell sandbox failure should trigger the non-privileged bundled-backend repair and no-bypass boundary.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "This example-app task explicitly needs two harnesses, Codex Desktop and Muse, with a direct Muse call and cross-harness wrapper/session routing. Run the Muse CLI workhorse through the repository collaboration wrapper. Its sandbox helper is missing, so repair the wrapper with the exact active ELF, version/digest-bound bundled Bubblewrap selector, and outer Git guard. Keep Codex Desktop as orchestrator; do not install a root helper, change AppArmor, use yolo, or disable the sandbox."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_sandbox_failure
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

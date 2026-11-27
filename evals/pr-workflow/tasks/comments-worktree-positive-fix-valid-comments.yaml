@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-fix-valid-comments
+name: Positive - fix valid review comments
+description: The skill should trigger when review-comment triage leads to worktree-based code fixes.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this example-app PR, inspect all review comment surfaces, decide which threads are still valid, then fix them in a clean worktree."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_comment_fix_worktree
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

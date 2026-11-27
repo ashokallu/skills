@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-existing-conventions-no-standard
+name: Behavior - no clear convention standard
+description: Absence of a clear standard defaults to audit evidence rather than a finding.
+tags: [behavior, conventions, no-standard, evidence]
+inputs:
+  prompt: |
+    Treat the facts below as the complete case. Do not inspect the repository or run tools.
+    Review a stable small implementation diff for a new problem class. A
+    bounded search of the owning package and nearest shared owner finds no
+    helper, sibling, or documented standard. The choice has no material effect
+    on correctness, operations, or the verdict. Apply the existing-conventions
+    lens.
+    End with exactly one field per line using these allowed values:
+    Convention disposition: FINDING or NO_FINDING
+    Standard state: AUTHORITATIVE, CONFLICTING, JUSTIFIED, NONE, or NIT
+    Search scope: OWNER_BOUNDED when package/owner evidence is used, otherwise INPUT_SUFFICIENT
+    Finding owner: CONVENTIONS, SECURITY_PRIVACY, or NONE
+    Pending verification: YES or NO
+    Reason: one sentence supporting every field without hypothetical findings.
+graders:
+  - name: no_standard_defaults_to_no_finding
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/reviewer/graders/existing_conventions_contract.py,
+          no-standard,
+        ]

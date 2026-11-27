@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: claude-code-configuration-positive-install-and-doctor
+name: Positive - install and doctor Claude Code
+description: The skill should trigger when an agent is asked to install and doctor Claude Code for a user.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Set up Claude Code for me in example-app. Install it if needed, create my .claude/settings.local.json placeholder, and run the doctor once my sk- token is in place."
+expected:
+  should_trigger: true
+graders:
+  - name: agents_skill_should_trigger_setup
+    type: trigger
+    config:
+      skill_path: .agents/skills/claude-code-configuration/SKILL.md
+      mode: positive
+      threshold: 0.6
+  - name: claude_skill_should_trigger_setup
+    type: trigger
+    config:
+      skill_path: .claude/skills/claude-code-configuration/SKILL.md
+      mode: positive
+      threshold: 0.6

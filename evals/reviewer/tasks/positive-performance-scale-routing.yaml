@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-performance-scale-routing
+name: Positive - performance scale lens routing
+description: Concrete reviewer routing for performance-sensitive changes should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Given this local git diff --name-only output for a example-app PR: app/components/CourseGrid.tsx, app/package.json, backend/internal/content/datasource_cache.go, backend/internal/shared/sql/queries/content.sql. The PR claims lower P99 latency, smaller bundle size, and fewer allocations. Select reviewer lenses and check benchmark/profiling evidence before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_performance_scale_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

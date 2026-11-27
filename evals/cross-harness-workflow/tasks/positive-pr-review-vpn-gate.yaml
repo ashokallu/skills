@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-pr-review-vpn-gate
+name: Positive - PR review attempts Claude collaborator and Copilot VPN gate
+description: The skill should trigger when Codex should attempt to share PR review notes with Claude before code changes, while keeping VPN gating for Copilot-only calls.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review this GitHub PR, try to share Codex's review findings with Claude Code first, do not require VPN for Claude Enterprise, and keep VPN preflight only for any Copilot CLI collaborator call."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_review_vpn_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

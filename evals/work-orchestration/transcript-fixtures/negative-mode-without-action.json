@@ -1,0 +1,19 @@
+{
+  "expect_pass": false,
+  "options": { "require_modes": ["code-authoring", "validation"] },
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: defect\nRoute/mode: code-authoring; edit\nRoute rationale: code authoring owns the requested fix\nWork ownership: parent-only: no net-positive child identified\nTarget: target.go\nSide effects: local repository edits and validation\nRisk: medium\nProof/evidence: reviewed candidate"
+    },
+    {
+      "type": "assistant.message",
+      "content": "Route/mode: validation; validate"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "bash",
+      "arguments": { "command": "focused-check" }
+    }
+  ]
+}

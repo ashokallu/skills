@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-instruction-skill-authoring
+name: Positive - instruction skill authoring
+description: Durable skill, agent, prompt, and mirrored instruction edits should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Edit the example-app Codex, Agents, and Claude skill instructions to add a durable authoring lane, keep mirror parity, update the packet docs, and validate the Markdown before review."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_instruction_skill_authoring
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

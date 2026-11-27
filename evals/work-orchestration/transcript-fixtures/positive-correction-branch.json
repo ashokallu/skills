@@ -1,0 +1,42 @@
+{
+  "expect_pass": true,
+  "options": {
+    "require_correction": true,
+    "require_branch_join": true
+  },
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: maintenance\nRoute/mode: delegation; plan\nRoute rationale: a required critic owns the pre-edit decision gate\nWork ownership: mixed: see Dispatch\nTarget: stable workflow plan\nSide effects: read-only critic dispatch\nRisk: medium\nProof/evidence: joined critic disposition\nDispatch: bounded critic branch"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "spawn_agent",
+      "tool_call_id": "call-critic",
+      "arguments": { "task": "bounded critic review" }
+    },
+    { "type": "tool.execution_complete", "tool_call_id": "call-critic" },
+    {
+      "type": "assistant.message",
+      "content": "Join result: critic approved the revised route"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "bash",
+      "arguments": { "command": "prepare-worktree" }
+    },
+    {
+      "type": "user.message",
+      "content": "[route-correction] Commit locally but do not push."
+    },
+    {
+      "type": "assistant.message",
+      "content": "Classification delta:\nRoute/mode: worktree-readiness; commit\nRoute rationale: the user narrowed publication authority to a local commit\nSide effects: local git commit only; no push\nProof/evidence: local commit SHA\nNext checkpoint: local commit SHA"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "bash",
+      "arguments": { "command": "git commit" }
+    }
+  ]
+}

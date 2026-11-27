@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-flags-a11y-i18n
+name: Positive - flags accessibility i18n
+description: Feature flag, rollout, accessible UI, and localization implementation should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Implement a example-app frontend feature behind a rollout flag, cover enabled disabled and invalid flag states, add translated form copy, preserve keyboard focus behavior, and verify long localized labels on mobile."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_flags_a11y_i18n
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

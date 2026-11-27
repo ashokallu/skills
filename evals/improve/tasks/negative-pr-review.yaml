@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-negative-pr-review
+name: Negative - ordinary PR review
+description: PR review should route to pr-workflow and reviewer, not improve.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Review this GitHub PR for bugs, missing tests, and stale PR description issues: https://github.com/example-org/example-app/pull/104602"
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_pr_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: negative
+      threshold: 0.7

@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-author-self-review-exclusions
+name: Behavior - author self-review exclusions
+description: The gate applies only before first independent review of an agent-authored substantive target.
+tags: [behavior, self-review, routing, exclusions]
+inputs:
+  prompt: |
+    Decide whether to run the author self-review delta gate in each case and
+    name the owning route instead:
+
+    A. You are reviewing a teammate's open PR.
+    B. The user asked you to directly review a local commit you did not author.
+    C. You changed one typo locally with no handoff, ready claim, push, or
+       independent review gate.
+    D. An already reused reviewer is checking its own finding against a new
+       ancestral fix commit under the scoped re-review workflow.
+graders:
+  - name: author_self_review_exclusion_routing
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response excludes all four cases: A routes to ordinary
+        teammate PR review; B remains a parent-owned direct reviewer pass;
+        C remains an eligible local micro-edit without inventing a reviewer
+        gate; and D stays excluded from the full author self-review but must
+        complete authoring-preflight's strengthened Review-fix proof before
+        finding-directed scoped re-review with the reused reviewer's own
+        provenance-bound context. It must explain that author self-review is only
+        for an agent-authored substantive stable target before its first
+        independently dispatched reviewer and emit only the compact exclusion
+        reason rather than a full delta for each case. Fail if it treats review as
+        delegation, adds a fresh full review to D, or emits a verdict packet.

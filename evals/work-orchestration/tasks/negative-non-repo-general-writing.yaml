@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-negative-non-repo-general-writing
+name: Negative - non-repo general writing
+description: General writing with no example-app repo work should not trigger the workflow dispatcher.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Write a short birthday toast for a friend who likes coffee."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_non_repo_general_writing
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: negative
+      threshold: 0.7

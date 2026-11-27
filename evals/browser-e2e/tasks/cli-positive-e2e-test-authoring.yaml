@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: browser-e2e-positive-e2e-test-authoring
+name: Positive - E2E test authoring
+description: The skill should trigger for Playwright-native e2e/pd test generation and selector proof.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "I need to write a new e2e/pd Playwright test for a course pathway page. Use playwright-cli snapshots to prove the locator before editing the spec."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_playwright_cli_e2e_authoring
+    type: trigger
+    config:
+      skill_path: .codex/skills/browser-e2e/SKILL.md
+      mode: positive
+      threshold: 0.6

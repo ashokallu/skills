@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-security-privacy-routing
+name: Positive - security privacy lens routing
+description: Concrete reviewer routing for auth, tenant, and sensitive-data changes should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review the stable diff for app/middleware.ts, app/components/AdminLink.tsx, backend/internal/auth/permission_verifier.go, backend/internal/content/controller.go, and .github/workflows/deploy.yml. The change touches cookie refresh, tenant-scoped content, public error messages, and OIDC permissions. Select reviewer lenses for security/privacy before issuing a verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_security_privacy_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

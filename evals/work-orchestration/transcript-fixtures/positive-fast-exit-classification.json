@@ -1,0 +1,15 @@
+{
+  "expect_pass": true,
+  "options": {},
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification: fast-exit; investigation; read-only; no repository or external mutation"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "known-file.go" }
+    }
+  ]
+}

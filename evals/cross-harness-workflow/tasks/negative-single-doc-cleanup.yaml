@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-negative-single-doc-cleanup
+name: Negative - single document cleanup
+description: A narrow markdown cleanup should not trigger the multi-harness orchestration workflow.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Please lint and fix line wrapping in docs/plans/platform-options-claude.md only."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_single_doc_cleanup
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

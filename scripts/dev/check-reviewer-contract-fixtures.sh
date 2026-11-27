@@ -437,7 +437,7 @@ fail_fixture("canonical closeout category order drifted") unless category_offset
   fail_fixture("packet acceptance does not enter beginning phase") unless skill.include?("soft-pedaled proved gaps enters the beginning phase")
   fail_fixture("packet acceptance lacks bounded middle analysis") unless skill.include?("bounded packet-artifact inventory")
   fail_fixture("reviewer kernel lost accepted FULL primer activation") unless skill.include?("Accepted `FULL` scope activates") && skill.include?("newly admitted whole-target initial")
-  fail_fixture("reviewer kernel lost exact live primer read") unless skill.include?("`docs/agents/pr-4713-review-thoroughness-case-study.md` through EOF") && skill.include?("every page or chunk")
+  fail_fixture("reviewer kernel lost exact live primer read") unless skill.include?("`docs/agents/initial-review-thoroughness-primer.md` through EOF") && skill.include?("every page or chunk")
   fail_fixture("reviewer kernel permits primer substitutes") unless skill.include?("first-N-line peeks, summaries, injected") && skill.include?("another agent's read are not substitutes")
   fail_fixture("reviewer kernel lost private primer identity") unless skill.include?("privately record the immutable identity")
   fail_fixture("reviewer kernel lets primer replace native review law") unless skill.include?("reviewer role, mandatory phase contracts, evidence law, mandatory floors,") && skill.include?("stop proof remain authoritative")
@@ -545,7 +545,7 @@ ROLE_PATHS.each do |relative|
   end
   fail_fixture("reviewer role lacks shared scope-control owner: #{relative}") unless body.include?("review-control-plane.md")
   fail_fixture("reviewer role can force disputed narrowing: #{relative}") unless body.include?("SCOPE_DISPUTE_BLOCKED")
-  fail_fixture("reviewer role lost FULL primer fallback: #{relative}") unless body.include?("docs/agents/pr-4713-review-thoroughness-case-study.md")
+  fail_fixture("reviewer role lost FULL primer fallback: #{relative}") unless body.include?("docs/agents/initial-review-thoroughness-primer.md")
   fail_fixture("reviewer role permits partial primer read: #{relative}") unless body.include?("continuing through every page or chunk") && body.include?("Grep hits, excerpts, summaries")
   fail_fixture("reviewer role activates primer for focused re-review: #{relative}") unless body.match?(/focused re-review do\s+not\s+activate this private primer/)
   fail_fixture("reviewer role permits public primer acknowledgement: #{relative}") unless body.include?("Never emit an acknowledgement")

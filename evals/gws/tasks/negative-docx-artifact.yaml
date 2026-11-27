@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: gws-negative-docx-artifact
+name: Negative - local DOCX artifact
+description: Creating a Word document artifact should route to the document skill, not gws.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Create a polished quarterly report as a local .docx file."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_docx_artifact
+    type: trigger
+    config:
+      skill_path: .codex/skills/gws/SKILL.md
+      mode: negative
+      threshold: 0.75

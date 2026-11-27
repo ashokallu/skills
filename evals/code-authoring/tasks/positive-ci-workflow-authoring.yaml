@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-ci-workflow-authoring
+name: Positive - CI workflow authoring
+description: GitHub Actions workflow YAML, matrices, caches, path filters, artifacts, permissions, and runner settings should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Update a example-app GitHub Actions workflow to split backend validation into clearer jobs, tune path filters and cache keys, keep branch-protection failure signals intact, and document any syntax validation that cannot be run locally."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_ci_workflow_authoring
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

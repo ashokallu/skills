@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-nitpick-review-lane
+name: Positive - default PR closeout lanes
+description: The canonical closeout lens should trigger naming readability while the legacy nitpick filename remains an alias.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app PR review already has a pinned head, base, changed-file inventory, and local diff. Load review-closeout-lens.md once and apply naming_readability last with pure nits non-counting and the shared advisory budget. Treat nitpick-review-lane.md as a compatibility alias, not an additional pass."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_nitpick_review_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

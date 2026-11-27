@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-negative-worktree-creation
+name: Negative - worktree creation
+description: Creating and preparing the worktree should route to worktree-readiness first.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Create a new tmp/worktrees checkout from origin/main, set up app/node_modules, repair Husky, and confirm the worktree is ready."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_worktree_creation
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: negative
+      threshold: 0.9

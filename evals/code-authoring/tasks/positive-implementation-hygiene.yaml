@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-implementation-hygiene
+name: Positive - implementation hygiene
+description: Code edits with implementation hygiene should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Update the example-app backend handler and keep the change surgical. I want the implementation, simplification, and engineering-judgment checks before we hand it to review."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_implementation_hygiene
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

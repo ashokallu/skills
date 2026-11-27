@@ -1,0 +1,44 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-phase-readiness-obvious-task-incomplete
+name: Behavior - require canonical readiness for an apparently obvious phase
+description: The dispatcher prevents a simple-looking owning phase from bypassing material capability, prerequisite, constraint, assumption, or next-consumer readiness inputs.
+tags: [behavior, routing, readiness, constraints, capability]
+inputs:
+  prompt: |
+    A example-app instruction edit appears straightforward. The objective,
+    exact files, parent owner, local-write boundary, success proof, and stop
+    condition are already known, so a teammate proposes starting edits without
+    loading workflow-contracts.
+
+    Before substantive editing:
+
+    - write capability for every required runtime mirror has not been
+      established;
+    - a mandatory prerequisite instruction gate has no current result;
+    - the task permits one paid behavior run, but its model, timeout, and stop
+      condition are not recorded;
+    - an assumption about mirror equivalence affects the edit shape but has no
+      basis or verification point; and
+    - the next consumer is a contract checker whose acceptance requirements
+      have not been inspected.
+
+    Do not run commands, edit files, contact services, or spawn workers.
+    Explain whether the phase is ready, which complete readiness requirements
+    apply even though the task looks obvious, when the exact canonical schema
+    is needed, how each missing input should be handled, and the smallest next
+    action boundary.
+graders:
+  - name: obvious_phase_does_not_bypass_readiness
+    type: text
+    config:
+      regex_match:
+        - "(?i)(not ready|must not (start|begin|proceed)|cannot (start|begin|proceed))"
+        - "(?i)Phase (Contract|Readiness)"
+        - "(?i)(capability|prerequisite)"
+        - "(?i)(constraint|budget|paid)"
+        - "(?i)next consumer"
+  - name: complete_readiness_is_mandatory_before_substantive_work
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/phase-readiness-obvious-task-incomplete.md

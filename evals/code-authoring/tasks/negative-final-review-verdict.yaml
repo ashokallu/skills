@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-negative-final-review-verdict
+name: Negative - final read-only verdict
+description: Read-only final verdict after a stable target should not trigger code authoring.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Review this stable example-app PR and give me the final parser-facing verdict only. Do not implement, simplify, test, or run authoring-preflight."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_code_authoring_final_review_verdict
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: negative
+      threshold: 0.9

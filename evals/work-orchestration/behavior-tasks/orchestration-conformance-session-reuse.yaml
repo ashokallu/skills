@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-orchestration-conformance-session-reuse
+name: Behavior - decision attestations refresh only when material state changes
+description: A critic reuses unchanged same-session decisions but refreshes an affected decision after its owning instruction changes.
+tags: [behavior, orchestration-conformance, critic, freshness, reuse]
+inputs:
+  prompt: |
+    In one critic session you consumed a current decision-focused orchestration
+    conformance attestation. The parent resubmits the same candidate with no
+    instruction, objective, target, classification, gate-result, consultation,
+    or scope change. Later in that same session, the decision-bearing objective
+    lock instruction changes in the dirty worktree while HEAD stays the same.
+    The candidate itself is still unchanged.
+
+    State what may be reused after the first resubmission, what the changed
+    instruction invalidates, and what evidence is required before another
+    verdict. Preserve any accepted-plan and final-target identities. Do not
+    request or emit a governing-source path/hash inventory.
+graders:
+  - name: reuse_is_session_local_content_bound_and_separate
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/orchestration-conformance-session-reuse.md

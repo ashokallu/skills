@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-remote-link-fallback
+name: Positive - remote link fallback
+description:
+  The skill should trigger when Jira development-info is empty after PR publication and the agent
+  must create deterministic Jira PR linkage.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "For DEMO-2911, publish the GitHub PR with durable Jira linkage, check Jira dev-info summary, and
+    if the Development panel stays empty use the explicit remote-link fallback."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_remote_link_fallback
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

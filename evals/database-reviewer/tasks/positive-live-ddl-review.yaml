@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-live-ddl-review
+name: Positive - live DDL safety review
+description: Read-only review of DDL on a live relation should trigger database-reviewer.
+tags: [trigger, positive, ddl, locking]
+inputs:
+  prompt: "Independently review this PostgreSQL ALTER TABLE on a populated, write-heavy production relation for lock behavior, rewrite or validation scans, runner transaction compatibility, timeout bounds, cancellation, and partial residue. Do not implement changes."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_live_ddl_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.45

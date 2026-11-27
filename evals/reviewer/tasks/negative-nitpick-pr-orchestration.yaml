@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-negative-nitpick-pr-orchestration
+name: Negative - nitpick PR orchestration before stable target
+description: A bare PR nitpick request should route through pr-workflow before reviewer lens selection.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Nitpick this example-app pull request and leave comments: https://github.com/example-org/example-app/pull/101234"
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_nitpick_before_pr_workflow
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: negative
+      threshold: 0.6

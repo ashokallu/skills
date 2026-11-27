@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-analytics-event-tracking-lens
+name: Positive - analytics event tracking lens
+description: Stable PR reviews for analytics instrumentation should trigger reviewer lens selection.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a stable example-app diff after changed-file inventory shows app/lib/analytics.ts, app/components/SignupForm.tsx, and docs/tracking-plan.md. The PR renames an event, changes a property type, moves the firing point from click to confirmed success, and claims dashboards remain compatible. Select analytics/event tracking, privacy, frontend, docs, and tests lenses before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_reviewer_analytics_event_tracking_lens
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

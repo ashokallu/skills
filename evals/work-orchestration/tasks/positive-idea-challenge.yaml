@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-idea-challenge
+name: Positive - idea challenge
+description: User-proposed durable workflow or implementation ideas should route through the idea-challenge lane before execution.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "I have an idea for example-app: add a default new agent gate before every PR and make it mandatory for all branches. Before implementing it, challenge whether we should do this at all and whether a simpler workflow already solves it."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_work_orchestration_idea_challenge
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

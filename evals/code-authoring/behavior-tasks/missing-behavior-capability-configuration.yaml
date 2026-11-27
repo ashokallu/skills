@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-missing-behavior-capability-configuration
+name: Behavior - diagnose existing but disabled capability before proposing code
+description: A runtime symptom must be reconciled with capability, configuration, and lineage before code is declared missing.
+tags: [behavior, authoring, source-map, configuration, diagnosis]
+inputs:
+  prompt: |
+    Production shadow rows show Postgres XP ahead of raw Mongo by amounts that
+    match completed materialization floors. Current source already calls
+    applyXPOverlayDeltas before the comparator on both affected endpoints, and
+    that helper mutates the compared value in place. The effective environment
+    configuration has overlay reads disabled and an empty population-run ID.
+
+    The proposed fix is to add overlay application inside the comparator. Give
+    the authoring decision before editing.
+graders:
+  - name: existing_disabled_capability_is_not_missing_code
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response rejects or pauses the proposed code change
+        and reconciles all four layers: intended comparison contract,
+        implemented capability across both endpoint paths and in-place
+        transforms, effective flags and lineage, and observed rows matching a
+        known floor. It must state that disabled or incompletely configured
+        capability is not missing code, identify duplicate overlay or wrong
+        repair direction as a regression risk, and select bounded config and
+        lineage verification before code. Missing material evidence must remain
+        Pending Verification. It must not cite or require the
+        requested-plan-policy-substitution case study.

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-negative-quality-scout-now
+name: Negative - immediate quality scout
+description: A small quality discovery feeding immediate implementation belongs to code authoring.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Find at most three code-health tasks in the learner-progress package, choose the best one, and implement it now."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_immediate_quality_scout
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: negative
+      threshold: 0.72

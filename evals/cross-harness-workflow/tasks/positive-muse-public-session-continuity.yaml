@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-public-session-continuity
+name: Positive - Muse public exact-session continuity
+description: A wholly public Muse task may reuse one wrapper-owned exact session lane without using global latest state.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run a direct cross-harness Muse CLI collaboration through the repository wrapper/session route for two read-only turns over an entirely public open-source checkout with only public prompt context. Keep Codex Desktop as orchestrator, reuse one wrapper-owned exact task lane with one writer, never latest or last, and fail closed if the mounted target is private, mixed, or unknown."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_public_exact_session_continuity
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

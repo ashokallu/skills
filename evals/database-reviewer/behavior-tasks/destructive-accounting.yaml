@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-destructive-accounting
+name: Behavior - destructive rollback and ambiguous accounting
+description: Recall PR4708-derived hazards and emit an independent database verdict.
+tags: [behavior, recall, pr4708-seed]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review this conceptual stable
+    target without editing files:
+
+    - down SQL deletes all business rows where migration_run_id is non-null;
+    - organic writers are intended to clear that field, but not every writer was inventoried;
+    - each batch commits transactionally, then a count query can fail;
+    - dry-run and apply both persist inserted_count with different meanings;
+    - a partially completed run ID cannot be resumed.
+
+    Return the complete Database review packet and verdict.
+graders:
+  - name: destructive_accounting_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/database-reviewer/graders/behavior_contract.py,
+          destructive-accounting,
+        ]

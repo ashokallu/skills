@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-explicit-muse-offload
+name: Positive - explicit Muse work offload
+description: An explicit request to use Muse for the current task should route through cross-harness Muse orchestration even when no second external harness is named.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use Muse for this task. Give it the largest safe implementation slice as the workhorse, while Codex Desktop stays the orchestrator and validates the result."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_explicit_muse_offload
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

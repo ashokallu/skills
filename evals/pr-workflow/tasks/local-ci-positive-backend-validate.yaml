@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-backend-validate
+name: Positive - backend PR gate
+description: The skill should trigger when a backend branch needs PR-triggered local validation.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The backend fix is in a disposable worktree. Scan the pull_request workflows and run the matching local backend validation before handoff."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_backend_pr_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

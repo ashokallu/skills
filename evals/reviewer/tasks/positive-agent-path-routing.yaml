@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-agent-path-routing
+name: Positive - agent path lens routing
+description: Reviewer lens selection for agent role paths should trigger the instruction, skill, agent, and durable-doc lens.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review the stable diff for .codex/agents/reviewer.toml and .agents/plugins/example-app/agents/reviewer.md. Select the applicable reviewer reference lenses before issuing a verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_agent_path_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

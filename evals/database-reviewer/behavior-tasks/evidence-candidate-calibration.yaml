@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-evidence-candidate-calibration
+name: Behavior - historical operation candidate calibrates unsupported claims
+description: Use relevant historical evidence without promoting non-replayable provenance or inventing runtime impact.
+tags: [behavior, evidence-candidate, performance, provenance]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Perform an advisory performance
+    assessment of a proposed concurrent B-tree index on the Production
+    content_user_progress.created_at column. A supplied optional evidence
+    candidate records that this exact index operation completed on 2026-07-16
+    in 45.7 seconds, with CPU peak 38.093%, free-memory minimum 44.135%, and no
+    terminal lock waiters. Its provenance is agent_attested_non_replayable: the
+    executing agent observed terminal, catalog, and Monitoring readbacks, but
+    no portable primary artifact or digest remains. Current load and current
+    index existence are unavailable. Another reviewer asserts the operation
+    will saturate the instance, cause timeouts, and exhaust connections based
+    only on the instance tier and historical row estimate. Return the complete
+    Database review packet without refreshing evidence. Classify the candidate
+    relevance and provenance, and apply the formal finding-admission gate.
+graders:
+  - name: evidence_candidate_calibration_contract
+    type: program
+    config:
+      command: python3
+      args:
+        - evals/database-reviewer/graders/behavior_contract.py
+        - evidence-candidate-calibration

@@ -1,0 +1,22 @@
+{
+  "expect_pass": false,
+  "options": { "require_branch_join": true },
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: maintenance\nRoute/mode: delegation; review\nRoute rationale: a required critic owns plan review\nWork ownership: mixed: see Dispatch\nTarget: stable workflow plan\nSide effects: read-only critic dispatch\nRisk: medium\nProof/evidence: joined critic disposition\nDispatch: bounded critic branch"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "spawn_agent",
+      "tool_call_id": "call-critic",
+      "arguments": { "task": "bounded critic review" }
+    },
+    { "type": "tool.execution_complete", "tool_call_id": "call-critic" },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "bash",
+      "arguments": { "command": "apply-changes" }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-lane-journey-multiphase
+name: Behavior - narrate a multi-phase lane journey before acting
+description: A parent makes authoring, validation, review, and commit ownership visible at their boundaries.
+tags: [behavior, routing, journey, sequencing]
+inputs:
+  prompt: |
+    The loaded example-app workflow contract requires the parent to expose
+    the current route node before later phases act. Make the current
+    explanation-only node visible for a proposed local instruction change,
+    then map the future authoring, validation, direct local-review, and
+    local-commit journey. Do not inspect files, edit, validate, review, or
+    commit in this task.
+graders:
+  - name: lane_journey_multiphase_contract
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/lane-journey-multiphase.md

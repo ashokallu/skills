@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-cms-sanity-groq-routing
+name: Positive - CMS Sanity GROQ lens routing
+description: Concrete post-diff reviewer lens routing for Sanity and GROQ changes should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Given this local git diff --name-only output for a example-app PR: app/sanity/types/course.ts, app/sanity.types.ts, backend/internal/content/datasource.go, backend/internal/content/cache.go. The diff changes GROQ projections, draft filtering, reference expansion, and Sanity webhook cache invalidation. Select the reviewer lenses before issuing a verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_cms_sanity_groq_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

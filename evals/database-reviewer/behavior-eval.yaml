@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/eval.schema.json
+name: database-reviewer-behavior-eval
+description: Deterministic cold-agent packet-contract and seeded-recall checks.
+skill: database-reviewer
+version: "0.1"
+
+config:
+  trials_per_task: 1
+  timeout_seconds: 180
+  parallel: false
+  executor: copilot-sdk
+  model: deepseek-v4-pro
+  skill_directories:
+    - ../../.codex/skills
+
+metrics:
+  - name: dba_behavior
+    weight: 1
+    threshold: 1
+    description: The specialist must satisfy deterministic packet, lane, seeded-hazard, clean-case, and verdict checks.
+
+tasks:
+  - behavior-tasks/*.yaml

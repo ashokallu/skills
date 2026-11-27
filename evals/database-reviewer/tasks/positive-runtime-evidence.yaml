@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-runtime-evidence
+name: Positive - runner and runtime evidence
+description: DDL and asserted access paths require migration-specific runner and evidence probes.
+tags: [trigger, positive, physical-design]
+inputs:
+  prompt: "Perform a read-only DBA safety review of pending Postgres migration files under backend/internal/shared/sql/migrations. They create an index during application startup and claim a candidate-bounded query uses the primary key without representative EXPLAIN evidence."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_runner_and_plan_evidence
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.45

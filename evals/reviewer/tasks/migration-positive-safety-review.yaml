@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-migration-positive-safety-review
+name: Positive - migration safety review
+description: The skill should trigger for read-only review of pending migration files.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review the pending backend/internal/shared/sql/migrations changes for deploy-time safety, rolling-deploy compatibility, and down-migration reversibility. Do not edit files."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_migration_safety_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

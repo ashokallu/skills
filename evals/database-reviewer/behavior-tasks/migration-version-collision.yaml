@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-migration-version-collision
+name: Behavior - same migration version with different content
+description: Treat a confirmed current-base version collision as an integration defect without inventing runtime impact.
+tags: [behavior, migration, version-collision]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review merge readiness for a
+    branch that adds migration 000057. The exact current base also contains
+    migration 000057, and a source diff proves the up and down contents differ.
+    No environment execution claim is needed to establish the source collision.
+    Return the complete Database review packet. Emit the integration finding,
+    but do not invent lock, saturation, or Production-runtime impact.
+graders:
+  - name: migration_version_collision_contract
+    type: program
+    config:
+      command: python3
+      args:
+        - evals/database-reviewer/graders/behavior_contract.py
+        - migration-version-collision

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-pr-publication-codex-review-gate
+name: Positive - PR publication Codex review gate
+description: The PR workflow publication lane should preserve the high codex-review pre-open gate for every worktree branch.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Open a PR for this example-app worktree branch. Before creating the PR, make sure the branch is up to date with origin/main, run the high codex-review script for the branch, and fix any accepted or actionable Codex review comments before publication."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_publication_codex_review_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

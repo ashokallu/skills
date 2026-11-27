@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-recursive-final-package-eval
+name: Positive - recursive final package evaluation
+description: The skill should trigger when the user asks all harnesses to evaluate final packages produced from earlier harness rounds and then aggregate the verdicts.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Take all final reports from the five council harness folders, feed those final packages back to all five reused harness sessions, ask each to evaluate whose final document is best and why, then create an overall final-package verdict with the vote count and rationale."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_recursive_final_package_eval
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

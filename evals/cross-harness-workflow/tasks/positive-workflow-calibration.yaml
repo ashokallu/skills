@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-workflow-calibration
+name: Positive - workflow calibration and repair
+description: The skill should trigger when the user asks for multi-harness low-reasoning smoke tests, scoring, and targeted instruction self-repair.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run low-reasoning workflow smokes for Claude, Codex, Grok, and Muse, score how each maps work-orchestration lanes, then let weak harnesses repair the instructions in isolated worktrees and consolidate the best generic fixes."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_workflow_calibration
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

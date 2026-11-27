@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-work-item-profile-material-delta
+name: Behavior - emit a material Work Item Profile delta after discovery
+description: Discovery must revise downstream routing without repeating the full profile.
+tags: [behavior, routing, work-item-profile, discovery, delta]
+inputs:
+  prompt: |
+    Work item route-cache@v1 was classified as a standard defect with component
+    impact, easy reversibility, HIGH confidence, one PR, STANDARD review, and no
+    database consequence. Impact mapping now proves the helper is called by two
+    services and the fix requires changing a shared SQL query contract. The
+    profile itself has already been shown to the user. Complexity, reversibility,
+    and confidence were rechecked and have no material delta.
+
+    Give the phase-transition update and next route. Do not edit files.
+graders:
+  - name: material_delta_changes_route_without_recital
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/work-item-profile-material-delta.md

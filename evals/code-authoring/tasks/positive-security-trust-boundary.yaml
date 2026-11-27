@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-security-trust-boundary
+name: Positive - security trust boundary
+description: Code changes touching auth, permissions, tenants, secrets, or trust boundaries should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Implement a example-app backend endpoint change that touches tenant permissions and sensitive logs; use the security-and-trust-boundary lane before editing and prove the reachable auth paths."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_security_trust_boundary
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

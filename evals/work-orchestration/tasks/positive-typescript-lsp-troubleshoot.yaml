@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-typescript-lsp-troubleshoot
+name: Positive - TypeScript LSP MCP troubleshooting
+description: The umbrella should trigger when TypeScript LSP MCP server config or startup is broken.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The example-app typescript-lsp MCP returns unconfigured for typescriptreact. Check the MCP config surfaces and smoke-test startup."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_diagnose_for_ts_lsp_troubleshoot
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

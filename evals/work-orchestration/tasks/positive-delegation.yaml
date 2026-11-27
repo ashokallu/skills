@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-delegation
+name: Positive - work-start delegation
+description: The umbrella should trigger before substantial example-app Codex implementation work begins.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Implement the example-app backend change and use subagents or Luna where helpful before editing."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_delegation_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

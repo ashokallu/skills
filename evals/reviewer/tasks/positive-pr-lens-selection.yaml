@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-pr-lens-selection
+name: Positive - PR lens selection
+description: The skill should trigger when Codex needs to select reviewer lenses after a PR changed-file inventory exists, including the mandatory AI-generated/large-change overlay for example-app PR verdicts.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "I have the local git diff --name-only output for a example-app team PR. Select the reviewer lenses to load before applying the reviewer role, including the mandatory AI-generated/large-change overlay for PR verdicts."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_reviewer_lens_selection
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

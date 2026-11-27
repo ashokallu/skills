@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-requested-artifact-policy-substitution
+name: Behavior - reviewer catches requested-artifact policy substitution
+description: A durable plan with correct facts must still fail review when it reverses the requested behavior without owner authority.
+tags: [behavior, reviewer, decision-provenance, artifact-fidelity]
+inputs:
+  prompt: |
+    Review a stable documentation target. The user explicitly asked the new
+    reference to preserve a proposed per-user unresolved-failure fallback and
+    bounded-repair PR plan. The authored reference accurately records the
+    Production observations, but declares no automatic fallback, no repair,
+    and labels direct cutover the locked objective. There is no owner statement
+    approving that reversal. The author argues that preserving a proposal did
+    not mean approving it for implementation.
+
+    Return the direction and evidence portion of the reviewer verdict.
+graders:
+  - name: reviewer_separates_artifact_fidelity_from_execution
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the reviewer identifies a material semantic
+        requested-artifact defect despite the correct observations and
+        distinguishes artifact-fidelity obligation from phase authority,
+        execution authorization, and owner-approved behavioral policy. It must
+        require the requested proposal to be restored with its true decision
+        status or require explicit owner authority for the reversal; it must
+        not claim that preservation itself approves implementation. It must
+        reject the self-authored locked objective as circular authority and
+        must not cite or require the requested-plan-policy-substitution case
+        study.

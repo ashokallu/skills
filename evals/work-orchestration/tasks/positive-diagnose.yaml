@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-diagnose
+name: Positive - unknown failure diagnosis
+description: The umbrella should trigger for a failing example-app command with unknown root cause.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The backend import smoke command started failing in example-app and the root cause is not proven yet. Diagnose it before proposing a fix."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_diagnose_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

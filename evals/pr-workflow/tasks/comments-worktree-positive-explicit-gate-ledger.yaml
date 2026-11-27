@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-comments-worktree-positive-explicit-gate-ledger
+name: Positive - explicit PR gate ledger
+description: Explicit multi-step PR feedback workflows must route through the PR workflow and preserve every named gate.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this example-app PR, repeat the same workflow as the base PR: change the base branch, fix current Copilot review comments, wait for first green current-head CI, send the PR to council review, fix accepted council findings, request one final Copilot review, reply and resolve any bot threads, wait for current-head CI to be green again, and hand off only after every gate is complete."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_explicit_pr_gate_ledger
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

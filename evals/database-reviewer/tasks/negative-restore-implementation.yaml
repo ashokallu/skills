@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-negative-restore-implementation
+name: Negative - implement restore tooling
+description: Implementing restore tooling belongs to authoring, not the read-only database reviewer.
+tags: [trigger, negative, backup, authoring]
+inputs:
+  prompt: "Implement a example-app backup restore command, add PITR configuration, write failover tests, and update the operator runbook."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_restore_implementation
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: negative
+      threshold: 0.9

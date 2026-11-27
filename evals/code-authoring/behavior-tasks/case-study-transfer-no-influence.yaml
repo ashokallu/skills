@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-case-study-transfer-no-influence
+name: Behavior - case-study closeout does not invent influence
+description: A commitment without observable influence cannot be called embodied.
+tags: [behavior, case-study, evidence, closeout]
+inputs:
+  prompt: |
+    At closeout, C1's anticipated failure never occurred, its promised probe
+    was not reached, and no decision changed because of it. The author wants to
+    mark C1 embodied because the implementation succeeded. Return the allowed
+    closeout row and explain whether the phase may proceed.
+graders:
+  - name: case_study_transfer_requires_observable_influence
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response rejects embodied, uses not-reached or Pending
+        Verification according to the missing proof, leaves the obstacle and
+        changed-choice fields honest, and does not manufacture evidence from
+        general implementation success. It may allow the phase to proceed only
+        if the untested commitment is not material under the existing owning
+        lane; otherwise it must block or narrow the claim.

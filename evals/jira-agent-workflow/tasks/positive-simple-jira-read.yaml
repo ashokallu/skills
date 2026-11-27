@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-simple-jira-read
+name: Positive - simple Jira read
+description: Ordinary Jira issue reads should route to the Jira workflow skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Fetch Jira issue DEMO-2911 through the Atlassian MCP and summarize its status, assignee, and
+    latest update."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_simple_jira_read
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

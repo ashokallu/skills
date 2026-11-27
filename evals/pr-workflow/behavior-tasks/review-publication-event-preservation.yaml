@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-review-publication-event-preservation
+name: Behavior - preserve reviewer event without transport theater
+description: Publication reuses once-accepted bytes and fails closed when no GitHub surface preserves the reviewer-selected event.
+tags: [behavior, pr, review, publication, transport, economy]
+inputs:
+  prompt: |
+    First invoke and follow the pr-workflow skill. A reviewer packet has
+    already passed mechanical acceptance and contains accepted inline comment
+    and Summary bytes with REQUEST_CHANGES. The parent now has
+    authorization to publish. The first GitHub surface cannot submit that event
+    with the supplied summary and inline comments. A teammate proposes either
+    inventing digest triples, posting standalone inline comments,
+    changing the event to COMMENT, writing a new summary, or resuming the
+    reviewer for another body. Explain the exact transport checks that remain,
+    the publication capability rule, the allowed fallback, and the fail-closed
+    result when no compatible surface exists.
+graders:
+  - name: publication_event_preservation
+    type: program
+    config:
+      command: python3
+      args:
+        - evals/pr-workflow/graders/review_dispatch_economy_contract.py
+        - publication

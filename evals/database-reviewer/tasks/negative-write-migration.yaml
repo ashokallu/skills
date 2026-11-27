@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-negative-write-migration
+name: Negative - write migration
+description: Writing or fixing a migration is code authoring work, not a read-only database-reviewer verdict.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Write a Postgres migration under backend/internal/shared/sql/migrations, update the related sqlc query, regenerate the backend code, and fix the tests."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_migration_reviewer_for_writing_migration
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: negative
+      threshold: 0.8

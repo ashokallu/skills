@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-artifact-implementation-review
+name: Positive - artifact implementation and review loop
+description: The skill should trigger when the user asks multiple harnesses to turn council outputs into concrete parser-backed artifacts and then review those artifacts.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Ask Claude Opus, Codex high, Grok, and Muse to create their own final critic.toml files under tmp/critic/<harness>/, validate the TOML, then have each harness review all four TOML candidates and recommend the best base to ship."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_artifact_implementation_review_loop
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

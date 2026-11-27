@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-instruction-review
+name: Positive - instruction review lenses
+description: The skill should trigger when reviewing instruction or skill changes and selecting the durable-doc lens.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review these changed Codex skill files and decide which reviewer reference lenses apply before issuing a verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_instruction_lens
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

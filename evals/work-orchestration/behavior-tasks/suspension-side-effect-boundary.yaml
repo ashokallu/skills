@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-suspension-side-effect-boundary
+name: Behavior - suspension respects checkpoint write authority
+description: The dispatcher distinguishes a bare halt from a tangent and never invents checkpoint write permission.
+tags: [behavior, routing, suspension, side-effects, context]
+inputs:
+  prompt: |
+    Compare the next route for these three example-app messages while a
+    non-trivial task is unfinished. Explain only; do not write a checkpoint.
+
+    A. "Pause."
+    B. "Pause this and investigate the unrelated test failure first."
+    C. No tangent was requested, but context is getting long. The current task
+       explicitly permits reads only and forbids every local file write.
+
+    Explain the route, checkpoint side-effect boundary, and stop condition for
+    each case. For C, also state whether a later same-session tangent could
+    begin under the no-write boundary and the exact re-entry path if it cannot.
+graders:
+  - name: suspension_response_preserves_halt_and_write_boundaries
+    type: text
+    config:
+      regex_match:
+        - "abort-and-unwind"
+        - "task-suspension-checkpoint"
+        - "(?i)no.*write|write.*forbid"
+        - "(?i)gitignored"
+        - "(?i)workflow-metadata"
+        - "(?i)user-directed"
+        - "(?i)same-session"
+        - "(?i)separate session|explicit.*permission"
+  - name: suspension_checkpoint_authority_is_explicit
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/suspension-side-effect-boundary.md

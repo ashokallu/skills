@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-risk-evidence-handoff
+name: Positive - risk evidence handoff for production-impact review
+description: The reviewer skill should trigger when a review needs P0-P2 risk questions and live evidence handoff planning.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app PR review has already found a production-impact P1 risk in an audit query. I need the reviewer workflow to produce a Risk Evidence Handoff with P0-P3 concerns, exact questions for the author, and read-only evidence lanes such as Cloud SQL or staging Mongo through readonly-data-access before reassessing the verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_risk_evidence_handoff_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-documentation-staleness-lens
+name: Positive - documentation staleness lens
+description: The canonical closeout lens should trigger documentation truth while the legacy documentation-staleness filename remains an alias.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app PR review already has a pinned head, base, changed-file inventory, local diff, and changed behavior. Load review-closeout-lens.md once and apply documentation_truth as the final consistency and navigation pass beyond changed lines. Treat documentation-staleness-lens.md as a compatibility alias, not an additional pass."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_documentation_staleness_lens
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

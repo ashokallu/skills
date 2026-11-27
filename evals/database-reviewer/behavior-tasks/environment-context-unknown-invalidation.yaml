@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-environment-context-unknown-invalidation
+name: Behavior - time-valid snapshot with unknown invalidation state
+description: Time validity alone must not make environment evidence current.
+tags: [behavior, environment-context, stale-evidence, pending-verification]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. A Production capacity decision
+    depends on a Cloud SQL snapshot observed two days ago with a seven-day
+    maximum validity. The snapshot has no accompanying deploy, migration,
+    resize, failover, configuration, statistics-reset, or workload-change
+    inventory, so invalidation status is unknown. Review the evidence without
+    refreshing it and return the complete Database review packet and verdict.
+graders:
+  - name: environment_context_unknown_invalidation_contract
+    type: program
+    config:
+      command: python3
+      args:
+        - evals/database-reviewer/graders/behavior_contract.py
+        - environment-context-unknown-invalidation

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-negative-pr-publication-prepush-collaborator-review
+name: Negative - PR publication pre-push collaborator review
+description: PR publication pre-push collaborator review belongs to the pr-workflow publication lane, not the authenticated PR state skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Use the pr-workflow publication lane for this already-validated branch: prepare the final push and new PR for a substantial auth/workflow fix, including the repo-approved pre-push collaborator review, but do not inspect an existing PR URL."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_open_pr_prepush_collaborator
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: negative
+      threshold: 0.95

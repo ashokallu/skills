@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-luna-pr-ci-inventory
+name: Positive - Luna PR CI inventory scout
+description: The umbrella should trigger when Luna is asked to summarize bounded read-only PR CI status evidence.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use Luna as a read-only scout to summarize this PR's current CI status from the provided head SHA, check-run JSON, and gh run list output. Do not diagnose or fix."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_luna_pr_ci_inventory
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: gws-negative-drive-browser
+name: Negative - Drive browser navigation
+description: Browser-only Drive navigation should not trigger the gws CLI skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Open Google Drive in my existing Chrome session and navigate to the Shared with me page."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_drive_browser
+    type: trigger
+    config:
+      skill_path: .codex/skills/gws/SKILL.md
+      mode: negative
+      threshold: 0.75

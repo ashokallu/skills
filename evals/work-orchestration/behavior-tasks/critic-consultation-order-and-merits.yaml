@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-critic-consultation-order-and-merits
+name: Behavior - critic consultation is merits-first and precedes plan acceptance
+description: Orchestration evaluates semantic merits before presentation and preserves critic-before-plan-acceptance order.
+tags: [behavior, critic, consultation, conformance, plan-acceptance]
+inputs:
+  prompt: |
+    Decide the workflow result for each independent case. Do not inspect files,
+    run commands, or implement. Start each answer with the exact heading
+    requested, then give the reason and next action.
+
+    Case A: The critic brief contains the objective, authority, scope, risks,
+    ownership, rollback, verification, and current conformance decisions, but
+    labels the candidate-design paragraph `Approach`. No governing-source path
+    or hash inventory is included. The evidence supports approval.
+    Start with `Case A: EVALUATE MERITS`.
+
+    Case B: The exact candidate has reached a terminal critic approval. Plan
+    acceptance independently applies, but the owner has not yet accepted that
+    exact plan version. Start with `Case B: PLAN ACCEPTANCE` and state the only
+    allowed next workflow action.
+graders:
+  - name: critic_consultation_order_structural_results
+    type: text
+    config:
+      regex_match:
+        - "Case A: EVALUATE MERITS"
+        - "Case B: PLAN ACCEPTANCE"
+      regex_not_match:
+        - "(?i)(required|must).{0,40}(sha-?256|source hash|path inventory)"
+        - "(?i)(implement|edit|author|code).{0,40}(before|without).{0,40}(plan acceptance|owner accept)"
+  - name: critic_consultation_order_semantic_contract
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/critic-consultation-order-and-merits.md

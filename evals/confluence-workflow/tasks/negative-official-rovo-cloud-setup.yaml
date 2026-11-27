@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-negative-official-rovo-cloud-setup
+name: Negative - official Rovo Cloud setup
+description: Atlassian Cloud Rovo setup should not route to the Confluence workflow skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Set up the official Atlassian Rovo MCP OAuth 2.1 endpoint for Confluence Cloud in an editor."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_official_rovo_cloud_setup
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

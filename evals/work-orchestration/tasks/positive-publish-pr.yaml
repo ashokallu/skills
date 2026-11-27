@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-publish-pr
+name: Positive - dispatch validated work publication
+description: The umbrella should trigger and dispatch when validated work must become a clean main-based PR.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "This change was validated on local-dev-reference. Dispatch publication to the PR workflow so it can transplant the change onto a fresh origin/main worktree branch, revalidate it, push, and open a PR with a title and body that match the final diff."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_publish_pr_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-negative-online-schema-change-authoring
+name: Negative - implement online schema change
+description: Implementing online schema-change tooling and tests belongs to authoring, not the read-only database reviewer.
+tags: [trigger, negative, ddl, authoring]
+inputs:
+  prompt: "Implement an online schema-change command, add lock-timeout handling, write concurrent-writer tests, and wire it into the deployment workflow."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_online_schema_change_authoring
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: negative
+      threshold: 0.9

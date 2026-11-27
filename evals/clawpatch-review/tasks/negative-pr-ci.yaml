@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: clawpatch-review-negative-pr-ci
+name: Negative - normal PR CI validation
+description: Normal pull_request workflow reproduction should route to local CI checks, not Clawpatch review.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "From this PR worktree, reproduce the Frontend - Validate GitHub Actions gate locally before pushing."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_pr_ci
+    type: trigger
+    config:
+      skill_path: .codex/skills/clawpatch-review/SKILL.md
+      mode: negative
+      threshold: 0.9

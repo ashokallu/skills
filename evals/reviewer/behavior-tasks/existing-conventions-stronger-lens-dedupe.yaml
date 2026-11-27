@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-existing-conventions-stronger-lens-dedupe
+name: Behavior - stronger lens convention dedupe
+description: Convention evidence must not duplicate a stronger root-cause finding.
+tags: [behavior, conventions, dedupe, security]
+inputs:
+  prompt: |
+    Treat the facts below as the complete case. Do not inspect the repository or run tools.
+    Review a stable implementation diff that introduces a free-text error log
+    containing sensitive tenant data where the package standard uses redacted
+    structured attributes. Both security/privacy and existing-conventions
+    lenses identify the same changed line and root cause. Return findings and
+    selected-lens accountability.
+    End with exactly one field per line using these allowed values:
+    Convention disposition: FINDING or NO_FINDING
+    Standard state: AUTHORITATIVE, CONFLICTING, JUSTIFIED, NONE, or NIT
+    Search scope: OWNER_BOUNDED when package/owner evidence is used, otherwise INPUT_SUFFICIENT
+    Finding owner: CONVENTIONS, SECURITY_PRIVACY, or NONE
+    Pending verification: YES or NO
+    Reason: one sentence supporting every field, including why security/privacy
+    owns the deduplicated finding, without hypothetical findings.
+graders:
+  - name: stronger_lens_owns_single_disposition
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/reviewer/graders/existing_conventions_contract.py,
+          stronger-lens-dedupe,
+        ]

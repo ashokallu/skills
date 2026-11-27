@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-environment-context-unrelated-migration
+name: Behavior - unrelated migration preserves claim-level snapshot currency
+description: Invalidate only fields affected by a proven relevant event.
+tags: [behavior, environment-context, claim-level-invalidation]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review an advisory capacity claim
+    for table content_user_progress using a Production snapshot observed two
+    days ago within its seven-day maximum-validity window. A bounded event
+    inventory covers the full observation-to-decision interval and shows one
+    later migration that changed only an unrelated table. It shows no resize,
+    failover, configuration, statistics-reset, or material workload event.
+    Return the complete Database review packet without refreshing evidence.
+    Apply claim-level invalidation and do not treat the unrelated migration as
+    invalidating content_user_progress scale or instance topology.
+graders:
+  - name: environment_context_unrelated_migration_contract
+    type: program
+    config:
+      command: python3
+      args:
+        - evals/database-reviewer/graders/behavior_contract.py
+        - environment-context-unrelated-migration

@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-configuration-and-topology
+name: Behavior - effective configuration and topology review
+description: Route effective settings, replicas, failover, and recovery proof.
+tags: [behavior, configuration, topology, recovery]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review conceptual target
+    `database-topology-v2` against base `database-topology-v1` without editing
+    files. Treat those immutable labels as the complete target/base identity:
+
+    - source configuration raises a durability setting, but its effective value
+      and restart requirement were not checked on every mixed-version node;
+    - post-write reads are newly routed to replicas without a freshness bound;
+    - failover and connection-pool scaling behavior were not rehearsed;
+    - a destructive rollout is approved because PITR is configured, but no
+      successful restore exercise, loss window, duration, or integrity result
+      is available.
+
+    Return the complete Database review packet and verdict.
+graders:
+  - name: configuration_topology_and_recovery_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/database-reviewer/graders/behavior_contract.py,
+          configuration-topology,
+        ]

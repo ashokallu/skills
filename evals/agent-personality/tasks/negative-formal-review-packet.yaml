@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: agent-personality-negative-formal-review-packet
+name: Negative - formal PR review packet
+description: Formal review packets should use stricter reviewer output contracts rather than personality guidance.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Review this example-app PR and produce the required formal packet with findings first, severity, evidence, and no conversational filler."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_formal_review_packet
+    type: trigger
+    config:
+      skill_path: .codex/skills/agent-personality/SKILL.md
+      mode: negative
+      threshold: 0.8

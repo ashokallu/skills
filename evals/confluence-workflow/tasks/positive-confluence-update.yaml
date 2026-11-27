@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-positive-confluence-update
+name: Positive - Confluence page update
+description: The skill should trigger when the user asks to update Confluence content.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Use the Confluence MCP to update the onboarding page with this new note, preserving the
+    existing page structure."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_confluence_update
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

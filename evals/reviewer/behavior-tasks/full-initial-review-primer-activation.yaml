@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-full-initial-review-primer-activation
+name: Behavior - initial FULL review activates private thoroughness primer
+description: A newly admitted whole-target initial FULL review completes the private primer before evidence-heavy analysis.
+tags: [behavior, review, full, primer]
+inputs:
+  prompt: |
+    You are the ordinary reviewer in a fresh session. A parent separately
+    assigns a newly admitted whole-target initial review. Scope control has
+    reached REVIEW_SCOPE_ACCEPTED at FULL depth and single topology. You have
+    completed bootstrap but have not begun evidence-heavy middle-phase
+    analysis.
+
+    State the next admission action and its boundaries. Do not emit a final
+    verdict packet or a public acknowledgement.
+graders:
+  - name: full_initial_review_primer_activates_privately
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/reviewer/rubrics/full-initial-review-primer-activation.md

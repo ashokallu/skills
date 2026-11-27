@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-browser-e2e-dispatch
+name: Positive - browser E2E dispatcher
+description: Browser and Playwright work should enter the workflow dispatcher, then route to browser-e2e.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Debug the flaky Playwright visual regression in e2e/pd and inspect the trace screenshot."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_browser_e2e_dispatch
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.7

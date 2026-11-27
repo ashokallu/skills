@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-test-quality
+name: Positive - test quality
+description: Test authoring or fixture changes that need behavior value and brittleness checks should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Improve a brittle example-app unit test by using the test-quality lane to avoid private-helper assertions, keep the test maintainable and concise, fix fixtures, make the test fail for the real behavior, and report what the test proves plus any Pending Verification."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_test_quality
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

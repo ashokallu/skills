@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-jira-issue-update
+name: Positive - Jira issue update
+description: Jira issue updates should route to the Jira workflow skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Use the Jira MCP to add a concise comment to DEMO-2911 and transition it if the requested
+    transition is available."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_jira_issue_update
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

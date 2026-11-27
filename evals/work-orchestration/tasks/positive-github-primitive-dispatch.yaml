@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-github-primitive-dispatch
+name: Positive - GitHub primitive dispatcher
+description: GitHub primitive work should enter the workflow dispatcher, then route to github-workflow.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Update the PR body and reply to the unresolved GitHub review thread with the validation result."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_github_primitive_dispatch
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.7

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-pr-bound-prepush-review
+name: Positive - PR-bound substantial pre-push Claude review
+description: The skill should trigger when Codex is about to push impactful commits to an open PR branch or a branch that is about to become a PR.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before pushing commits to this example-app branch and opening a new PR, the diff changes workflow behavior and shared test helpers. Run the VPN smoke and ask Claude Code for one more review if reachable, but continue with Codex if VPN or Claude is unavailable."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_open_pr_prepush
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

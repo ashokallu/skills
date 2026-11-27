@@ -1,0 +1,27 @@
+{
+  "expect_pass": true,
+  "options": {},
+  "transcript": [
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": {
+        "paths": [
+          "AGENTS.md",
+          "CLAUDE.md",
+          "repo.md",
+          ".claude/skills/work-orchestration/SKILL.md"
+        ]
+      }
+    },
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: maintenance\nRoute/mode: instruction-maintenance; inspect\nRoute rationale: the instruction owner controls the target audit\nWork ownership: parent-only: bounded local inspection\nTarget: runtime instruction contract\nSide effects: local read-only inspection\nRisk: low\nProof/evidence: current target instruction read"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "runtime-contract.md" }
+    }
+  ]
+}

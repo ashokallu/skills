@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-classification-receipt-before-action
+name: Behavior - classify work before meaningful action
+description: Agents expose a complete classification before non-fast-exit action while keeping fast-exit proportional and independent from Work Item Profile activation.
+tags: [behavior, routing, classification, proportionality, observability]
+inputs:
+  prompt: |
+    The loaded example-app dispatcher is the governing source for this
+    self-contained comparison. Do not inspect the repository or perform either
+    task. State exactly what must be visible before the first meaningful tool
+    call in each case.
+
+    A. The user asks you to diagnose and fix a multi-file workflow bug, validate
+       it, review the final diff, commit it, and push the branch.
+    B. The user asks for the value of one named constant in one known local file.
+
+    For case A, assume the Work Item Profile does not activate yet because no
+    downstream sizing decision currently depends on it. Explain whether that
+    changes the task-classification requirement. Also state what happens if the
+    agent emits only `Route/mode: code-authoring; edit` and immediately
+    inspects the target.
+graders:
+  - name: classification_is_visible_complete_and_proportional
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/classification-receipt-before-action.md

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-checks-access
+name: Positive - checks access
+description: The skill should trigger for read-only Checks API smoke tests on a PR.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Smoke-test GitHub Checks access for this example-app PR and report the named check runs, conclusions, and details URLs."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_checks_read
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

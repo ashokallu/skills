@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-decision-scope-review
+name: Positive - decision scope and later readiness
+description: Stable implementation review with unsupported later readiness requires reviewer judgment.
+tags: [trigger, positive, evidence, readiness]
+inputs:
+  prompt: "Review a stable example-app implementation diff and issue a verdict. The author says source checks prove it is safe to execute in production, but no deploy or runtime evidence was reviewed. State the reviewed decision scope and do not imply later-stage readiness."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_decision_scope_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.5

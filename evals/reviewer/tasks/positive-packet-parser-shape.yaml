@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-packet-parser-shape
+name: Positive - review packet parser shape
+description: The reviewer skill should trigger when a parser-facing review packet has REH/P3 verdict math, bounded ledger, plain-language summary, or top-level section shape defects.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app reviewer packet is BLOCKED with one P1 REH gate and one separate P3 doc finding, but Would flip verdict if says the staging evidence flips to PASS, the variance ledger says enumerated below while omitting review wrapper IDs, Plain-language summary is missing, appears after Packet ends, or softens the Pending Verification and Next owner fields, Not loaded is indented under the last selected lens, Packet ends is indented or followed by a memory citation/footer summary, the route and verdict rationale depend on prior memory instead of current repo/GitHub artifacts, and the REH-n block has blank lines between named fields. Use the reviewer workflow to reject the packet and request a corrected one."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_packet_parser_shape
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

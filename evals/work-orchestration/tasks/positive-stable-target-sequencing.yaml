@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-stable-target-sequencing
+name: Positive - stable-target sequencing
+description: Work that would mutate a target under synchronous review should route through orchestration and stay sequenced.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The example-app critic is reviewing the current implementation plan and the reviewer is inspecting the same diff. Decide whether another agent may edit those files in parallel, preserve the stable target, and join every required verdict before the next write."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_stable_target_sequencing
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

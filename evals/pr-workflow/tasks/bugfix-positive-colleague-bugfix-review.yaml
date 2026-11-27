@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-colleague-bugfix-review
+name: Positive - colleague bugfix PR review
+description: The skill should trigger when a colleague asks whether a bug-fix PR really fixes the issue.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A colleague asked me to review https://github.com/example-org/example-app/pull/101234. It claims to fix a login redirect bug. Read the PR, decide whether the root cause is real, and reproduce locally if the diff is not enough proof."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_bugfix_pr_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-full-review-primer-nonactivation-reuse
+name: Behavior - thoroughness primer nonactivation and bounded reuse
+description: Lower-depth and focused re-review avoid the primer while one continuing initial FULL review may reuse an unchanged read.
+tags: [behavior, review, proportional, rereview]
+inputs:
+  prompt: |
+    Classify the private thoroughness-primer action for five ordinary review
+    situations:
+
+    1. a newly admitted whole-target initial LITE review;
+    2. a newly admitted whole-target initial STANDARD review;
+    3. a focused re-review whose inherited depth is FULL, performed by a fresh
+       reviewer session;
+    4. the same continuing whole-target initial FULL reviewing session, where
+       that session already read the live primer through EOF and its content
+       identity is unchanged; and
+    5. that same continuing initial FULL session after the live primer content
+       identity changes.
+
+    Give only the action and rationale for each situation. Do not emit a final
+    verdict packet or public acknowledgement.
+graders:
+  - name: full_review_primer_nonactivation_and_reuse_are_bounded
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/reviewer/rubrics/full-review-primer-nonactivation-reuse.md

@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-board-42-workflow
+name: Positive - board 42 workflow
+description: The skill should trigger for board-specific Jira workflow orchestration.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Use my DEMO board 42 filtered to example.reviewer to decide what I should work on next, then start
+    the correct Jira-linked worktree branch and PR flow."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_board_42_workflow
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

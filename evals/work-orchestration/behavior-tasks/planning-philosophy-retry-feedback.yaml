@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-planning-philosophy-retry-feedback
+name: Behavior - planning philosophy changes a retry proposal
+description: Substantive planning translates feedback and delay into a bounded engineering decision rather than a slogan.
+tags: [behavior, planning, philosophy, feedback, resilience]
+inputs:
+  prompt: |
+    A team proposes enabling automatic retries for every timeout from every
+    client because retries are resilient. The downstream service can saturate,
+    fleet-wide retry volume and recovery delay are unknown, and callers already
+    have different timeouts. Give the planning decision and rationale before
+    implementation. Do not inspect files, edit anything, or run a model council.
+graders:
+  - name: planning_philosophy_retry_has_no_post_record_summary
+    type: text
+    config:
+      contains:
+        - "Planning philosophy influence:"
+      regex_not_match:
+        - "(?s)Forward-analysis decision record:.*\\n(?:#{1,6}\\s+|\\*\\*)?(?:Decision|Summary|Rationale|Planning philosophy influence)(?:\\*\\*)?:"
+  - name: planning_philosophy_retry_feedback_changes_the_decision
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/planning-philosophy-retry-feedback.md

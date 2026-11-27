@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-negative-github-pr-read
+name: Negative - GitHub PR read
+description: GitHub PR metadata inspection should route to GitHub PR skills, not Confluence.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Read PR 4459 comments, reviews, changed files, and check runs using the repo GitHub MCP."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_github_pr_read
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

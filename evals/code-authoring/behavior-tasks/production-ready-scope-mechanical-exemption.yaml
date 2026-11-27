@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-production-ready-scope-mechanical-exemption
+name: Behavior - mechanical edits do not activate scope ceremony
+description: Wording-only and semantically unchanged generated refreshes stay exempt from the production-ready scope contract.
+tags: [behavior, scope, exemption, generated]
+inputs:
+  prompt: |
+    The current task corrects one README typo and refreshes generated SQL after
+    a canonical query was reformatted without semantic change. Runtime behavior,
+    schema, data, permissions, CI semantics, release behavior, and deploy
+    behavior are unchanged. Return the authoring routing decision.
+graders:
+  - name: production_ready_scope_mechanical_exemption
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response keeps validation proportional through
+        canonical-source parity or generated readback plus Markdown or diff
+        hygiene. It must not cite a case study, emit a read acknowledgement, or
+        invent a scope lock, lifecycle mechanism, critic, or broad-review
+        ceremony. Fail if it activates the production-scope behavior merely
+        because a generated file changed.

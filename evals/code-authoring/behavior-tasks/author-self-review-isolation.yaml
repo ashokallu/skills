@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-author-self-review-isolation
+name: Behavior - fresh reviewer context isolation
+description: A neutral prompt is insufficient when other reviewer-visible channels inherit author conclusions.
+tags: [behavior, self-review, reviewer, isolation]
+inputs:
+  prompt: |
+    Author self-review is complete. You plan to start a new reviewer agent with
+    a neutral factual prompt, but the spawn inherits the parent conversation,
+    attaches the author's self-review notes, reuses the parent's browser and
+    terminal session state, and includes a generated context file listing the
+    author's selected reviewer lenses and fixed issues. Can this invocation
+    satisfy the independent reviewer gate? Describe the safe dispatch packet
+    and fallback.
+graders:
+  - name: author_self_review_all_context_isolation
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response says the invocation is context-contaminated
+        and advisory despite its neutral prompt and new identity; requires a
+        verified zero-history fresh session, using fork_turns="none" for a
+        Codex native subagent or a proved runtime equivalent, across inherited
+        turns, attached or generated context files, handoff artifacts, and
+        tool/session state;
+        limits the reviewer to factual target, intent, changed-file inventory,
+        current validation, required case-study contract, and factual
+        environment evidence; excludes the author self-review delta, selected
+        lenses, issue/fix history, preferred files, expected verdict,
+        confidence, completion labels, and conclusions; and keeps the
+        independent gate blocked or Pending Verification until isolation is
+        proved.

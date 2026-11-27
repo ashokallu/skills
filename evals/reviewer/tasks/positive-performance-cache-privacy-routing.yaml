@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-performance-cache-privacy-routing
+name: Positive - performance cache privacy routing
+description: Concrete reviewer routing for optimization evidence with cache privacy risk should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a stable example-app PR after changed-file inventory shows app/api/learn.ts, backend/internal/content/datasource_cache.go, backend/internal/shared/sql/queries/content.sql, and docs/runbooks/content-release.md. The PR claims faster page loads based on a dev-server Lighthouse screenshot, removes a tenant dimension from a shared cache key, and has no comparable production-build baseline. Select reviewer lenses for performance, security/privacy, validation, and operational evidence before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_performance_cache_privacy_routing
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-user-shell-refusal
+name: Positive - Muse userShell refusal
+description: A request to automate Muse through MSP userShell must route to the adapter and retain the managed-shell approval boundary.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run a direct cross-harness Muse CLI workhorse through the Codex-owned MSP collaboration controller. Do not call session/userShell or the TUI exclamation escape because those bypass the managed sandbox. Let Muse propose the exact managed-shell command and description, deny it by default, then reuse only the reviewed once-only approval tuple."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_user_shell_refusal
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

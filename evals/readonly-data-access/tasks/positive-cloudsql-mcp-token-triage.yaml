@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: readonly-data-access-positive-cloudsql-mcp-token-triage
+name: Positive - Cloud SQL MCP token triage
+description: The skill should trigger for Cloud SQL MCP metadata or executeSql readonly access failures.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The Cloud SQL readonly MCP returns Auth required while checking staging instance metadata. Triage the token/access issue without printing GOOGLE_MCP_ACCESS_TOKEN."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_cloudsql_mcp_token_triage
+    type: trigger
+    config:
+      skill_path: .codex/skills/readonly-data-access/SKILL.md
+      mode: positive
+      threshold: 0.6

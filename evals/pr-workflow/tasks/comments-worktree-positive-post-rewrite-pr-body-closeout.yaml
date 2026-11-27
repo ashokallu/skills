@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-post-rewrite-pr-body-closeout
+name: Positive - post-rewrite PR body closeout
+description: Owner PR rewrite work should trigger the PR workflow so the live body, head SHA, changed files, and current-head CI are checked after the push.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this owner example-app PR, amend the review-fix commit, force-push it, refresh the PR description if the body is stale, and do not sign off until the body and current-head CI match the new head."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_post_rewrite_body_and_ci_closeout
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.7

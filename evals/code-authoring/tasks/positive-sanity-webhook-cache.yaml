@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-sanity-webhook-cache
+name: Positive - Sanity webhook cache lane
+description: Sanity webhook cache invalidation code changes should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use code-authoring's sanity-schema lane to debug why Sanity webhook updates are not flushing the example-app CMS and ETag caches after content changes."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_sanity_schema_webhook_cache
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

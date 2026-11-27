@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-re-review-neutral-finding-loop
+name: Behavior - neutral reviewer finding loop
+description: A neutral full reviewer may verify its own bounded fixes, then must reissue a current-target canonical packet.
+tags: [behavior, re-review, lifecycle, signoff]
+inputs:
+  prompt: |
+    Fresh reviewer B completed neutral whole-PR discovery at HS and found F3.
+    The parent added one ancestral finding-directed fix HN. B can prove the
+    cone closed and finds no unrelated issue. Explain how B closes review, and
+    what changes if B instead finds an outside-cone defect.
+graders:
+  - name: cumulative_b_closeout_or_reset
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if exact B may use scoped re-review for F3 but the compact
+        result remains non-signoff; after resolution B records the required
+        current-target middle-phase completion with a recomputed lens set and
+        residual pass, runs the existing reviewer end phase once, and emits a
+        canonical packet bound to HN. If an outside-cone or unrelated defect
+        proves the model incomplete, the response must reset to a fresh neutral
+        full reviewer rather than chain scoped passes indefinitely.

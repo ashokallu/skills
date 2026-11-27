@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-negative-product-jira-text
+name: Negative - product code only mentions Jira
+description: The skill should not trigger just because product code contains Jira text or ticket references.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt:
+    "Update the frontend copy so the Jira ticket field label wraps correctly on mobile, then run the
+    relevant app tests."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_product_copy
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

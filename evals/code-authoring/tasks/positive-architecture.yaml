@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-architecture
+name: Positive - architecture assessment
+description: Refactor and architecture assessment before implementation should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use code-authoring's architecture lane to assess whether the duplicated course-progress handlers need a cleaner architecture seam before we start the refactor."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_architecture_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

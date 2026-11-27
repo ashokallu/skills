@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-selected-probe-omission
+name: Behavior - reviewer selected probe omission
+description: An early blocking finding must not terminate the remaining selected probes.
+tags: [behavior, probes, completeness, closeout]
+inputs:
+  prompt: |
+    A stable target selects auth, concurrency, and test-validity probes. The
+    auth probe immediately proves a P1 tenant-boundary defect. The concurrency
+    surface looks suspicious but has not been inspected, and the test-validity
+    probe has not started. May the reviewer close out now because the verdict is
+    already blocked? Give the required middle-phase record.
+graders:
+  - name: every_selected_probe_has_a_disposition
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response refuses closeout until auth, concurrency, and
+        test-validity each have an evidence-backed disposition or exact Pending
+        Verification. The P1 may determine the verdict, but it cannot erase the
+        remaining selected probes. Fail if the response stops at the first P1,
+        silently drops a probe, or invents a clean result without inspection.

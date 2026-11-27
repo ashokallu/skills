@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-existing-conventions-pure-nit
+name: Behavior - pure convention nit suppression
+description: Taste-only differences without material consequences do not become findings.
+tags: [behavior, conventions, materiality, nit]
+inputs:
+  prompt: |
+    Treat the facts below as the complete case. Do not inspect the repository or run tools.
+    Review a stable one-line implementation diff that uses an equally clear
+    local variable name different from a sibling. The name does not alter domain
+    terminology, searchability, ownership, public contracts, tests, runtime
+    behavior, or maintenance cost. Apply the mandatory existing-conventions
+    lens and return the disposition.
+    End with exactly one field per line using these allowed values:
+    Convention disposition: FINDING or NO_FINDING
+    Standard state: AUTHORITATIVE, CONFLICTING, JUSTIFIED, NONE, or NIT
+    Search scope: OWNER_BOUNDED when package/owner evidence is used, otherwise INPUT_SUFFICIENT
+    Finding owner: CONVENTIONS, SECURITY_PRIVACY, or NONE
+    Pending verification: YES or NO
+    Reason: one sentence supporting every field without hypothetical findings.
+graders:
+  - name: pure_nit_does_not_survive_filter
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/reviewer/graders/existing_conventions_contract.py,
+          pure-nit,
+        ]

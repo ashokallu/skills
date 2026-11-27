@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-tdd-regression
+name: Positive - TDD regression harness
+description: Known behavior that needs a focused failing check first should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "The root cause is known. Add a behavior-focused regression test through the public API before changing the example-app implementation."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_tdd_regression_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

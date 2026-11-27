@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-closeout-review
+name: Positive - Codex closeout review
+description: The umbrella should trigger when the user asks to run Codex review on local changes.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run Codex review on the uncommitted diff and only fix findings that are real after checking the code path."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_closeout_review_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

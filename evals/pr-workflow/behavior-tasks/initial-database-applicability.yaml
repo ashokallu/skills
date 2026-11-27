@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-initial-database-applicability
+name: Behavior - initial database applicability classification
+description: Classify direct, indirect, negative, and ambiguous database consequences before dispatch.
+tags: [behavior, review, database, routing]
+inputs:
+  prompt: |
+    First invoke and follow the pr-workflow skill. Use its parent-owned
+    database applicability gate; do not perform the specialist database review.
+    Classify four stable PR targets. A changes a SQL predicate. B changes an API
+    loop from one batched repository call to one query per item without editing
+    SQL files. C changes UI copy and its nearest persistence caller is unchanged.
+    D changes a backend retry path, but the supplied diff does not show whether
+    the retry wraps a transaction. Use the exact tri-state disposition names
+    `required`, `not required`, and `Pending Verification`; explain why the last
+    state fails closed. Keep reviewer applicability separate from whether live
+    environment evidence is material. State explicitly that the classification
+    grants no live-read authority during ordinary PR review, and that a
+    separately requested validation or production-readiness phase must classify
+    again before any live collection.
+graders:
+  - name: database_applicability_classifier
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/pr-workflow/graders/database_applicability_contract.py,
+          classification,
+        ]

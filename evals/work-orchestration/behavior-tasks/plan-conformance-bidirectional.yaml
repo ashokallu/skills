@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-plan-conformance-bidirectional
+name: Behavior - plan conformance catches same-file loss and unapproved additions
+description: Stable-step coverage and changed-surface coverage must both close against semantic obligations.
+tags: [behavior, plan-conformance, preservation, reviewer, deletion]
+inputs:
+  prompt: |
+    An exact approved plan requires deleting obsolete agent definitions while
+    preserving four generally useful sections in a surviving README. It also
+    forbids compatibility shims and new mechanisms. The final diff touches the
+    expected README but deletes two preserved sections, adds an unplanned helper
+    file and compatibility alias, marks one unconditional validation step
+    `deferred`, and includes a parent ledger claiming every plan step is done.
+
+    Decide the plan-conformance result before implementation handoff and the
+    independent reviewer result. Do not inspect files or run commands. Output
+    headings `Authoring: MATERIAL_DEVIATION` and
+    `Reviewer: MATERIAL_DEVIATION`, then name the route, next owner, forbidden
+    shortcut, required proof, and re-entry trigger. Distinguish every separate
+    deviation and incomplete step.
+graders:
+  - name: plan_conformance_structural_results
+    type: text
+    config:
+      regex_match:
+        - "Authoring: MATERIAL_DEVIATION"
+        - "Reviewer: MATERIAL_DEVIATION"
+        - "(?i)preserv"
+        - "(?i)helper"
+        - "(?i)alias"
+        - "(?i)(deferred|incomplete)"
+        - "(?i)(ledger.{0,50}(unsupported|contradicted|not proof)|(reject|cannot trust|cannot accept).{0,50}ledger)"
+      regex_not_match:
+        - "(?i)(file was touched|changed-file inventory).{0,40}(sufficient|passes|proves)"
+  - name: plan_conformance_semantic_contract
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/plan-conformance-bidirectional.md

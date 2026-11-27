@@ -1,0 +1,38 @@
+{
+  "expect_pass": true,
+  "options": {
+    "require_branch_join": true,
+    "require_dispatch_lifecycle": true,
+    "require_dispatch_takeover": true
+  },
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: investigation\nRoute/mode: delegation; inspect\nRoute rationale: independent caller mapping is a bounded parallel work unit\nWork ownership: mixed: see Dispatch\nTarget: caller map\nSide effects: read-only inspection\nRisk: low\nProof/evidence: joined mapping result or parent takeover\nDelegation ID: map-owner-v1\nDelegation decision: optional net-positive\nDispatch:\n- parent critical path: inspect another surface\n- active delegations:\n  - map-owner-v1: owner=scout; state=launched\n- join boundary: no mapping claim before disposition"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "spawn_agent",
+      "tool_call_id": "call-map-owner-v1",
+      "arguments": { "task": "map callers" }
+    },
+    { "type": "tool.execution_complete", "tool_call_id": "call-map-owner-v1" },
+    {
+      "type": "assistant.message",
+      "content": "Dispatch:\n- parent critical path: take over failed mapping\n- active delegations:\n  - map-owner-v1: owner=parent; state=takeover\n- join boundary: no mapping claim before disposition"
+    },
+    {
+      "type": "assistant.message",
+      "content": "Join result: map-owner-v1 child output rejected; parent takeover recorded"
+    },
+    {
+      "type": "assistant.message",
+      "content": "Work ownership: parent-only: map-owner-v1 taken over"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "target.go" }
+    }
+  ]
+}

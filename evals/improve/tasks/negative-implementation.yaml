@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-negative-implementation
+name: Negative - direct implementation
+description: Direct implementation should route through work orchestration, not improve.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Implement the backend cache cleanup now, update the tests, run validation, commit it, and push the branch."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_direct_implementation
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: negative
+      threshold: 0.8

@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-forward-analysis-one-more-pr
+name: Behavior - forward analysis rejects unsupported one-more-PR churn
+description: High-risk authoring must prove the next consumer before recommending another patch.
+tags: [behavior, forward-analysis, evidence, no-code]
+inputs:
+  prompt: |
+    A migration apply retry failed at the latest policy bucket. Someone proposes
+    one more PR to permit that bucket, but the current source data, existing
+    configuration path, runbook preconditions, and the next materialization and
+    validate gates have not been checked. Recommend the next action before any
+    implementation starts.
+graders:
+  - name: forward_analysis_one_more_pr
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response does not recommend the patch yet. It must
+        request bounded current evidence for the whole problem, check no-code,
+        existing-path, config, operator-sequence, and policy alternatives, name
+        the proposed output's next consumer and its acceptance rules, identify
+        the next predictable blocker, and keep missing proof Pending
+        Verification. It must not cite a case study or emit a read
+        acknowledgement. Fail if it merely omits the citation while still
+        recommending the unsupported one-more-PR patch.

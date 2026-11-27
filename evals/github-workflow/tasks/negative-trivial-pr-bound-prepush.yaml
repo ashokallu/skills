@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-negative-trivial-pr-bound-prepush
+name: Negative - trivial PR-bound pre-push
+description: The PR skill should not treat a trivial PR-bound push as needing the selective collaborator review.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "I am about to push this branch and open a new PR after a format-only docs cleanup. Continue with the ordinary PR publication path; skip the collaborator review."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_trivial_pr_bound_prepush
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: negative
+      threshold: 0.95

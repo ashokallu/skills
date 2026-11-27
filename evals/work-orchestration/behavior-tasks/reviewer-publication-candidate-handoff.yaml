@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-reviewer-publication-candidate-handoff
+name: Behavior - preserve reviewer-owned comment bytes through parent publication
+description: Ordinary and database reviewers return mandatory verdicts plus exact minimal review comments; the parent stays a mechanical publication controller.
+tags: [behavior, review, database-review, publication, integrity]
+inputs:
+  prompt: |
+    A stable PR requires an ordinary reviewer, and database applicability has
+    already been classified `required`, so a database reviewer is also
+    mandatory. The user also asked you to post surviving review comments. Define the final
+    output contract for both reviewers and the parent's acceptance and
+    publication behavior. Include the explicit verdict-only or triage exception
+    and who owns the source-evidence decision, public wording, and exact UTF-8
+    bytes for every ordinary and database Summary and Body. State the literal
+    transport required for both Summary and Body, the minimal `Review comments:`
+    fields, the canonical-anchor requirement, and the exact inline/unanchored
+    finding partition. Also include one-sided sibling payload handling, what
+    happens when a comment's wording is semantically incomplete, when the PR
+    head or anchor is stale, and when one database finding would otherwise be
+    lost during the one-event sibling join. Do not write or post an actual PR
+    comment.
+graders:
+  - name: reviewers_own_exact_bytes_and_parent_preserves_them
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/reviewer-publication-candidate-handoff.md

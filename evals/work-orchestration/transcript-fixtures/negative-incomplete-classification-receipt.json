@@ -1,0 +1,16 @@
+{
+  "expect_pass": false,
+  "expected_error": "Classification receipt is missing required fields: Route rationale",
+  "options": {},
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: maintenance\nRoute/mode: code-authoring; edit\nWork ownership: parent-only: no net-positive child identified\nTarget: target.go\nSide effects: local repository edits\nRisk: medium\nProof/evidence: reviewed candidate"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "target.go" }
+    }
+  ]
+}

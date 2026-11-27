@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-behavior-review-submission-unresolved-thread-guard
+name: Behavior - same-actor unresolved threads block a new review
+description: Posting unique findings does not waive the same-actor unresolved-thread guard.
+tags: [behavior, conventional-comments, review-write, threads]
+inputs:
+  prompt: |
+    You are authenticated to GitHub as `alice`. A PR has three unresolved and
+    unaddressed review threads whose root comments were authored by `alice`
+    from a previous pass. Their replies are authored by `bob` or have no author
+    login. The
+    review lane found one additional unique inline issue, and the user says
+    "add any unique comments you found." Describe the next GitHub action.
+graders:
+  - name: unresolved_threads_block_new_review
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/github-workflow/rubrics/review-submission-unresolved-thread-guard.md

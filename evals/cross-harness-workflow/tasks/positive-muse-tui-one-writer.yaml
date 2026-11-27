@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-tui-one-writer
+name: Positive - Muse TUI one-writer handling
+description: Resuming a visible Muse TUI while another protocol controller is considered should trigger the Muse session-ownership adapter.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use direct cross-harness Muse CLI orchestration with the open Muse TUI and resume its exact session. Check whether MSP can also send commands, but preserve one writer and fail closed if that session is already owned."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_tui_session_ownership
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

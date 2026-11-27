@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-verification-rehearsal
+name: Behavior - cross-lane verification and rehearsal
+description: Select the evidence overlay only when representative cross-lane proof controls the verdict.
+tags: [behavior, verification, rehearsal, fault-injection]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review immutable target
+    `database-rollout-v2` against `database-rollout-v1` without editing files.
+    The rollout performs a resumable data transition and claims production
+    readiness from source inspection plus happy-path tests on a tiny fixture.
+    It has no independent reconciliation, production-shaped rehearsal,
+    concurrent-writer or partial/ambiguous-commit fault injection, harness
+    parity proof, or failed-run residue evidence. Return the complete Database
+    review packet and verdict.
+graders:
+  - name: verification_rehearsal_contract
+    type: program
+    config:
+      command: python3
+      args: [evals/database-reviewer/graders/behavior_contract.py, verification]

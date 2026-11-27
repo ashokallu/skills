@@ -48,7 +48,7 @@ substantive review non-substantive.
 ## Conditional FULL Initial-Review Primer
 
 For a separately assigned review, the private primer at
-`docs/agents/pr-4713-review-thoroughness-case-study.md` activates only for a
+`docs/agents/initial-review-thoroughness-primer.md` activates only for a
 newly admitted whole-target initial ordinary review after scope control reaches
 an accepted `FULL` terminal state: `REVIEW_SCOPE_ACCEPTED`,
 `ESCALATION_ACCEPTED`, or `CORRECTED_AND_ACCEPTED`.

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: browser-e2e-positive-ui-debug
+name: Positive - Codex local UI debug
+description: The skill should trigger for authenticated local UI debugging with browser MCP tools.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "In Codex, use Playwright MCP snapshots and screenshots to debug an authenticated app-local UI state after login."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_playwright_ui_debug
+    type: trigger
+    config:
+      skill_path: .codex/skills/browser-e2e/SKILL.md
+      mode: positive
+      threshold: 0.6

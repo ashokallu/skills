@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-typescript-lsp-navigation
+name: Positive - TypeScript LSP semantic navigation
+description: The umbrella should trigger when TypeScript/TSX symbol-aware navigation is needed in app/.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use the registered TypeScript LSP MCP to find definitions and references for a shared TSX component in example-app app/."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_zoom_out_for_ts_lsp_navigation
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

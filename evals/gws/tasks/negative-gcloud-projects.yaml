@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: gws-negative-gcloud-projects
+name: Negative - gcloud project inventory
+description: Ordinary Google Cloud CLI work should not trigger the Google Workspace CLI skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Run gcloud projects list and tell me which project is active in the local configuration."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_gcloud_projects
+    type: trigger
+    config:
+      skill_path: .codex/skills/gws/SKILL.md
+      mode: negative
+      threshold: 0.75

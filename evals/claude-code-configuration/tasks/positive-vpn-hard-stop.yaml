@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: claude-code-configuration-positive-enterprise-no-vpn-gate
+name: Positive - Enterprise setup without VPN gate
+description: The skill should trigger and avoid treating VPN as a Claude Code auth prerequisite.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Set up Claude Code with the Enterprise plan. Do not block on a VPN smoke; if Enterprise login or the headless smoke fails, give me the manual recovery workflow without printing secrets."
+expected:
+  should_trigger: true
+graders:
+  - name: agents_skill_should_trigger_enterprise_setup
+    type: trigger
+    config:
+      skill_path: .agents/skills/claude-code-configuration/SKILL.md
+      mode: positive
+      threshold: 0.6
+  - name: claude_skill_should_trigger_enterprise_setup
+    type: trigger
+    config:
+      skill_path: .claude/skills/claude-code-configuration/SKILL.md
+      mode: positive
+      threshold: 0.6

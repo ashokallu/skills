@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-zoom-out
+name: Positive - unfamiliar code map
+description: The umbrella should trigger for a short read-only map before editing unfamiliar code.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before changing the unfamiliar example-app saved-items route, map the entry point, upstream callers, downstream dependencies, domain terms, validation surface, and change risk."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_zoom_out_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

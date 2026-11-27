@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-linked-change-reachability-reassessment
+name: Behavior - linked change reachability reassessment
+description: Linked change context and evidence-backed corrections must control reachability and severity.
+tags: [behavior, ancestry, callers, correction, severity]
+inputs:
+  prompt: |
+    A stable PR changes a legacy callback handler. Initial source inspection
+    found the handler can still accept the old input and a P1 production
+    regression was proposed. The user then says a linked predecessor PR moved
+    the main consumer to a replacement login flow, while another compatibility
+    consumer may still call the legacy handler. Reassess the finding before
+    verdict or GitHub comments.
+graders:
+  - name: linked_change_reachability_and_severity
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response treats both the original claim and the user
+        correction as evidence leads. It must inspect the linked PR for stated
+        intent, verify ancestry or containment, and trace current callers,
+        routes, flags, config, and environment selection. It must distinguish a
+        handler's capability from an ordinary active product flow, separate the
+        migrated consumer from any still-live compatibility consumer, and then
+        reject, retain, or downgrade the finding from the narrowest proven
+        reachable impact. It must invalidate affected packet and GitHub-comment
+        drafts before producing a new verdict.

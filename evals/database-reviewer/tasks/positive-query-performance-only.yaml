@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-query-performance-only
+name: Positive - query performance without migration
+description: SQL correctness and performance review should trigger database-reviewer without requiring a migration.
+tags: [trigger, positive, sql, performance]
+inputs:
+  prompt: "Independently review this unchanged-schema SELECT query for join correctness, null semantics, access paths, and p99 latency. There is no migration or DDL."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_query_only_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.45

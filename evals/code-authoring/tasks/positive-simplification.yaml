@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-simplification
+name: Positive - simplification
+description: Behavior-preserving simplification, large-file pressure, or unnecessary abstraction cleanup should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Simplify a large example-app helper without changing behavior; use the simplification lane to remove unnecessary abstraction and keep proof focused on behavior preservation."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_simplification
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

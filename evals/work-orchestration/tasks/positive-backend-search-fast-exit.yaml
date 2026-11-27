@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-backend-search-fast-exit
+name: Positive - backend search fast-exit
+description: Backend grep-style exploration should enter the workflow dispatcher without implying the TypeScript LSP reference.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Search the Go backend for where course progress is saved and summarize the call path."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_backend_search_fast_exit
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.35

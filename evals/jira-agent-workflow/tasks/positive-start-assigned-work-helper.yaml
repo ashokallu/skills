@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-start-assigned-work-helper
+name: Positive - start assigned work helper
+description:
+  The skill should trigger when the user asks the agent to kick off assigned Jira work with
+  automated branch and worktree setup.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Kick off the highest-priority DEMO issue assigned to me: choose it from Jira, create the
+    Jira-keyed worktree branch from main, initialize the run ledger, and get ready to implement."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_start_assigned_work_helper
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

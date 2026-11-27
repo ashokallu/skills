@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-planning-philosophy-mechanical-bypass
+name: Behavior - mechanical edit bypasses planning philosophy silently
+description: A precise typo correction adds no planning-philosophy ceremony or packet.
+tags: [behavior, planning, philosophy, bypass, deterministic]
+inputs:
+  prompt: |
+    Replace `teh` with `the` in this sentence and return the corrected sentence
+    only: `Use teh existing helper.`
+graders:
+  - name: mechanical_bypass_is_exact_and_silent
+    type: text
+    config:
+      regex_match:
+        - "(?s)\\AUse the existing helper\\.\\s*\\z"
+      regex_not_match:
+        - "(?i)(philosoph|principle|lens|idea.challenge|forward.analysis|skip.receipt|planning)"

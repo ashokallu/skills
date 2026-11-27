@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-review-dispatch-economy-first-pass
+name: Behavior - return review comments with the first verdict
+description: Whole-target ordinary and database reviewers share one snapshot and return minimal review comments with findings in the same response.
+tags: [behavior, pr, review, database, dispatch, economy]
+inputs:
+  prompt: |
+    First invoke and follow the pr-workflow skill. The user asks only to
+    review a teammate PR and has not asked to post comments. Database review
+    applicability is required. A teammate suggests using verdict-only output,
+    asking for comment bodies in a later turn, and requiring each reviewer to
+    emit base64, byte counts, and SHA-256 digests. They also suggest letting both
+    reviewers independently fetch PR metadata, threads, and CI. Explain the
+    exact first-dispatch output contract for both reviewers, including when
+    `Review comments:` appears or is omitted and the only allowed verdict-only
+    exception. State the same-response requirement directly rather than only
+    saying that later deferral is forbidden. Also explain who owns and reuses
+    the initial evidence snapshot, the permitted refresh triggers, what the
+    parent normally shows the user, and whether returning comments authorizes
+    publication. Answer every proposed ceremony explicitly, including whether
+    reviewers emit base64, byte counts, or SHA-256 and whether the parent shows
+    exact packets without an explicit user request.
+graders:
+  - name: first_pass_dispatch_economy
+    type: program
+    config:
+      command: python3
+      args:
+        - evals/pr-workflow/graders/review_dispatch_economy_contract.py
+        - dispatch

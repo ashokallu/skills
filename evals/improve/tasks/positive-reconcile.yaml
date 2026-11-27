@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: improve-positive-reconcile
+name: Positive - reconcile advisor plans
+description: An explicit improve reconcile request should trigger improve.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use improve reconcile to verify the current advisor-plans index, refresh drifted TODO plans, and retire work already fixed."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_reconcile
+    type: trigger
+    config:
+      skill_path: .codex/skills/improve/SKILL.md
+      mode: positive
+      threshold: 0.5

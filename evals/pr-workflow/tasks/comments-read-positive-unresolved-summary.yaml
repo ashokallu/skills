@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-unresolved-summary
+name: Positive - unresolved summary
+description: The skill should trigger when the user wants unresolved review threads summarized without fixes.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Inspect the unresolved inline threads on this example-app pull request and tell me which ones still matter. This is read-only."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_unresolved_thread_summary
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

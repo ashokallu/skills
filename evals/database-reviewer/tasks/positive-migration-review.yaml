@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-migration-review
+name: Positive - migration review
+description: Read-only review of Postgres migrations for deploy safety should trigger database-reviewer.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review these example-app Postgres migration files for rolling-deploy safety, lock risk, query compatibility, and down-migration reversibility. Do not edit them."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_migration_reviewer_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.5

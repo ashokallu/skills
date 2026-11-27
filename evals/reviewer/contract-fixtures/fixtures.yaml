@@ -1,0 +1,658 @@
+schema_version: 1
+suite_id: reviewer-contract-fixtures-v1
+
+canonical_transport:
+  path: evals/reviewer/contract-fixtures/canonical-transport.yaml
+  sha256: d8fbfcfffa376d909f20a8cef8774221efd4f4bf14f899bb3acafe1bf587e848 # pragma: allowlist secret
+
+negative_transport_cases:
+  - id: missing-canonical-transport
+    path: evals/reviewer/contract-fixtures/does-not-exist.yaml
+    sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+    expected_error: transport_missing
+  - id: corrupt-canonical-transport-digest
+    path: evals/reviewer/contract-fixtures/canonical-transport.yaml
+    sha256: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    expected_error: transport_digest_mismatch
+
+required_case_ids:
+  - packet-valid-skeleton
+  - packet-valid-with-finding
+  - packet-valid-unanchored-blocking
+  - packet-valid-review-comment-adversarial
+  - packet-invalid-skeleton-terminator
+  - central-blocking-verdict
+  - closeout-consequence-advisory
+  - closeout-simplification
+  - closeout-documentation-truth
+  - closeout-naming-readability
+  - overlap-dedupe-single-root
+  - pure-nit-suppression
+  - stale-operator-documentation
+  - unsafe-over-simplification
+  - clean-control
+  - branch-local-without-pr-packet
+  - direct-sql-without-pr-packet
+
+cases:
+  - id: packet-valid-skeleton
+    description: A complete GitHub PR packet starts with the verdict and ends at the canonical terminator.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned GitHub PR head
+      side_effects: read-only
+      risk_class: medium
+      success_evidence: parser-valid packet over current target evidence
+    seed:
+      defect: none
+      artifact: valid packet skeleton with every required field and final terminator
+      packet_sample: |
+        Verdict: PASS artifact: fixture
+        Review mode: STANDARD
+        Review target: fixture head
+        Scope basis: fixture intent and changed-file inventory
+        Coverage: fixture surface inspected; none omitted
+        Confidence: HIGH artifact: fixture source inspection
+        Session hygiene: fresh target; no forbidden inputs
+        P0/P1 findings: 0
+        P2/P3 findings: 0
+        Strongest proof checked: fixture/path:1
+        Variance ledger: N/A
+        Pending Verification: none
+        Would flip verdict if: fixture changes
+        Next owner: none artifact: fixture
+        Plain-language summary: no material findings
+        Selected reviewer lenses: fixture
+        Not loaded: none
+        Packet ends.
+    expected:
+      adjudication: accept
+      verdict: PASS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      formal_findings: 0
+
+  - id: packet-valid-with-finding
+    description: A complete GitHub PR packet expands every positive finding count into a canonical finding block.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned GitHub PR head
+      side_effects: read-only
+      risk_class: medium
+      success_evidence: parser-valid packet with one structured finding
+    seed:
+      defect: a proved documentation contract mismatch
+      artifact: valid packet with one complete P2 finding block
+      packet_sample: |
+        Verdict: PASS_WITH_FINDINGS artifact: fixture
+        Review mode: STANDARD
+        Review target: fixture head
+        Scope basis: fixture intent and changed-file inventory
+        Coverage: fixture surface inspected; none omitted
+        Confidence: HIGH artifact: fixture source inspection
+        Session hygiene: fresh target; no forbidden inputs
+        P0/P1 findings: 0
+        P2/P3 findings: 1 P2 documentation mismatch
+        Strongest proof checked: fixture/path:1
+        Variance ledger: N/A
+        Pending Verification: none
+        Would flip verdict if: documentation matches the current contract
+        Next owner: parent artifact: one open finding
+        Finding P2: Documentation contract mismatch
+        - Severity: P2
+        - Confidence: HIGH
+        - Category: documentation
+        - Location: fixture/path:1@fixture-head
+        - Target relevance: worsened; the changed documentation now contradicts the inspected source contract.
+        - Decision affected: whether reviewers can accept the current documentation as an accurate operator contract.
+        - Problem: The documented contract contradicts the inspected source.
+        - Impact: Reviewers can approve the wrong behavior.
+        - Evidence:
+          - fixture/path:1 proves the documented contract differs from source.
+        - Fix shape: Update the contract paragraph at fixture/path:1 to match the inspected source behavior, then run the focused documentation contract check that asserts both surfaces describe the same rule.
+        Review comments:
+        Review event: COMMENT
+        Unanchored findings: none
+        Summary:
+          | One material documentation finding is ready for author follow-up.
+        Comment C-1:
+        - Finding: 1
+        - Anchor JSON: {"line":1,"path":"fixture/path","side":"RIGHT","start_line":null,"start_side":null,"subject_type":"line"}
+        - Body:
+          | `issue(non-blocking)` Documentation contract mismatch
+          |
+          | **What happens:** The documented contract contradicts the inspected source.
+          |
+          | **Why it matters:** Reviewers can approve the wrong behavior.
+          |
+          | **Evidence:** `fixture/path:1` differs from source.
+          |
+          | **Suggested fix:** Update the contract paragraph to match the inspected source behavior.
+          |
+          | **How to verify:** Run the focused documentation contract check and assert both surfaces describe the same rule.
+        Plain-language summary: one material documentation finding
+        Selected reviewer lenses: documentation_truth
+        Not loaded: none
+        Packet ends.
+    expected:
+      adjudication: accept
+      verdict: PASS_WITH_FINDINGS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      formal_findings: 1
+      review_comments: 1
+
+  - id: packet-valid-unanchored-blocking
+    description: An unanchored P1 remains in the summary and selects REQUEST_CHANGES.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned GitHub PR head
+      side_effects: read-only
+      risk_class: medium
+      success_evidence: parser-valid unanchored blocking finding with no fabricated anchor
+    seed:
+      defect: a blocking workflow defect that has no current diff anchor
+      artifact: valid packet with one unanchored P1 represented in the summary
+      packet_sample: |
+        Verdict: FAIL artifact: fixture
+        Review mode: STANDARD
+        Review target: fixture head
+        Scope basis: fixture intent and changed-file inventory
+        Coverage: fixture surface inspected; none omitted
+        Confidence: HIGH artifact: fixture source inspection
+        Session hygiene: fresh target; no forbidden inputs
+        P0/P1 findings: 1 P1 workflow defect
+        P2/P3 findings: 0
+        Strongest proof checked: fixture/path:1
+        Variance ledger: N/A
+        Pending Verification: current diff has no valid inline anchor for the workflow-level defect
+        Would flip verdict if: the workflow contract is corrected
+        Next owner: parent artifact: one open finding
+        Finding P1: Workflow contract drops the required gate
+        - Severity: P1
+        - Confidence: HIGH
+        - Category: workflow
+        - Location: fixture/workflow.yml:1@fixture-head
+        - Target relevance: introduced; the reviewed workflow removes the required gate.
+        - Decision affected: merge readiness
+        - Problem: The workflow no longer enforces the required gate.
+        - Impact: A change can merge without the required decision proof.
+        - Evidence:
+          - fixture/workflow.yml:1 proves the gate is absent from the reviewed workflow.
+        - Fix shape: Restore the required gate in fixture/workflow.yml and add a focused workflow contract assertion that fails when the gate is removed.
+        Review comments:
+        Review event: REQUEST_CHANGES
+        Unanchored findings: 1
+        Summary:
+          | The workflow drops a required gate. This P1 is unanchored because no current diff line can accept an inline comment.
+        Plain-language summary: one blocking workflow finding
+        Selected reviewer lenses: fixture
+        Not loaded: none
+        Packet ends.
+    expected:
+      adjudication: accept
+      verdict: FAIL
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      formal_findings: 1
+      review_comments: 0
+
+  - id: packet-valid-review-comment-adversarial
+    description: Pipe-prefixed review-comment bytes may contain packet-like tokens without changing strict packet structure.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned GitHub PR head
+      side_effects: read-only
+      risk_class: medium
+      success_evidence: pipe-prefixed literal bodies preserve parser-like UTF-8 comment bytes
+    seed:
+      defect: a proved parser-token preservation mismatch
+      artifact: valid packet with one formal finding whose comment contains parser tokens
+      packet_sample: |
+        Verdict: PASS_WITH_FINDINGS artifact: fixture
+        Review mode: STANDARD
+        Review target: fixture head
+        Scope basis: fixture intent and changed-file inventory
+        Coverage: fixture surface inspected; none omitted
+        Confidence: HIGH artifact: fixture source inspection
+        Session hygiene: fresh target; no forbidden inputs
+        P0/P1 findings: 0
+        P2/P3 findings: 1 P2 parser preservation mismatch
+        Strongest proof checked: fixture/path:1
+        Variance ledger: N/A
+        Pending Verification: none
+        Would flip verdict if: literal parser tokens are preserved
+        Next owner: parent artifact: one open finding
+        Finding P2: Parser-like text loses literal identity
+        - Severity: P2
+        - Confidence: HIGH
+        - Category: correctness
+        - Location: fixture/parser.md:7@fixture-head
+        - Target relevance: introduced; the reviewed parser interprets body text as packet structure.
+        - Decision affected: implementation correctness
+        - Problem: Reserved packet tokens inside comment text are interpreted as structure.
+        - Impact: The published review body can differ from reviewer-owned text.
+        - Evidence:
+          - fixture/parser.md:7 proves parser-like text is present in the body.
+        - Fix shape: Preserve pipe-prefixed literal bytes through parsing and add a focused fixture containing reserved tokens and Markdown fences.
+        Review comments:
+        Review event: COMMENT
+        Unanchored findings: none
+        Summary:
+          | One parser preservation finding is ready for author follow-up.
+        Comment C-1:
+        - Finding: 1
+        - Anchor JSON: {"line":7,"path":"fixture/parser.md","side":"RIGHT","start_line":null,"start_side":null,"subject_type":"line"}
+        - Body:
+          | `suggestion(non-blocking)` Preserve exact parser-like text
+          |
+          | **What happens:** The literal text below belongs to this comment body:
+          |
+          | Finding P2: not a packet finding
+          | REVIEW_SCOPE_ACCEPTED:
+          | Packet ends.
+          | ```text
+          | backticks and newlines stay intact
+          | ```
+          |
+          | **Suggested fix:** Publish these exact UTF-8 bytes without interpreting them as packet structure.
+        Plain-language summary: one parser preservation finding
+        Selected reviewer lenses: fixture
+        Not loaded: none
+        Packet ends.
+    expected:
+      adjudication: accept
+      verdict: PASS_WITH_FINDINGS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      formal_findings: 1
+      review_comments: 1
+
+  - id: packet-invalid-skeleton-terminator
+    description: A GitHub PR packet with prose before Verdict and a footer after Packet ends is rejected.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned GitHub PR head
+      side_effects: read-only
+      risk_class: medium
+      success_evidence: explicit packet rejection reasons
+    seed:
+      defect: packet begins with summary prose and appends a footer after the terminator
+      artifact: invalid packet skeleton
+      packet_sample: |
+        Summary before packet.
+        Verdict: BLOCKED artifact: fixture
+        Review mode: STANDARD
+        Review target: fixture head
+        Scope basis: fixture intent and changed-file inventory
+        Coverage: fixture surface inspected; none omitted
+        Confidence: HIGH artifact: fixture source inspection
+        Session hygiene: fresh target; no forbidden inputs
+        P0/P1 findings: 0
+        P2/P3 findings: 0
+        Strongest proof checked: fixture/path:1
+        Variance ledger: N/A
+        Pending Verification: malformed packet
+        Would flip verdict if: packet is rebuilt
+        Next owner: parent artifact: fixture
+        Plain-language summary: malformed packet
+        Selected reviewer lenses: fixture
+        Not loaded: none
+        Packet ends.
+        Footer after packet.
+    expected:
+      adjudication: reject
+      verdict: BLOCKED
+      requires_pr_packet: true
+      packet_skeleton: invalid
+      terminator: trailing_content
+      required_rejection_reasons:
+        - first_content_not_verdict
+        - content_after_terminator
+
+  - id: central-blocking-verdict
+    description: Missing central production proof cannot produce PASS or PASS_WITH_FINDINGS.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned mutation-capable SQL PR head
+      side_effects: read-only
+      risk_class: high
+      success_evidence: central applicability gap represented by BLOCKED and REH
+    seed:
+      defect: production table cardinality and bounded rehearsal are unavailable for an applicable central query path
+      artifact: code diff plus missing operational evidence
+    expected:
+      adjudication: accept
+      verdict: BLOCKED
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      central_unknown: true
+      pass_forbidden: true
+      reh_required: true
+      formal_findings: 0
+
+  - id: closeout-consequence-advisory
+    description: A limit applied after network fanout is recalled by the consequence-advisory closeout category.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned TypeScript diff
+      side_effects: read-only
+      risk_class: medium
+      success_evidence: exact fanout and post-fanout limit lines
+    seed:
+      defect: Promise.all fetches every ID before slicing results to the requested limit
+      artifact: changed TypeScript hunk and caller
+      semantic_class: material_finding
+    expected:
+      adjudication: accept
+      verdict: PASS_WITH_FINDINGS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - consequence_advisory
+      emitted_root_causes: 1
+      formal_findings: 1
+
+  - id: closeout-simplification
+    description: A one-use boolean passthrough wrapper is recalled as behavior-preserving simplification.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned Go diff
+      side_effects: read-only
+      risk_class: low
+      success_evidence: wrapper body, sole caller, and direct boolean tests
+    seed:
+      defect: normalizeEnabled returns its boolean argument through a redundant branch
+      artifact: changed Go helper, caller, and tests
+      semantic_class: non_formal_advisory
+    expected:
+      adjudication: accept
+      verdict: PASS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - simplification
+      emitted_root_causes: 1
+      formal_findings: 0
+      advisory_max: 1
+
+  - id: closeout-documentation-truth
+    description: Mode-specific flag behavior that contradicts help text is recalled as documentation truth.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned CLI and help-text diff
+      side_effects: read-only
+      risk_class: medium
+      success_evidence: runtime guard and exact contradictory help line
+    seed:
+      defect: --limit is accepted only for reconcile mode while help says it caps every apply mode
+      artifact: runtime guard plus generated help
+      semantic_class: material_finding
+    expected:
+      adjudication: accept
+      verdict: PASS_WITH_FINDINGS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - documentation_truth
+      emitted_root_causes: 1
+      formal_findings: 1
+
+  - id: closeout-naming-readability
+    description: A broad run parameter that breaks an adjacent sourceRunID and targetRunID convention is retained as a non-formal naming advisory.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned Go test-helper diff
+      side_effects: read-only
+      risk_class: low
+      success_evidence: exact parameter and adjacent local naming convention
+    seed:
+      defect: a new parameter named run always carries targetRunID beside sourceRunID and targetRunID APIs
+      artifact: changed test helper and adjacent call sites
+      semantic_class: non_formal_advisory
+    expected:
+      adjudication: accept
+      verdict: PASS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - naming_readability
+      emitted_root_causes: 1
+      formal_findings: 0
+      advisory_max: 1
+
+  - id: overlap-dedupe-single-root
+    description: Attempted rows described as committed state are emitted once despite four closeout-category leads.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned job, test, log, and README diff
+      side_effects: read-only
+      risk_class: high
+      success_evidence: attempted-row source plus committed-state log, test, and prose claims
+    seed:
+      defect: attempted rows flow through a redundant summary wrapper and are named, logged, tested, and documented as committed rows
+      artifact: changed job, helper, test, log, and README
+      semantic_class: material_finding
+    expected:
+      adjudication: accept
+      verdict: PASS_WITH_FINDINGS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - consequence_advisory
+        - simplification
+        - documentation_truth
+        - naming_readability
+      dedupe_root: attempted_rows_misrepresented_as_committed
+      emitted_root_causes: 1
+      formal_findings: 1
+      duplicate_findings_forbidden: true
+
+  - id: pure-nit-suppression
+    description: Preference-only naming without a local contract is not promoted into a formal finding.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned TypeScript diff
+      side_effects: read-only
+      risk_class: low
+      success_evidence: changed line and absence of a conflicting local convention
+    seed:
+      defect: reviewer merely prefers items over values with no convention or behavior difference
+      artifact: changed local variable
+      semantic_class: pure_nit
+    expected:
+      adjudication: accept
+      verdict: PASS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - naming_readability
+      emitted_root_causes: 0
+      formal_findings: 0
+      pure_nit_suppressed: true
+
+  - id: stale-operator-documentation
+    description: A runbook command missing a newly required mutating-mode guard is a material documentation finding.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned job and operator-runbook diff
+      side_effects: read-only
+      risk_class: high
+      success_evidence: enforced flag guard and exact stale runbook command
+    seed:
+      defect: runbook invokes apply without the newly required --confirm-live-write flag
+      artifact: CLI validation plus operator command block
+      semantic_class: material_finding
+    expected:
+      adjudication: accept
+      verdict: PASS_WITH_FINDINGS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - documentation_truth
+      emitted_root_causes: 1
+      formal_findings: 1
+      minimum_severity: P2
+
+  - id: unsafe-over-simplification
+    description: A compact rewrite that removes an explicit tenant guard is not accepted as simplification.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned auth-sensitive Go diff
+      side_effects: read-only
+      risk_class: high
+      success_evidence: removed tenant guard and reachable caller path
+    seed:
+      defect: refactor combines branches and drops the explicit tenant ownership rejection
+      artifact: before and after handler plus caller
+      semantic_class: material_finding
+    expected:
+      adjudication: accept
+      verdict: FAIL
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - simplification
+      emitted_root_causes: 1
+      formal_findings: 1
+      minimum_severity: P1
+      behavior_preserving_claim_rejected: true
+
+  - id: clean-control
+    description: Correct bounded work, direct structure, current docs, and local naming produce no closeout finding.
+    review_mode: github_pr
+    route: reviewer
+    route_fields:
+      mode: review
+      target: pinned clean control diff
+      side_effects: read-only
+      risk_class: low
+      success_evidence: bounded query, direct code, aligned docs, semantic test, and local names
+    seed:
+      defect: none
+      artifact: clean control across all four closeout categories
+      semantic_class: clean
+    expected:
+      adjudication: accept
+      verdict: PASS
+      requires_pr_packet: true
+      packet_skeleton: valid
+      terminator: final
+      candidate_categories:
+        - consequence_advisory
+        - simplification
+        - documentation_truth
+        - naming_readability
+      emitted_root_causes: 0
+      formal_findings: 0
+      clean_control: true
+
+  - id: branch-local-without-pr-packet
+    description: A local branch verdict uses compact integrity fields and no GitHub PR packet.
+    review_mode: branch_local
+    route: reviewer
+    route_fields:
+      mode: review
+      target: local branch diff at named base and head
+      side_effects: read-only
+      risk_class: medium
+      success_evidence: compact integrity contract over stable local target
+    seed:
+      defect: none
+      artifact: stable local branch diff
+    expected:
+      adjudication: accept
+      verdict: PASS
+      requires_pr_packet: false
+      packet_skeleton: forbidden
+      terminator: not_applicable
+      required_mode_fields:
+        - stable_target
+        - selected_lenses
+        - evidence
+        - findings
+        - confidence
+        - unresolved_central_proof
+        - next_owner
+      formal_findings: 0
+
+  - id: direct-sql-without-pr-packet
+    description: A direct named SQL path review without a diff is findings-first and does not require PR serialization.
+    review_mode: direct_sql
+    route: reviewer
+    route_fields:
+      mode: review
+      target: named SQL file without an explicit diff
+      side_effects: read-only
+      risk_class: high
+      success_evidence: findings-first SQL safety evidence and applicability map
+    seed:
+      defect: unbounded update over a production-sized table
+      artifact: named SQL path, schema, and bounded related context
+      finding_sample: |
+        Finding P1: unbounded production update
+        - Severity: P1
+        - Confidence: HIGH
+        - Category: database safety
+        - Location: backend/query.sql:20-28@fixture-head
+        - Problem: The update scans and mutates the full production relation without a bounded candidate or execution guard.
+        - Impact: The statement can hold locks and consume database capacity beyond the rollout window.
+        - Evidence:
+          - backend/query.sql:20-28@fixture-head has no predicate, chunk boundary, or maximum-row guard.
+          - schema evidence identifies the target as a production-sized relation.
+        - Fix shape: Change the SQL execution path to enforce a bounded candidate set and resumable chunks, then run a focused production-shape plan probe and interruption test that prove the bound and resume behavior.
+    expected:
+      adjudication: accept
+      verdict: FAIL
+      requires_pr_packet: false
+      packet_skeleton: forbidden
+      terminator: not_applicable
+      required_mode_fields:
+        - named_stable_target
+        - selected_safety_lenses
+        - evidence
+        - findings
+        - production_applicability_map
+        - pending_verification
+      formal_findings: 1

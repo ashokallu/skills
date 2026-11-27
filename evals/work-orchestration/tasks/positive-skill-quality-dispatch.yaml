@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-skill-quality-dispatch
+name: Positive - skill quality dispatcher
+description: Skill and Waza eval edits should enter the workflow dispatcher, then route to skill-quality-evals.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Add Waza trigger coverage for the reviewer skill and update the mirrored skill quality guidance."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_skill_quality_dispatch
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.7

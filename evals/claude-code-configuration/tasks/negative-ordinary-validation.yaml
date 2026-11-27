@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: claude-code-configuration-negative-ordinary-validation
+name: Negative - ordinary repo validation
+description: Ordinary test or lint requests should not trigger Claude Code configuration routing.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "I changed a backend Go handler. Run the focused unit tests and tell me whether the implementation passes."
+expected:
+  should_trigger: false
+graders:
+  - name: agents_skill_should_not_trigger_code_tests
+    type: trigger
+    config:
+      skill_path: .agents/skills/claude-code-configuration/SKILL.md
+      mode: negative
+      threshold: 0.75
+  - name: claude_skill_should_not_trigger_code_tests
+    type: trigger
+    config:
+      skill_path: .claude/skills/claude-code-configuration/SKILL.md
+      mode: negative
+      threshold: 0.75

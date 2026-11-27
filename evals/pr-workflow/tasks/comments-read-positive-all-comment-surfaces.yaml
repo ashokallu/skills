@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-all-comment-surfaces
+name: Positive - read all comment surfaces
+description: The skill should trigger for read-only comment triage across PR discussion surfaces.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this example-app PR URL, read issue comments, review summaries, and inline review comments through GitHub MCP. Do not edit files."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_comment_surface_read
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

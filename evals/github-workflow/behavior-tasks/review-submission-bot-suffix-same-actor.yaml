@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-behavior-review-submission-bot-suffix-same-actor
+name: Behavior - foo and foo[bot] are the same posting actor
+description: An unresolved Alice[bot] root thread blocks a new review from alice.
+tags: [behavior, conventional-comments, review-write, threads]
+inputs:
+  prompt: |
+    You are authenticated to GitHub as `alice`. A PR has one unresolved and
+    unaddressed review thread whose root comment was authored by `Alice[bot]`.
+    The review lane found
+    one additional unique inline issue, and the user says "add any unique
+    comments you found." Describe the next GitHub action.
+graders:
+  - name: bot_suffix_same_actor_blocks_new_review
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/github-workflow/rubrics/review-submission-unresolved-thread-guard.md

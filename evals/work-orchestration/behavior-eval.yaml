@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/eval.schema.json
+name: work-orchestration-behavior-eval
+description: Cold-agent checks for objective activation, pre-action classification, mandatory phase readiness, critic sequencing, contract preservation, source-native web-search routing, bounded planning-philosophy use, peer challenge, duplicate-ceremony avoidance, conditional routing, wait and suspension ownership, urgency non-waiver, and observable lane journeys.
+skill: work-orchestration
+version: "0.1"
+
+config:
+  trials_per_task: 1
+  timeout_seconds: 180
+  parallel: false
+  executor: copilot-sdk
+  model: auto
+  skill_directories:
+    - ../../.codex/skills
+
+metrics:
+  - name: objective_lock_behavior
+    weight: 1
+    threshold: 1
+    description: Agents must preserve owner-authorized objectives and avoid redundant locking.
+
+tasks:
+  - behavior-tasks/classification-receipt-before-action.yaml
+  - behavior-tasks/objective-lock-cold-activation.yaml
+  - behavior-tasks/objective-lock-contract-changing-advice.yaml
+  - behavior-tasks/objective-lock-subordinate-mechanism-scope.yaml
+  - behavior-tasks/objective-lock-verified-contract-skip.yaml
+  - behavior-tasks/intent-alignment-activation-and-fallback.yaml
+  - behavior-tasks/plan-acceptance-version-lifecycle.yaml
+  - behavior-tasks/plan-conformance-bidirectional.yaml
+  - behavior-tasks/critic-consultation-order-and-merits.yaml
+  - behavior-tasks/peer-challenge-material-disagreement.yaml
+  - behavior-tasks/forward-analysis-production-unblock.yaml
+  - behavior-tasks/forward-analysis-decision-record-transport.yaml
+  - behavior-tasks/planning-philosophy-retry-feedback.yaml
+  - behavior-tasks/planning-philosophy-migration-reversibility.yaml
+  - behavior-tasks/planning-philosophy-analogy-deletion-test.yaml
+  - behavior-tasks/planning-philosophy-no-invented-influence.yaml
+  - behavior-tasks/planning-philosophy-structural-transfer.yaml
+  - behavior-tasks/planning-philosophy-owner-boundary.yaml
+  - behavior-tasks/planning-philosophy-mechanical-bypass.yaml
+  - behavior-tasks/decision-provenance-conflicting-artifacts.yaml
+  - behavior-tasks/lane-journey-multiphase.yaml
+  - behavior-tasks/phase-readiness-obvious-task-incomplete.yaml
+  - behavior-tasks/interface-semantic-trigger-boundaries.yaml
+  - behavior-tasks/web-search-source-native-routing.yaml
+  - behavior-tasks/privacy-boundary-conditional-activation.yaml
+  - behavior-tasks/scope-change-control-conditional-activation.yaml
+  - behavior-tasks/runtime-capability-check-conditional-activation.yaml
+  - behavior-tasks/loop-control-conditional-activation.yaml
+  - behavior-tasks/work-item-profile-one-line-production.yaml
+  - behavior-tasks/work-item-profile-large-contained.yaml
+  - behavior-tasks/work-item-profile-initiative-slicing.yaml
+  - behavior-tasks/work-item-profile-material-delta.yaml
+  - behavior-tasks/urgency-incident-nonwaiver.yaml
+  - behavior-tasks/suspension-side-effect-boundary.yaml
+  - behavior-tasks/waiting-obligation-closeout.yaml
+  - behavior-tasks/entry-and-explanation-routing.yaml
+  - behavior-tasks/instruction-maintenance-pruning.yaml
+  - behavior-tasks/instruction-maintenance-output-neutrality.yaml
+  - behavior-tasks/autonomy-envelope-conditional-activation.yaml
+  - behavior-tasks/autonomy-envelope-authority-and-expansion.yaml
+  - behavior-tasks/orchestration-conformance-session-reuse.yaml
+  - behavior-tasks/session-bootstrap-follow-up-reuse.yaml
+  - behavior-tasks/reviewer-scope-control-message.yaml
+  - behavior-tasks/review-progress-without-semantic-duplication.yaml
+  - behavior-tasks/reviewer-publication-candidate-handoff.yaml
+  - behavior-tasks/reviewer-packet-acceptance-repair.yaml

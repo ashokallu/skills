@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-cache-jobs-consistency-lenses
+name: Positive - cache jobs consistency lenses
+description: Stable review of cache, async job, idempotency, retry, and run-state behavior should trigger reviewer.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a stable example-app diff after changed-file inventory shows backend/jobs/progress-reconcile/main.go, backend/internal/progress/cache.go, backend/internal/shared/sql/queries/progress.sql, and docs/runbooks/progress-reconcile.md. The PR changes retry behavior, idempotency keys, cache invalidation, chunked processing, and operator-visible run state. Select jobs queues, concurrency caching, SQL, observability, and tests lenses before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_reviewer_cache_jobs_consistency_lenses
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

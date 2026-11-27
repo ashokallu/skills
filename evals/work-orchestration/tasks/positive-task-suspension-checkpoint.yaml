@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-task-suspension-checkpoint
+name: Positive - tangential task suspension checkpoint
+description: A tangential example-app request that pauses unfinished evidence-backed work should trigger context-rot pushback and a detailed cold-resume context package before switching.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before we publish the planned example-app backend performance PR, pause and inspect an unrelated tooling configuration. We already have live query evidence and an approved implementation plan. Push back if this switch risks context rot. If I confirm the tangent belongs now, preserve one session-owned cold-resume file named from the current runtime session or thread ID. Do not scan for a latest or objective-named checkpoint and do not create companion checkpoint files. Include the raw governing request, evidence provenance and file references, work already completed, stopped state, final goal, acceptance criteria, exact PR resume point, and forbidden substitutes. A short summary is not sufficient."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_task_suspension_checkpoint
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

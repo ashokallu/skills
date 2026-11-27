@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-pr-publication-glue
+name: Positive - PR publication glue
+description:
+  The skill should trigger when the user asks for Jira-keyed branch checks and GitHub PR
+  publication.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "For DEMO-2911, assert the branch matches the Jira key, prepare the GitHub PR title and body,
+    publish the non-empty branch as a PR, update the run ledger, and check Jira development info."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_publication_glue
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

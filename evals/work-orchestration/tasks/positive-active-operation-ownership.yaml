@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-active-operation-ownership
+name: Positive - active operation ownership across task switch
+description: Active example-app operations must keep terminal monitoring ownership when the user changes focus.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A long-running example-app Cloud Run job is still active, but I want to work on an unrelated documentation task while it runs. Keep monitoring the real execution, report its terminal state promptly, and do not assume a background shell will notify me."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_active_operation_ownership
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.6

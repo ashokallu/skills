@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/eval.schema.json
+name: reviewer-behavior-eval
+description: Cold-agent reviewer decision-scope, reachability, and evidence-integrity checks.
+skill: reviewer
+version: "0.1"
+
+config:
+  trials_per_task: 1
+  timeout_seconds: 180
+  parallel: false
+  executor: copilot-sdk
+  model: auto
+  skill_directories:
+    - ../../.codex/skills
+
+metrics:
+  - name: reviewer_behavior
+    weight: 1
+    threshold: 1
+    description: Reviewer verdicts must preserve evidence and decision scope.
+
+tasks:
+  - behavior-tasks/*.yaml

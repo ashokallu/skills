@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-objective-lock-subordinate-mechanism-scope
+name: Behavior - mechanism scope remains subordinate to objective authority
+description: Mechanism-only revisions and objective changes must advance different version owners.
+tags: [behavior, objective-lock, production-scope, versioning]
+inputs:
+  prompt: |
+    Objective `mismatch-observation@v2` requires retained mismatch evidence,
+    protects the current API response and the invariant "at most one current
+    mismatch row per user," and excludes request-time vetoes. Its acceptance
+    criteria do not require a uniqueness constraint. Current source evidence
+    proves that two concurrent upserts can both insert a current row because
+    no uniqueness constraint exists. Its current mechanism scope is
+    `mismatch-observation@v2/mechanisms@v1`.
+
+    Classify three proposals:
+
+    1. Add a uniqueness constraint preventing duplicate current rows.
+    2. Add episode history, automatic resolution, and a cleanup job, none of
+       which an acceptance criterion or mandatory current contract requires.
+    3. Make every request fail whenever the comparison store disagrees.
+
+    State the required version transitions and history treatment.
+graders:
+  - name: mechanism_and_objective_revisions_have_distinct_owners
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/objective-lock-subordinate-mechanism-scope.md

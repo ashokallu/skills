@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-negative-trivial-pr-bound-prepush
+name: Negative - trivial PR-bound pre-push
+description: The collaboration skill should not trigger for a trivial PR-bound push that explicitly does not need Claude review.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Before pushing this branch and opening a new PR, I only fixed a typo in a docs paragraph. Do the normal validation and push flow; no Claude collaborator review is needed."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_trivial_pr_bound_prepush
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: negative
+      threshold: 0.9

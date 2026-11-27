@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: browser-e2e-positive-local-auth
+name: Positive - local authenticated browser
+description: The skill should trigger when Codex needs deterministic local example-app auth with Playwright MCP.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use Codex Playwright MCP browser tools to log into app-local on :8443, prove auth through :4444/api/users/me, then verify a route on :4443."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_playwright_local_auth
+    type: trigger
+    config:
+      skill_path: .codex/skills/browser-e2e/SKILL.md
+      mode: positive
+      threshold: 0.6

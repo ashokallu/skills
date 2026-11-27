@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-luna-route-map
+name: Positive - Luna route mapping scout
+description: The umbrella should trigger for bounded read-only route and caller mapping.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use Luna to map this example-app Sidebar TODO. Find related route config, callers, and tests with file:line evidence. Do not edit."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_luna_route_mapping
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-llm-ai-integration-lens
+name: Positive - LLM AI integration lens
+description: Stable PR reviews for runtime model calls should trigger reviewer lens selection.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a stable example-app diff after changed-file inventory shows backend/internal/ai/client.go, backend/internal/ai/prompts/course_summary.md, app/components/AIGeneratedSummary.tsx, and backend/internal/ai/client_test.go. The PR adds runtime model calls, prompt templates with user content, JSON output parsing, token caps, and AI-generated content rendering. Select LLM/AI integration, API contract, silent failure, security/privacy, and tests lenses before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_reviewer_llm_ai_integration_lens
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

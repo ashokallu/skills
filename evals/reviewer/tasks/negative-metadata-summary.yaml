@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-negative-metadata-summary
+name: Negative - metadata summary without verdict
+description: PR metadata, changed-file, comment, or CI summaries without a reviewer verdict should not trigger reviewer lens selection.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "List the changed files and summarize CI status for PR 1234. Do not create a local checkout and do not issue a review verdict."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_metadata_summary
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: negative
+      # This prompt intentionally says "review verdict" while asking not to
+      # produce one, so the mock keyword trigger has unavoidable overlap with
+      # reviewer language. Keep the boundary above that overlap.
+      threshold: 0.8

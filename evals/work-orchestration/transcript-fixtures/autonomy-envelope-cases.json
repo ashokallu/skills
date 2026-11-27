@@ -1,0 +1,1717 @@
+{
+  "autonomy_matrix": true,
+  "base": {
+    "Activation": "critical-shared-mutation",
+    "Risk": "medium",
+    "Blast radius": "one local worktree and one reversible file change",
+    "Work item profile": "fixture-profile@v1",
+    "Environment ceiling": "local",
+    "Principal/identity set": "local-user",
+    "Resource set": "example-app",
+    "Read-sensitivity ceiling": "internal",
+    "Write/execute ceiling": "workspace",
+    "Cost/resource ceiling": "bounded",
+    "Cost/resource limits": "local-commands=10, minutes=30",
+    "Destructiveness ceiling": "reversible",
+    "Rollback boundary": "local-revert",
+    "Monitoring dependency": "synchronous",
+    "Monitoring capability": "supported",
+    "Phase-authorized actions": "edit-workspace",
+    "Predeclared bounded recovery": "none",
+    "Preliminary preflights": "read-repo",
+    "Planned action graph": "read-repo:preflight, edit-workspace:mutation, revert-edit:rollback-abort, inspect-diff:readback, observe-edit:monitoring, report-result:terminal-delivery",
+    "Capability/action evidence map": "read-repo=runtime-capability-check|load-current-repo-contract|local-filesystem|local-user|example-app|authorized|ready|repo-read|current@repo-head|read-only|no-write|verified|none|preflight, edit-workspace=runtime-capability-check|apply-approved-local-change|local-filesystem|local-user|example-app|authorized|ready|worktree-readiness|current@repo-head|local/workspace|no-external-write|verified|none|mutation, revert-edit=risk-and-side-effects|restore-local-diff|local-revert|local-user|example-app|authorized|ready|current-diff|current@worktree|workspace-write|no-remote-write|verified|none|rollback-abort, inspect-diff=completion-claim-gate|prove-final-diff|git-diff|local-user|example-app|authorized|ready|current-diff|current@worktree|read-only|no-write|verified|none|readback, observe-edit=waiting-and-monitoring|observe-terminal-state|foreground-process|local-user|not-required|authorized|ready|foreground-observation|current@session|read-only|no-background-detach|verified|none|monitoring, report-result=completion-claim-gate|deliver-terminal-result|chat-delivery|local-user|not-required|authorized|ready|user-response|current@session|no-write|no-external-mutation|verified|none|terminal-delivery",
+    "Shared-environment effect": "none",
+    "Shared-mutation latch": "not-applicable",
+    "Confirmation binding": "none",
+    "Standing-authority proof": "none",
+    "Prerequisites and gates": "met",
+    "Unresolved readiness": "none",
+    "Checkpoints": "none",
+    "Abort/stop conditions": "user-stop",
+    "Success proof and terminal observation": "exact-local-diff"
+  },
+  "cases": [
+    {
+      "name": "noncritical-envelope-is-rejected",
+      "expect_pass": false,
+      "expected_error": "autonomy envelope requires a qualifying critical or irreversible mutation",
+      "allow_noncritical_envelope_fixture": false,
+      "versions": [{ "actions": [{ "action": "edit-workspace" }] }]
+    },
+    {
+      "name": "ordinary-local-work-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "deterministically-reconstructable-agent-artifact-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "explicit-autopilot-alone-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "ordinary-commit-push-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "pr-review-comment-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "issue-doc-collaboration-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "test-only-ci-retry-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "production-read-plus-unrelated-comment-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "local-database-write-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "preliminary-allows-enumerated-read-only-preflight",
+      "expect_pass": true,
+      "versions": [
+        {
+          "preliminary_actions": [
+            {
+              "action": "read-repo",
+              "write_execute": "none",
+              "cost_resource": "none",
+              "preflight": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "preflight-can-resolve-readiness-evidence-within-version",
+      "expect_pass": true,
+      "versions": [
+        {
+          "overrides": {
+            "Monitoring capability": "unknown",
+            "Prerequisites and gates": "preflight-pending",
+            "Checkpoints": "pending"
+          },
+          "preliminary_actions": [
+            {
+              "action": "read-repo",
+              "write_execute": "none",
+              "cost_resource": "none",
+              "preflight": true
+            }
+          ],
+          "final_overrides": {
+            "Monitoring capability": "supported",
+            "Prerequisites and gates": "met",
+            "Checkpoints": "none"
+          }
+        }
+      ]
+    },
+    {
+      "name": "preliminary-rejects-substantive-action",
+      "expect_pass": false,
+      "expected_error": "substantive action cannot run while PRELIMINARY",
+      "versions": [{ "preliminary_actions": [{ "action": "edit-workspace" }] }]
+    },
+    {
+      "name": "preliminary-preflight-cannot-hide-a-write",
+      "expect_pass": false,
+      "expected_error": "preliminary preflight must remain read-only",
+      "versions": [
+        {
+          "overrides": { "Preliminary preflights": "edit-workspace" },
+          "preliminary_actions": [
+            {
+              "action": "edit-workspace",
+              "preflight": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "production-public-read-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "staging-sensitive-read-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "remote-metadata-write-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "ordinary-ci-retry-does-not-activate",
+      "expect_pass": true,
+      "no_envelope": true,
+      "require_autonomy_envelope": false,
+      "forbid_autonomy_envelope": true
+    },
+    {
+      "name": "critical-database-mutation-uses-one-hold-through-erratum-and-bounded-recovery",
+      "expect_pass": true,
+      "expected_approval_holds": 1,
+      "versions": [
+        {
+          "approval_hold": true,
+          "acceptance_card": true,
+          "mutation_boundary": "production/production-write",
+          "presentation_erratum": "Corrected derived resource count; exact enumerated resources and actions are unchanged.",
+          "overrides": {
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Resource set": "cloudsql-primary,content_user_progress",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Phase-authorized actions": "create-index-concurrently,retry-index-build",
+            "Predeclared bounded recovery": "retry-index-build",
+            "Capability/action evidence map": "read-repo=external-system-boundaries|verify-production-target|cloudsql-read|local-user|cloudsql-primary|authorized|ready|cloudsql-metadata|current@fixture-head|read-only|no-write|verified|none|preflight, edit-workspace=runtime-capability-check|build-concurrent-index|cloudsql-ddl|local-user|content_user_progress|authorized|ready|cloudsql-primary|current@fixture-head|local/workspace|no-destructive-ddl|verified|none|mutation, revert-edit=risk-and-side-effects|abort-index-build|cloudsql-cancel|local-user|content_user_progress|authorized|ready|cloudsql-primary|current@fixture-head|production-write|no-data-delete|verified|none|rollback-abort, inspect-diff=completion-claim-gate|verify-index-state|cloudsql-read|local-user|content_user_progress|authorized|ready|cloudsql-catalog|current@fixture-head|read-only|no-write|verified|none|readback, observe-edit=waiting-and-monitoring|observe-sql-pressure|cloudsql-monitoring|local-user|cloudsql-primary|authorized|ready|cloudsql-metrics|current@fixture-head|read-only|no-write|verified|none|monitoring, report-result=completion-claim-gate|deliver-terminal-result|chat-delivery|local-user|not-required|authorized|ready|user-response|current@session|no-write|no-external-mutation|verified|none|terminal-delivery",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v1 environment=production principal=local-user resources=cloudsql-primary,content_user_progress actions=create-index-concurrently,retry-index-build recovery=retry-index-build source=user-now time=2026-07-24T12:00:00Z"
+          },
+          "actions": [
+            {
+              "action": "retry-index-build",
+              "action_id": "edit-workspace",
+              "environment": "production",
+              "resources": ["cloudsql-primary", "content_user_progress"],
+              "write_execute": "production-write",
+              "destructiveness": "coordinated",
+              "recovery_kind": "critical-retry",
+              "action_semantics_unchanged": true,
+              "recovery_reconciles_state": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-reconcilable",
+              "shared_effect": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "acceptance-card-omission-invalidates-confirmation",
+      "expect_pass": false,
+      "expected_error": "acceptance card is not a lossless projection of 'Exact resource set'",
+      "expected_approval_holds": 1,
+      "versions": [
+        {
+          "approval_hold": true,
+          "acceptance_card": true,
+          "card_overrides": {
+            "Exact resource set": "cloudsql-primary"
+          },
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Environment ceiling": "production",
+            "Resource set": "cloudsql-primary,content_user_progress",
+            "Write/execute ceiling": "production-write",
+            "Phase-authorized actions": "create-index-concurrently",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v1 environment=production principal=local-user resources=cloudsql-primary,content_user_progress actions=create-index-concurrently source=user-now time=2026-07-24T12:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-legacy-executable-bit-recovery",
+      "expect_pass": false,
+      "expected_error": "unsupported bounded recovery kind",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "repair-executable-mode"
+          },
+          "actions": [
+            {
+              "action": "repair-executable-mode",
+              "recovery_kind": "executable-bit",
+              "mode_change": "100644->100755",
+              "content_blob_unchanged": false,
+              "repo_hook_requirement": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-legacy-mode-recovery",
+      "expect_pass": false,
+      "expected_error": "unsupported bounded recovery kind",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "repair-executable-mode"
+          },
+          "actions": [
+            {
+              "action": "repair-executable-mode",
+              "recovery_kind": "executable-bit",
+              "mode_change": "100644->100777",
+              "content_blob_unchanged": true,
+              "repo_hook_requirement": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-legacy-invocation-recovery",
+      "expect_pass": false,
+      "expected_error": "autonomy action exceeds Environment ceiling",
+      "versions": [
+        {
+          "overrides": {
+            "Environment ceiling": "remote-non-production",
+            "Phase-authorized actions": "retry-corrected-invocation"
+          },
+          "actions": [
+            {
+              "action": "retry-corrected-invocation",
+              "environment": "staging",
+              "recovery_kind": "corrected-invocation",
+              "command_semantics_unchanged": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-hook-recovery",
+      "expect_pass": false,
+      "expected_error": "unsupported bounded recovery kind",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "retry-corrected-invocation"
+          },
+          "actions": [
+            {
+              "action": "retry-corrected-invocation",
+              "recovery_kind": "corrected-invocation",
+              "command_semantics_unchanged": true,
+              "bypasses_hooks": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-git-remote-recovery",
+      "expect_pass": false,
+      "expected_error": "unsupported bounded recovery kind",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "retry-corrected-invocation"
+          },
+          "actions": [
+            {
+              "action": "retry-corrected-invocation",
+              "recovery_kind": "corrected-invocation",
+              "command_semantics_unchanged": true,
+              "changes_credentials": true,
+              "changes_remote": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-legacy-second-retry",
+      "expect_pass": false,
+      "expected_error": "unsupported bounded recovery kind",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "retry-corrected-invocation"
+          },
+          "actions": [
+            {
+              "action": "retry-corrected-invocation",
+              "recovery_kind": "corrected-invocation",
+              "command_semantics_unchanged": true,
+              "state_readback": true,
+              "retry_number": 2,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-legacy-unknown-state-recovery",
+      "expect_pass": false,
+      "expected_error": "unsupported bounded recovery kind",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "retry-corrected-invocation"
+          },
+          "actions": [
+            {
+              "action": "retry-corrected-invocation",
+              "recovery_kind": "corrected-invocation",
+              "command_semantics_unchanged": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "unknown"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-legacy-restage-recovery",
+      "expect_pass": false,
+      "expected_error": "autonomy action uses a resource outside the envelope",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "retry-corrected-invocation"
+          },
+          "actions": [
+            {
+              "action": "retry-corrected-invocation",
+              "resources": ["another-repository"],
+              "recovery_kind": "corrected-invocation",
+              "command_semantics_unchanged": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-legacy-force-push-recovery",
+      "expect_pass": false,
+      "expected_error": "autonomy action exceeds Write/execute ceiling",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "retry-corrected-invocation"
+          },
+          "actions": [
+            {
+              "action": "retry-corrected-invocation",
+              "write_execute": "destructive-history-rewrite",
+              "recovery_kind": "corrected-invocation",
+              "command_semantics_unchanged": true,
+              "rewrites_history": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "critical-envelope-rejects-legacy-paid-recovery",
+      "expect_pass": false,
+      "expected_error": "autonomy action exceeds the exact cost/resource limits",
+      "versions": [
+        {
+          "overrides": {
+            "Phase-authorized actions": "retry-corrected-invocation"
+          },
+          "actions": [
+            {
+              "action": "retry-corrected-invocation",
+              "cost_limits": {
+                "local-commands": 10,
+                "minutes": 30,
+                "paid-calls": 1
+              },
+              "recovery_kind": "corrected-invocation",
+              "command_semantics_unchanged": true,
+              "state_readback": true,
+              "retry_number": 1,
+              "partial_external_state": "known-none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "local-capability-cannot-prove-remote-mutation-readiness",
+      "expect_pass": false,
+      "expected_error": "does not cover the envelope environment/write boundary",
+      "versions": [
+        {
+          "approval_hold": true,
+          "overrides": {
+            "Environment ceiling": "staging",
+            "Resource set": "staging-service",
+            "Write/execute ceiling": "production-write",
+            "Phase-authorized actions": "deploy-staging",
+            "Shared-environment effect": "predictable",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v1 environment=staging principal=local-user resources=staging-service actions=deploy-staging source=user-now time=2026-07-23T12:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "critical-effect-push-requires-confirmation-latch",
+      "expect_pass": false,
+      "expected_error": "critical mutation effect must use the shared-mutation latch",
+      "versions": [
+        {
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Resource set": "production-service",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Phase-authorized actions": "push-auto-deploy-branch",
+            "Shared-environment effect": "predictable"
+          }
+        }
+      ]
+    },
+    {
+      "name": "critical-effect-ci-retry-requires-confirmation-latch",
+      "expect_pass": false,
+      "expected_error": "critical mutation effect must use the shared-mutation latch",
+      "versions": [
+        {
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Resource set": "migration-job",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Phase-authorized actions": "retry-migration-job",
+            "Shared-environment effect": "predictable"
+          }
+        }
+      ]
+    },
+    {
+      "name": "indirect-deploy-effect-requires-confirmation-latch",
+      "expect_pass": false,
+      "expected_error": "critical mutation effect must use the shared-mutation latch",
+      "versions": [
+        {
+          "mutation_boundary": "staging/remote-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "high",
+            "Environment ceiling": "staging",
+            "Resource set": "staging-service",
+            "Write/execute ceiling": "remote-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Phase-authorized actions": "deploy-staging",
+            "Shared-environment effect": "predictable"
+          },
+          "actions": [
+            {
+              "action": "deploy-staging",
+              "shared_effect": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "shared-effect-action-cannot-hide-behind-none-packet",
+      "expect_pass": false,
+      "expected_error": "critical mutation action contradicts effect classification",
+      "versions": [
+        {
+          "actions": [
+            {
+              "action": "edit-workspace",
+              "shared_effect": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "vague-production-language-does-not-authorize-mutation",
+      "expect_pass": false,
+      "expected_error": "lacks action-specific authority",
+      "versions": [
+        {
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Resource set": "production-service",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Phase-authorized actions": "none"
+          },
+          "actions": [{ "action": "mutate-production" }]
+        }
+      ]
+    },
+    {
+      "name": "exact-production-authority-does-not-bypass-gates",
+      "expect_pass": false,
+      "expected_error": "critical mutation must await confirmation",
+      "versions": [
+        {
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Resource set": "production-service",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Phase-authorized actions": "mutate-production",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building",
+            "Confirmation binding": "fixture-task@v1 environment=production principal=local-user resources=production-service actions=mutate-production source=user-now time=2026-07-23T12:00:00Z"
+          },
+          "actions": [{ "action": "mutate-production" }]
+        }
+      ]
+    },
+    {
+      "name": "confirmed-production-envelope-runs-without-command-prompts",
+      "expect_pass": true,
+      "versions": [
+        {
+          "approval_hold": true,
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Resource set": "production-service",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Phase-authorized actions": "mutate-production",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v1 environment=production principal=local-user resources=production-service actions=mutate-production source=user-now time=2026-07-23T12:00:00Z"
+          },
+          "actions": [
+            {
+              "action": "mutate-production",
+              "shared_effect": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "confirmation-bound-to-another-version-is-rejected",
+      "expect_pass": false,
+      "expected_error": "confirmation must bind the current autonomy envelope version",
+      "versions": [
+        {
+          "approval_hold": true,
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v2 environment=production source=user-now time=2026-07-23T12:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "post-hold-resource-change-invalidates-confirmation",
+      "expect_pass": false,
+      "expected_error": "changed 'Resource set' after approval hold",
+      "versions": [
+        {
+          "approval_hold": true,
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Resource set": "production-service",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Resource set": "production-service, production-job",
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v1 environment=production principal=local-user resources=production-service,production-job source=user-now time=2026-07-23T12:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "approval-required-cannot-change-versioned-fields",
+      "expect_pass": false,
+      "expected_error": "changed 'Resource set' without a new version",
+      "versions": [
+        {
+          "final_state": "APPROVAL REQUIRED",
+          "final_overrides": {
+            "Resource set": "example-app, another-repository"
+          }
+        }
+      ]
+    },
+    {
+      "name": "blocked-after-hold-cannot-hide-field-change",
+      "expect_pass": false,
+      "expected_error": "changed 'Prerequisites and gates' after approval hold",
+      "versions": [
+        {
+          "approval_hold": true,
+          "final_state": "BLOCKED",
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Resource set": "production-service",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Prerequisites and gates": "user-denied",
+            "Shared-mutation latch": "awaiting-confirmation"
+          }
+        }
+      ]
+    },
+    {
+      "name": "omitted-capability-row-rejects-autopilot",
+      "expect_pass": false,
+      "expected_error": "every planned autonomy action needs exactly one capability evidence row",
+      "versions": [
+        {
+          "final_overrides": {
+            "Capability/action evidence map": "read-repo=runtime-capability-check|load-current-repo-contract|local-filesystem|local-user|example-app|authorized|ready|repo-read|current@repo-head|read-only|no-write|verified|none|preflight"
+          }
+        }
+      ]
+    },
+    {
+      "name": "unauthorized-capability-row-rejects-autopilot",
+      "expect_pass": false,
+      "expected_error": "has invalid auth state",
+      "versions": [
+        {
+          "final_overrides": {
+            "Capability/action evidence map": "read-repo=runtime-capability-check|load-current-repo-contract|local-filesystem|local-user|example-app|unauthorized|ready|repo-read|current@repo-head|read-only|no-write|verified|none|preflight, edit-workspace=runtime-capability-check|apply-approved-local-change|local-filesystem|local-user|example-app|authorized|ready|worktree-readiness|current@repo-head|local/workspace|no-external-write|verified|none|mutation, revert-edit=risk-and-side-effects|restore-local-diff|local-revert|local-user|example-app|authorized|ready|current-diff|current@worktree|workspace-write|no-remote-write|verified|none|rollback-abort, inspect-diff=completion-claim-gate|prove-final-diff|git-diff|local-user|example-app|authorized|ready|current-diff|current@worktree|read-only|no-write|verified|none|readback, observe-edit=waiting-and-monitoring|observe-terminal-state|foreground-process|local-user|current-session|authorized|ready|foreground-observation|current@session|read-only|no-background-detach|verified|none|monitoring, report-result=completion-claim-gate|deliver-terminal-result|chat-delivery|local-user|current-session|authorized|ready|user-response|current@session|no-write|no-external-mutation|verified|none|terminal-delivery"
+          }
+        }
+      ]
+    },
+    {
+      "name": "omitted-rollback-action-rejects-autopilot",
+      "expect_pass": false,
+      "expected_error": "critical mutation action graph is missing operational roles",
+      "versions": [
+        {
+          "approval_hold": true,
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Planned action graph": "read-repo:preflight, edit-workspace:mutation, inspect-diff:readback, observe-edit:monitoring, report-result:terminal-delivery",
+            "Capability/action evidence map": "read-repo=runtime-capability-check|load-current-repo-contract|local-filesystem|local-user|example-app|authorized|ready|repo-read|current@repo-head|read-only|no-write|verified|none|preflight, edit-workspace=runtime-capability-check|apply-approved-local-change|local-filesystem|local-user|example-app|authorized|ready|worktree-readiness|current@repo-head|workspace-write|no-external-write|verified|none|mutation, inspect-diff=completion-claim-gate|prove-final-diff|git-diff|local-user|example-app|authorized|ready|current-diff|current@worktree|read-only|no-write|verified|none|readback, observe-edit=waiting-and-monitoring|observe-terminal-state|foreground-process|local-user|current-session|authorized|ready|foreground-observation|current@session|read-only|no-background-detach|verified|none|monitoring, report-result=completion-claim-gate|deliver-terminal-result|chat-delivery|local-user|current-session|authorized|ready|user-response|current@session|no-write|no-external-mutation|verified|none|terminal-delivery",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v1 environment=production principal=local-user resources=example-app actions=edit-workspace source=user-now time=2026-07-23T12:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "verified-standing-authority-skips-interactive-hold",
+      "expect_pass": true,
+      "versions": [
+        {
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "standing-authority",
+            "Standing-authority proof": "incident-authority owner=on-call scope=production current=yes"
+          }
+        }
+      ]
+    },
+    {
+      "name": "mechanics-only-runbook-cannot-create-standing-authority",
+      "expect_pass": false,
+      "expected_error": "standing authority needs a current scoped authority artifact",
+      "versions": [
+        {
+          "mutation_boundary": "production/production-write",
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "critical",
+            "Environment ceiling": "production",
+            "Write/execute ceiling": "production-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "standing-authority",
+            "Standing-authority proof": "none"
+          }
+        }
+      ]
+    },
+    {
+      "name": "action-needs-phase-authority-and-envelope",
+      "expect_pass": false,
+      "expected_error": "lacks action-specific authority",
+      "versions": [
+        {
+          "overrides": { "Phase-authorized actions": "none" },
+          "actions": [{ "action": "edit-workspace" }]
+        }
+      ]
+    },
+    {
+      "name": "unsupported-wake-capability-rejects-autopilot",
+      "expect_pass": false,
+      "expected_error": "requires supported monitoring",
+      "versions": [
+        {
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Monitoring dependency": "autonomous-wake-resume",
+            "Monitoring capability": "unsupported"
+          }
+        }
+      ]
+    },
+    {
+      "name": "unmet-prerequisites-reject-autopilot",
+      "expect_pass": false,
+      "expected_error": "requires met prerequisites and gates",
+      "versions": [
+        {
+          "overrides": { "Prerequisites and gates": "missing-validation" }
+        }
+      ]
+    },
+    {
+      "name": "unbounded-cost-rejects-autopilot",
+      "expect_pass": false,
+      "expected_error": "requires a bounded cost ceiling",
+      "versions": [
+        {
+          "overrides": { "Cost/resource ceiling": "unbounded" }
+        }
+      ]
+    },
+    {
+      "name": "unknown-rollback-blocks-high-risk-readiness",
+      "expect_pass": false,
+      "expected_error": "unknown rollback blocks high/critical readiness",
+      "versions": [
+        {
+          "overrides": {
+            "Risk": "high",
+            "Rollback boundary": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "name": "unknown-restoration-cannot-reach-irreversible-approval-hold",
+      "expect_pass": false,
+      "expected_error": "unknown rollback blocks high/critical readiness",
+      "versions": [
+        {
+          "approval_hold": true,
+          "overrides": {
+            "Activation": "irreversible-nonrestorable",
+            "Risk": "high",
+            "Write/execute ceiling": "destructive-history-rewrite",
+            "Destructiveness ceiling": "irreversible-destructive",
+            "Rollback boundary": "unknown",
+            "Shared-environment effect": "none",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          }
+        }
+      ]
+    },
+    {
+      "name": "unknown-restoration-ends-blocked-before-approval",
+      "expect_pass": true,
+      "versions": [
+        {
+          "final_state": "BLOCKED",
+          "overrides": {
+            "Activation": "irreversible-nonrestorable",
+            "Risk": "high",
+            "Write/execute ceiling": "destructive-history-rewrite",
+            "Destructiveness ceiling": "irreversible-destructive",
+            "Rollback boundary": "unknown",
+            "Shared-environment effect": "none",
+            "Shared-mutation latch": "readiness-building"
+          }
+        }
+      ]
+    },
+    {
+      "name": "irreversible-work-cannot-hide-behind-critical-activation-label",
+      "expect_pass": false,
+      "expected_error": "irreversible nonrestorable work must use its activation branch",
+      "versions": [
+        {
+          "overrides": {
+            "Activation": "critical-shared-mutation",
+            "Risk": "high",
+            "Write/execute ceiling": "destructive-history-rewrite",
+            "Destructiveness ceiling": "irreversible-destructive",
+            "Rollback boundary": "approved-no-rollback",
+            "No-rollback terms": "owner-approved; irretrievable=unique-user-state; compensation=none-available",
+            "Shared-environment effect": "none"
+          }
+        }
+      ]
+    },
+    {
+      "name": "verified-restoration-rejects-irreversible-nonrestorable-label",
+      "expect_pass": false,
+      "expected_error": "irreversible-nonrestorable activation requires high/critical irreversible work without verified bounded restoration",
+      "versions": [
+        {
+          "overrides": {
+            "Activation": "irreversible-nonrestorable",
+            "Risk": "high",
+            "Write/execute ceiling": "destructive-history-rewrite",
+            "Destructiveness ceiling": "irreversible-destructive",
+            "Rollback boundary": "external-coordinated",
+            "Shared-environment effect": "none"
+          }
+        }
+      ]
+    },
+    {
+      "name": "critical-branch-label-wins-when-both-branches-apply",
+      "expect_pass": false,
+      "expected_error": "critical-shared-mutation activation takes precedence",
+      "versions": [
+        {
+          "overrides": {
+            "Activation": "irreversible-nonrestorable",
+            "Risk": "high",
+            "Write/execute ceiling": "destructive-history-rewrite",
+            "Destructiveness ceiling": "irreversible-destructive",
+            "Rollback boundary": "approved-no-rollback",
+            "No-rollback terms": "owner-approved; irretrievable=shared-history; compensation=none-available",
+            "Shared-environment effect": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "name": "irreversible-work-needs-approved-no-rollback-terms",
+      "expect_pass": false,
+      "expected_error": "owner-approved terms",
+      "versions": [
+        {
+          "approval_hold": true,
+          "overrides": {
+            "Activation": "irreversible-nonrestorable",
+            "Risk": "critical",
+            "Write/execute ceiling": "destructive-history-rewrite",
+            "Destructiveness ceiling": "irreversible-destructive",
+            "Rollback boundary": "approved-no-rollback",
+            "Shared-environment effect": "none",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          }
+        }
+      ]
+    },
+    {
+      "name": "owner-approved-irreversible-terms-are-explicit",
+      "expect_pass": true,
+      "expected_approval_holds": 1,
+      "versions": [
+        {
+          "approval_hold": true,
+          "acceptance_card": true,
+          "overrides": {
+            "Activation": "irreversible-nonrestorable",
+            "Risk": "high",
+            "Write/execute ceiling": "destructive-history-rewrite",
+            "Destructiveness ceiling": "irreversible-destructive",
+            "Rollback boundary": "approved-no-rollback",
+            "No-rollback terms": "owner-approved; irretrievable=unique-user-branch-history; compensation=none-available",
+            "Shared-environment effect": "none",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v1 environment=local principal=local-user resources=example-app actions=edit-workspace source=user-now time=2026-09-05T12:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "environment-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [{}, { "overrides": { "Environment ceiling": "staging" } }]
+    },
+    {
+      "name": "principal-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {},
+        { "overrides": { "Principal/identity set": "local-user, deployer" } }
+      ]
+    },
+    {
+      "name": "resource-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {},
+        { "overrides": { "Resource set": "example-app, shared-service" } }
+      ]
+    },
+    {
+      "name": "sensitivity-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {},
+        { "overrides": { "Read-sensitivity ceiling": "sensitive" } }
+      ]
+    },
+    {
+      "name": "write-class-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {},
+        { "overrides": { "Write/execute ceiling": "local-git" } }
+      ]
+    },
+    {
+      "name": "cost-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {
+          "overrides": {
+            "Cost/resource ceiling": "none",
+            "Cost/resource limits": "none"
+          }
+        },
+        {}
+      ]
+    },
+    {
+      "name": "bounded-cost-limit-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {},
+        {
+          "overrides": {
+            "Cost/resource limits": "local-commands=11, minutes=30"
+          }
+        }
+      ]
+    },
+    {
+      "name": "action-cannot-exceed-exact-cost-limit",
+      "expect_pass": false,
+      "expected_error": "exceeds the exact cost/resource limits",
+      "versions": [
+        {
+          "actions": [
+            {
+              "action": "edit-workspace",
+              "cost_limits": { "local-commands": 11, "minutes": 30 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "owner-approved-irreversible-terms-cannot-have-empty-values",
+      "expect_pass": false,
+      "expected_error": "owner-approved terms",
+      "versions": [
+        {
+          "approval_hold": true,
+          "overrides": {
+            "Activation": "irreversible-nonrestorable",
+            "Risk": "high",
+            "Write/execute ceiling": "destructive-history-rewrite",
+            "Destructiveness ceiling": "irreversible-destructive",
+            "Rollback boundary": "approved-no-rollback",
+            "No-rollback terms": "owner-approved; irretrievable=; compensation=",
+            "Shared-environment effect": "none",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          }
+        }
+      ]
+    },
+    {
+      "name": "destructiveness-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {},
+        { "overrides": { "Destructiveness ceiling": "coordinated" } }
+      ]
+    },
+    {
+      "name": "rollback-burden-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {},
+        { "overrides": { "Rollback boundary": "external-coordinated" } }
+      ]
+    },
+    {
+      "name": "monitoring-increase-stops-before-action",
+      "expect_pass": false,
+      "expected_error": "upward autonomy delta must stop and re-enter gates",
+      "versions": [
+        {},
+        { "overrides": { "Monitoring dependency": "bounded-polling" } }
+      ]
+    },
+    {
+      "name": "versioned-expansion-restarts-preliminary-and-regates",
+      "expect_pass": true,
+      "versions": [
+        {},
+        {
+          "overrides": {
+            "Environment ceiling": "remote-non-production",
+            "Expansion handling": "stopped-and-regated"
+          }
+        }
+      ]
+    },
+    {
+      "name": "narrowing-does-not-require-expansion-ceremony",
+      "expect_pass": true,
+      "versions": [
+        {
+          "overrides": {
+            "Environment ceiling": "production",
+            "Read-sensitivity ceiling": "sensitive",
+            "Write/execute ceiling": "remote-write"
+          }
+        },
+        {}
+      ]
+    },
+    {
+      "name": "unknown-new-category-is-not-silently-ordered",
+      "expect_pass": false,
+      "expected_error": "unsupported autonomy category",
+      "versions": [{}, { "overrides": { "Environment ceiling": "regional" } }]
+    },
+    {
+      "name": "checkpoint-stops-before-specified-action",
+      "expect_pass": false,
+      "expected_error": "action crosses a named autonomy checkpoint",
+      "versions": [
+        {
+          "final_state": "READY WITH CHECKPOINTS",
+          "overrides": { "Checkpoints": "before-edit-workspace" },
+          "actions": [
+            { "action": "edit-workspace", "crosses_checkpoint": true }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "checkpoint-readiness-needs-a-named-stop",
+      "expect_pass": false,
+      "expected_error": "requires a named checkpoint",
+      "versions": [{ "final_state": "READY WITH CHECKPOINTS" }]
+    },
+    {
+      "name": "approval-required-allows-only-preflight",
+      "expect_pass": true,
+      "versions": [
+        {
+          "final_state": "APPROVAL REQUIRED",
+          "preliminary_actions": [
+            {
+              "action": "read-repo",
+              "write_execute": "none",
+              "cost_resource": "none",
+              "preflight": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "blocked-rejects-substantive-action",
+      "expect_pass": false,
+      "expected_error": "no action can run while BLOCKED",
+      "versions": [
+        {
+          "final_state": "BLOCKED",
+          "actions": [{ "action": "edit-workspace" }]
+        }
+      ]
+    },
+    {
+      "name": "blocked-rejects-preflight-too",
+      "expect_pass": false,
+      "expected_error": "no action can run while BLOCKED",
+      "versions": [
+        {
+          "final_state": "BLOCKED",
+          "actions": [
+            {
+              "action": "read-repo",
+              "write_execute": "none",
+              "cost_resource": "none",
+              "preflight": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "missing-purpose-rationale-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "invalid capability evidence row",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "purpose-rationale": "" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "reserved-delimiter-rejects-ambiguous-readiness-row",
+      "expect_pass": false,
+      "expected_error": "invalid capability evidence row",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "purpose-rationale": "load|unexpected-field" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "unauthorized-auth-state-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "has invalid auth state",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "auth-state": "unauthorized" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "network-not-ready-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "has invalid runtime/network state",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "runtime-network-state": "unknown" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "stale-freshness-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "is not current",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "freshness": "stale@yesterday" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "missing-allowed-boundary-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "invalid capability evidence row",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "allowed-boundary": "" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "missing-prohibited-boundary-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "invalid capability evidence row",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "prohibited-boundary": "" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "unverified-availability-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "is not verified",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "availability": "partial" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "retained-blocker-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "retains a fallback or blocker",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "fallback-blocker": "vpn-unavailable" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "action-role-mismatch-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "does not match its action role",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": { "action-role": "monitoring" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "unrelated-tool-row-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "every planned autonomy action needs exactly one capability evidence row",
+      "versions": [
+        {
+          "extra_evidence_rows": {
+            "unused-tool": [
+              "runtime-capability-check",
+              "inventory-unrelated-tool",
+              "unused-cli",
+              "local-user",
+              "not-required",
+              "authorized",
+              "ready",
+              "runtime-inventory",
+              "current@session",
+              "read-only",
+              "no-write",
+              "verified",
+              "none",
+              "preflight"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "secret-bearing-evidence-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "contains secret-bearing material",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": {
+              "evidence-source": "Bearer abcdefghijklmnop"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "evidence-principal-outside-authorized-set-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "exceeds the principal set",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": {
+              "principal": "unapproved-operator"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "evidence-target-outside-resource-set-rejects-readiness",
+      "expect_pass": false,
+      "expected_error": "exceeds the resource set",
+      "versions": [
+        {
+          "evidence_overrides": {
+            "read-repo": {
+              "target": "unapproved-service"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "risk-and-blast-card-mismatch-invalidates-confirmation",
+      "expect_pass": false,
+      "expected_error": "not a lossless projection of 'Risk and blast radius'",
+      "versions": [
+        {
+          "approval_hold": true,
+          "acceptance_card": true,
+          "mutation_boundary": "staging/remote-write",
+          "overrides": {
+            "Risk": "high",
+            "Blast radius": "one staging learner",
+            "Environment ceiling": "staging",
+            "Write/execute ceiling": "remote-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "card_overrides": {
+            "Risk and blast radius": "risk=low; blast-radius=all staging learners"
+          }
+        }
+      ]
+    },
+    {
+      "name": "readiness-card-mismatch-invalidates-confirmation",
+      "expect_pass": false,
+      "expected_error": "not a lossless projection of 'Readiness/access evidence'",
+      "versions": [
+        {
+          "approval_hold": true,
+          "acceptance_card": true,
+          "mutation_boundary": "staging/remote-write",
+          "overrides": {
+            "Risk": "high",
+            "Blast radius": "one staging learner",
+            "Environment ceiling": "staging",
+            "Write/execute ceiling": "remote-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "card_overrides": {
+            "Readiness/access evidence": "preflights=none; rows=omitted; monitoring=supported; prerequisites=met"
+          }
+        }
+      ]
+    },
+    {
+      "name": "unresolved-readiness-rejects-approval-hold",
+      "expect_pass": false,
+      "expected_error": "critical mutation approval hold needs no unresolved readiness",
+      "versions": [
+        {
+          "approval_hold": true,
+          "mutation_boundary": "staging/remote-write",
+          "overrides": {
+            "Risk": "high",
+            "Blast radius": "one staging learner",
+            "Environment ceiling": "staging",
+            "Write/execute ceiling": "remote-write",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Unresolved readiness": "vpn-unavailable",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          }
+        }
+      ]
+    },
+    {
+      "name": "staging-approval-card-exposes-verified-load-bearing-access",
+      "expect_pass": true,
+      "expected_approval_holds": 1,
+      "versions": [
+        {
+          "approval_hold": true,
+          "acceptance_card": true,
+          "mutation_boundary": "staging/remote-write",
+          "overrides": {
+            "Risk": "high",
+            "Blast radius": "one ephemeral learner, one tutorial, seven completion requests",
+            "Environment ceiling": "staging",
+            "Principal/identity set": "operator,test-learner",
+            "Resource set": "staging-backend,test-learner,tutorial,cloudsql-staging,mongo-staging",
+            "Read-sensitivity ceiling": "secret-auth",
+            "Write/execute ceiling": "remote-write",
+            "Cost/resource limits": "requests=7, minutes=30",
+            "Destructiveness ceiling": "coordinated",
+            "Rollback boundary": "external-coordinated",
+            "Phase-authorized actions": "run-staging-regression",
+            "Planned action graph": "read-repo:preflight, edit-workspace:mutation, revert-edit:rollback-abort, inspect-diff:readback, inspect-mongo:readback, observe-edit:monitoring, report-result:terminal-delivery",
+            "Shared-environment effect": "direct",
+            "Shared-mutation latch": "readiness-building"
+          },
+          "evidence_overrides": {
+            "read-repo": {
+              "purpose-rationale": "verify-release-and-baseline",
+              "capability-integration": "gcloud-and-auth-preflight",
+              "principal": "operator",
+              "target": "staging-backend",
+              "evidence-source": "staging-release-readback",
+              "freshness": "current@revision"
+            },
+            "edit-workspace": {
+              "purpose-rationale": "complete-approved-tutorial",
+              "capability-integration": "authenticated-e2e-client",
+              "principal": "test-learner",
+              "target": "test-learner",
+              "evidence-source": "staging-auth-preflight",
+              "freshness": "current@session"
+            },
+            "revert-edit": {
+              "purpose-rationale": "abort-without-manual-repair",
+              "capability-integration": "bounded-run-control",
+              "principal": "operator",
+              "target": "test-learner",
+              "evidence-source": "operator-runbook",
+              "freshness": "current@revision"
+            },
+            "inspect-diff": {
+              "purpose-rationale": "read-sql-parity",
+              "capability-integration": "cloudsql-read",
+              "principal": "operator",
+              "target": "cloudsql-staging",
+              "evidence-source": "cloudsql-smoke",
+              "freshness": "current@session"
+            },
+            "observe-edit": {
+              "purpose-rationale": "observe-errors-latency-and-pressure",
+              "capability-integration": "gcloud-logging-monitoring",
+              "principal": "operator",
+              "target": "staging-backend",
+              "evidence-source": "logging-metrics-smoke",
+              "freshness": "current@session"
+            },
+            "report-result": {
+              "purpose-rationale": "deliver-terminal-proof",
+              "capability-integration": "chat-delivery",
+              "principal": "operator",
+              "target": "not-required",
+              "evidence-source": "current-session",
+              "freshness": "current@session"
+            }
+          },
+          "extra_evidence_rows": {
+            "inspect-mongo": [
+              "external-system-boundaries",
+              "read-mongo-parity",
+              "mongodb-read",
+              "operator",
+              "mongo-staging",
+              "authorized",
+              "ready",
+              "mongodb-smoke",
+              "current@session",
+              "read-only",
+              "no-write",
+              "verified",
+              "none",
+              "readback"
+            ]
+          },
+          "hold_overrides": {
+            "Shared-mutation latch": "awaiting-confirmation"
+          },
+          "final_overrides": {
+            "Shared-mutation latch": "confirmed",
+            "Confirmation binding": "fixture-task@v1 environment=staging principal=operator,test-learner resources=staging-backend,test-learner,tutorial,cloudsql-staging,mongo-staging actions=run-staging-regression source=user-now time=2026-07-27T12:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "each-version-starts-preliminary",
+      "expect_pass": false,
+      "expected_error": "must start PRELIMINARY",
+      "versions": [{ "skip_preliminary": true }]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-query-only-review
+name: Behavior - query-only database review
+description: SQL correctness and performance are first-class database-reviewer scope even without a migration.
+tags: [behavior, sql, performance]
+inputs:
+  prompt: |
+    Independently review this slow PostgreSQL query. There is no migration,
+    DDL, schema transition, backfill, import, or rollback.
+
+    The response contract requires every active account in tenant 42, including
+    accounts with no settled payments, ordered deterministically for cursor
+    pagination. An account with no settled payments must report zero.
+
+    ```sql
+    SELECT a.id, a.name, SUM(p.amount_cents) AS settled_cents
+    FROM accounts AS a
+    LEFT JOIN payments AS p ON p.account_id = a.id
+    WHERE a.tenant_id = 42
+      AND a.active = TRUE
+      AND p.status = 'settled'
+    GROUP BY a.id, a.name
+    ORDER BY settled_cents DESC
+    LIMIT 100;
+    ```
+
+    Relevant schema and evidence:
+
+    - `accounts(id bigint PRIMARY KEY, tenant_id bigint NOT NULL, active
+      boolean NOT NULL, name text NOT NULL)`;
+    - `payments(id bigint PRIMARY KEY, account_id bigint NOT NULL REFERENCES
+      accounts(id), status text NOT NULL, amount_cents bigint NULL)`;
+    - indexes are `accounts(tenant_id)` and `payments(account_id)` only;
+    - production has 8 million accounts and 600 million payments; tenant sizes
+      and payments per account are highly skewed;
+    - the only supplied plan is plain `EXPLAIN` from a 100-account fixture. It
+      estimates ten matching rows and shows nested loops; no actual rows,
+      buffers, timing, production statistics, or representative plan exists.
+
+    Return the complete Database review packet and verdict.
+graders:
+  - name: query_only_contract
+    type: program
+    config:
+      command: python3
+      args: [evals/database-reviewer/graders/behavior_contract.py, query-only]

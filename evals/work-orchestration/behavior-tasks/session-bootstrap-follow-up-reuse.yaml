@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-session-bootstrap-follow-up-reuse
+name: Behavior - reuse unchanged instruction reads across follow-up turns
+description: Same-session follow-ups reuse content-bound reads without bypassing fresh-read floors.
+tags: [behavior, session-bootstrap, follow-up, compaction, reuse]
+inputs:
+  prompt: |
+    Apply the repository's session-bootstrap contract to these cases. For each
+    case, state which instruction contents must be read, which existing reads
+    may be reused after immutable-identity verification, and whether the
+    optional Bootstrap packet is emitted. If that packet is required, include
+    its single `Instruction reuse` row.
+
+    A. The first repository task starts with no instruction-read ledger.
+    B. The next user message stays in the same runtime session; its read ledger,
+       target, scope, and all governing-source identities are unchanged.
+    C. Context was compacted, but the runtime proves the same session and
+       preserved the complete path-and-identity ledger; target and bytes are
+       unchanged.
+    D. The conversation continues after compaction, but runtime continuity or
+       the read ledger cannot be proved.
+    E. The same runtime session continues, but one governing file's bytes
+       changed while HEAD did not, and the target also moved into a subtree
+       with a newly applicable AGENTS.md.
+    F. The parent session is unchanged, while a higher-priority runtime rule
+       requires the selected SKILL.md to be reread per turn and a new critic
+       session is being dispatched.
+
+    Do not treat a new user turn or compaction alone as either proof of
+    continuity or proof of a new session. Keep parent source-read reuse,
+    per-turn selected-skill reads, and a fresh critic's decision-bearing
+    spot-checks distinct. Do not transport the parent's full governing-source
+    path/hash inventory to the critic.
+graders:
+  - name: follow_up_reuse_is_content_bound_and_fail_closed
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/session-bootstrap-follow-up-reuse.md

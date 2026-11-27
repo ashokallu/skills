@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/eval.schema.json
+name: github-workflow-behavior-eval
+description: Cold-agent GitHub review submission and readback checks.
+skill: github-workflow
+version: "0.1"
+
+config:
+  trials_per_task: 1
+  timeout_seconds: 180
+  parallel: false
+  executor: copilot-sdk
+  model: auto
+  skill_directories:
+    - ../../.codex/skills
+
+metrics:
+  - name: github_workflow_behavior
+    weight: 1
+    threshold: 1
+    description: New review feedback must contain surviving findings and be read back exactly.
+
+tasks:
+  - behavior-tasks/*.yaml

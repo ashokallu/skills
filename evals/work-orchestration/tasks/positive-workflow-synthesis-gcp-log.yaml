@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-workflow-synthesis-gcp-log
+name: Positive - workflow synthesis for GCP error log
+description: The umbrella should trigger and route staging GCP error log workflow explanations to the workflow-synthesis example lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "If I share a staging GCP error log from example-app and ask how you would plan the code fix, explain the full workflow step by step with rationale from the repo instructions and skill files."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_workflow_synthesis_gcp_log
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

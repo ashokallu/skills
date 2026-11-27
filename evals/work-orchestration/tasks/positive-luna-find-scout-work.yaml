@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-luna-find-scout-work
+name: Positive - Luna find useful scout work
+description: The umbrella should trigger when the user wants to consume available scout capacity on bounded repo-value scout tasks.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "We keep wasting the user's scout capacity. Use Luna to find bounded read-only example-app scout tasks in backend/internal/content that could save parent context."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_luna_find_scout_work
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-negative-github-ci
+name: Negative - GitHub CI
+description: GitHub PR CI work should not route to the Jira workflow orchestration skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt:
+    "Look at the failing GitHub Actions checks on PR 1234, reproduce the backend failure locally,
+    and push a fix."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_github_ci
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

@@ -1,0 +1,16 @@
+{
+  "expect_pass": false,
+  "expected_error": "fast-exit permits only one bounded read tool",
+  "options": {},
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification: fast-exit; investigation; read-only; no repository or external mutation"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "bash",
+      "arguments": { "command": "apply-change" }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-review-depth-escalation
+name: Behavior - accept bounded depth and escalate only from target evidence
+description: Ordinary review keeps scope negotiation separate and preserves mandatory floors.
+tags: [behavior, review, scope, packet]
+inputs:
+  prompt: |
+    A parent separately assigns an ordinary PR review at STANDARD depth and
+    single topology. The stable target inventory is initially a contained
+    backend bug fix, but bootstrap source inspection shows that the changed
+    function also changes a public API consumed by another service. Return the
+    scope-control result that must occur before evidence-heavy analysis, then
+    explain how the later strict PR packet represents depth/topology.
+graders:
+  - name: ordinary_review_depth_escalation_and_projection
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/reviewer/rubrics/review-depth-escalation.md

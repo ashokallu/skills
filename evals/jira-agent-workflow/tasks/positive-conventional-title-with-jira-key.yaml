@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-conventional-title-with-jira-key
+name: Positive - conventional title with Jira key
+description:
+  The skill should trigger when PR publication must satisfy both Jira key linkage and Conventional
+  Commits title lint.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "For DEMO-2911, open the GitHub PR so Jira can associate it, but make sure the PR title passes
+    the repository Conventional Commits lint."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_conventional_title_with_jira_key
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

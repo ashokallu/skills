@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-behavior-review-submission-unknown-login-fail-closed
+name: Behavior - unknown posting login fails closed
+description: A missing posting GitHub login blocks create-review and submit-review.
+tags: [behavior, review-write, threads, fail-closed]
+inputs:
+  prompt: |
+    The user authorized posting unique accepted review comments. The GitHub
+    surface that would mutate cannot establish this posting session's
+    authenticated login. Unresolved thread authors are therefore not
+    comparable. Describe the next GitHub action.
+graders:
+  - name: unknown_posting_login_fails_closed
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/github-workflow/rubrics/review-submission-unknown-login-fail-closed.md

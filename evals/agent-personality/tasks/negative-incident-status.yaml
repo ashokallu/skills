@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: agent-personality-negative-incident-status
+name: Negative - incident status
+description: Incident, security, data-loss, and production status output should stay in evidence-focused mode.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "We have a production incident with possible data loss. Write a crisp status update with facts, risk, commands run, and Pending Verification items only."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_incident_status
+    type: trigger
+    config:
+      skill_path: .codex/skills/agent-personality/SKILL.md
+      mode: negative
+      threshold: 0.65

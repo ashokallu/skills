@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-observability-ops-evidence-review
+name: Positive - observability ops evidence review
+description: Concrete post-diff reviewer routing for Sentry/GCloud/logging evidence should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a example-app PR after changed-file inventory shows instrumentation.ts, backend/internal/content/controller.go, docs/runbooks/content-release.md, and .github/workflows/release-health.yml. The PR claims Sentry events, GCloud logs, metrics, and a post-deploy runbook prove release health. Select reviewer lenses and check operational evidence type discipline before issuing a verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_observability_ops_evidence_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

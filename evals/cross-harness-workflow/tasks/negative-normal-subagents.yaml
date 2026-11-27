@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-negative-normal-subagents
+name: Negative - ordinary in-house subagent mapping
+description: Ordinary in-house Codex subagent mapping without external collaboration should stay with work-orchestration.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Map which project subagent should inspect backend files for this read-only repo orientation. Stay within normal local delegation."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_normal_subagents
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: negative
+      threshold: 0.7

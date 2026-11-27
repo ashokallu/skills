@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-positive-mcp-smoke
+name: Positive - smoke-test PR MCP
+description: The skill should trigger for read-only GitHub MCP smoke tests on pull requests.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Smoke-test the repo-configured GitHub MCP on a example-app PR by reading PR metadata, files, status, and check runs."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_mcp_smoke
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

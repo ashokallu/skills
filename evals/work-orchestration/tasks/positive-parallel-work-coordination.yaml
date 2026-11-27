@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-parallel-work-coordination
+name: Positive - parallel work coordination
+description: Concurrent writers on example-app shared surfaces should trigger the dispatcher.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Another agent is editing the same example-app instruction branch while I am working. Coordinate the shared files, partition write surfaces, and check for remote races before any push."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_parallel_work_coordination_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.6

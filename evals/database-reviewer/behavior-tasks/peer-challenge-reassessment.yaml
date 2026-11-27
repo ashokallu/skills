@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-peer-challenge-reassessment
+name: Behavior - statically reassess a challenged database finding
+description: The database reviewer must calibrate a finding with supplied evidence without refreshing an environment.
+tags: [behavior, database, collaboration, reassessment]
+inputs:
+  prompt: |
+    You reported that a concurrent index build will saturate Production. The
+    parent challenges that finding on the same commit with a relevant historical
+    operation evidence candidate and current source showing the operation runs
+    out of band. Reassess the finding without querying any database.
+graders:
+  - name: database_reassessment_uses_supplied_evidence_only
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/database-reviewer/rubrics/peer-challenge-reassessment.md

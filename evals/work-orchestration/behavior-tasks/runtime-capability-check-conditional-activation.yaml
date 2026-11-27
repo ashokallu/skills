@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-runtime-capability-check-conditional-activation
+name: Behavior - activate capability checking only for unresolved pre-route dependency
+description: The dispatcher distinguishes inline capability proof from unresolved pre-route uncertainty, actual failure, setup, auth, delegation, and monitoring ownership.
+tags: [behavior, routing, capability, recovery, proportionality]
+inputs:
+  prompt: |
+    Compare the next workflow route for these example-app situations. Do not
+    run commands, contact services, or spawn workers; explain only the route and
+    evidence boundary.
+
+    A. The current runtime inventory already lists the required read-only
+       reviewer role, and repo configuration confirms the supported invocation.
+    B. A planned mandatory gate depends on a named independent role, but the
+       current runtime inventory and repo configuration cannot establish that
+       the role exists or preserves the required read-only boundary.
+    C. A repo wrapper has already been invoked and returned HTTP 403.
+    D. The role exists, but the question is whether its context, paid-call,
+       supervision, and join cost make delegation worthwhile.
+
+    Explain whether runtime-capability-check activates in each case and where
+    the non-capability cases route. Also distinguish missing local setup,
+    external identity or authorization uncertainty, and monitoring after its
+    route is selected, then state what capability checking may not do merely
+    to prove availability.
+graders:
+  - name: capability_response_includes_partial_result_outcome
+    type: text
+    config:
+      regex_match:
+        - "(?i)partial result"
+        - "Pending Verification"
+  - name: capability_gate_requires_load_bearing_residual_uncertainty
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/runtime-capability-check-conditional-activation.md

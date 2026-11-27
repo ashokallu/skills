@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-changed-boundary-wrong-green-counterexample
+name: Behavior - changed boundary wrong-green counterexample
+description: Author preflight must independently find alternate-state defects hidden by a green happy-path test.
+tags: [behavior, counterexample, wrong-green, partial-failure]
+inputs:
+  prompt: |
+    A new optional audit write uses the request context. The supplied test says
+    the primary response succeeds when the audit collaborator returns nil, and
+    it is green. The request context can already be canceled after the primary
+    commit, but the prompt does not call that out as a bug. Perform the changed
+    boundary and skeptical self-check before review.
+graders:
+  - name: author_discovers_unmentioned_partial_failure
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response independently identifies the canceled-context
+        audit/failure-recording path as a plausible missed state, explains why
+        the happy-path test remains green with that defect, and names observable
+        acceptance proof for the partial-failure ordering. It must also state
+        the load-bearing assumption and the alternate valid state or caller.
+        Fail if it merely repeats that the supplied test passes or defers all
+        discovery to the reviewer.

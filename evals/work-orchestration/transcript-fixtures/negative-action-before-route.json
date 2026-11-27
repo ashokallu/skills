@@ -1,0 +1,20 @@
+{
+  "expect_pass": false,
+  "options": {},
+  "transcript": [
+    {
+      "type": "tool.execution_start",
+      "tool_name": "skill",
+      "arguments": { "skill": "work-orchestration" }
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "target.go" }
+    },
+    {
+      "type": "assistant.message",
+      "content": "Route/mode: code-authoring; edit"
+    }
+  ]
+}

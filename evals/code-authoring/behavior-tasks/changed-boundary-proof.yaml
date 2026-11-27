@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-changed-boundary-proof
+name: Behavior - changed-boundary proof blocks reviewer handoff
+description: Authoring preflight must detect config-presence, SQL-cardinality, and cleanup-context defects before review.
+tags: [behavior, config, sql, transactions, preflight]
+inputs:
+  prompt: |
+    You are completing the example-app authoring preflight for a backend
+    change. The central happy-path tests pass, but the current diff contains
+    these simplified shapes:
+
+    ```go
+    fs.Int64Var(&cfg.maxRows, "max-rows", 0, "maximum rows")
+    if cfg.maxRows != 0 {
+        rejectCapOutsideMode()
+    }
+    ```
+
+    ```sql
+    SELECT array_agg(claim.category_id)
+    FROM running_claims AS claim
+    JOIN requested_rows AS requested
+      ON requested.user_id = claim.user_id
+     AND requested.category_id = claim.category_id;
+    ```
+
+    ```go
+    defer func() {
+        _ = tx.Rollback(context.WithoutCancel(ctx))
+    }()
+    ```
+
+    The database is expected to have one logical claim per user/category, but
+    stale duplicate physical rows are possible and this query claims to handle
+    them. Return the authoring preflight decision and the concrete corrections
+    required before reviewer handoff.
+graders:
+  - name: changed_boundary_authoring_detection
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response blocks reviewer handoff and identifies all
+        three concrete defects, not merely a need for a boundary matrix:
+        (1) maxRows value cannot distinguish omitted from explicitly supplied
+        zero, so presence must be tracked and omission/zero/negative/positive
+        cases tested as applicable; (2) duplicate physical claim rows can
+        multiply aggregate output, so exact logical-key cardinality must be
+        proved or deduplicated and duplicate/stale rows tested; (3)
+        context.WithoutCancel removes caller cancellation/deadline but leaves
+        rollback unbounded, so cleanup needs a fresh narrow timeout and tests
+        for active, canceled, and expired parent contexts or equivalent exact
+        proof. The response must state that central happy-path tests do not
+        clear these unanswered boundary rows.

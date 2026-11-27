@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-comments-worktree-ci-only
+name: Positive - CI-only failure routes through umbrella
+description: A PR CI-only failure should trigger the umbrella and route to a CI lane, not review-comment fixing.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "This example-app PR only has a failing Backend - Validate check. Inspect CI and reproduce the failing lane; no review comments are involved."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_ci_only_failure
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

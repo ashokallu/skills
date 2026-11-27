@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-comments-worktree-positive-code-authoring-boundary
+name: Positive - PR comments with code edits
+description: Copilot review comments on a backend PR should trigger PR workflow first, with code edits routed through code-authoring during the worktree phase.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Copilot left review comments - https://github.com/example-org/example-app/pull/104669. Fix the valid backend datasource.go and testutil.go comments, run the right backend validation, reply to Copilot, resolve eligible bot threads, and push."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_workflow_for_copilot_comment_code_fix
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.7

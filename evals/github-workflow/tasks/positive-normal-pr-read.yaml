@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-positive-normal-pr-read
+name: Positive - normal PR read
+description: A normal read-only PR summary should route through the GitHub read lane and use GitHub MCP tools first.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Summarize the current files and status checks on this example-app pull request using the configured GitHub MCP tools."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_normal_mcp_read
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

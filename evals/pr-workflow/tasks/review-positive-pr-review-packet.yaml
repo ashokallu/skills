@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-pr-review-packet
+name: Positive - PR review packet
+description: The skill should trigger for a normal example-app PR review whose verdict must be emitted as the canonical packet.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review this PR https://github.com/example-org/example-app/pull/104492 and return the canonical reviewer packet."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pr_review_packet_workflow
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

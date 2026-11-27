@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-negative-codex-closeout
+name: Negative - local Codex closeout review
+description: Local Codex CLI closeout review should use the work-orchestration closeout-review lane, not the PR worktree review workflow.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Run codex review on my uncommitted local changes before I commit them."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_codex_closeout
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: negative
+      # Local Codex closeout overlaps on review vocabulary but has no PR
+      # worktree, branch freshness, or GitHub review-comment workflow.
+      threshold: 0.95

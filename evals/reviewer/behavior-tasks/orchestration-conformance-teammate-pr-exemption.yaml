@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-orchestration-conformance-teammate-pr-exemption
+name: Behavior - teammate PR review does not demand private workflow history
+description: A reviewer must use live PR intent without retroactively imposing the author's orchestration attestation.
+tags: [behavior, reviewer, orchestration-conformance, teammate-pr, exemption]
+inputs:
+  prompt: |
+    Review a teammate's existing open PR. The live PR body, issue, current
+    diff, and tests are available, but the author did not provide an
+    orchestration conformance attestation or objective-lock history.
+
+    Explain the review admission decision and the evidence boundary.
+graders:
+  - name: teammate_pr_uses_live_intent_exemption
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/reviewer/rubrics/orchestration-conformance-teammate-pr-exemption.md

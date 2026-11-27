@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-headless-codex-review
+name: Positive - headless Codex PR review
+description: The skill should trigger when the parent asks to delegate a PR review to headless Codex.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Spin headless Codex and review this PR https://github.com/example-org/example-app/pull/104492"
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_headless_codex_pr_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

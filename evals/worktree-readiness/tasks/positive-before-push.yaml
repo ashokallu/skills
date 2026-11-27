@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: worktree-readiness-positive-before-push
+name: Positive - push readiness
+description: The skill should trigger before pushing from a prepared example-app worktree.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before pushing this example-app worktree branch, verify the branch slug, Husky setup, auth boundary, and that no agent instruction files are included."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_push_readiness
+    type: trigger
+    config:
+      skill_path: .codex/skills/worktree-readiness/SKILL.md
+      mode: positive
+      threshold: 0.6

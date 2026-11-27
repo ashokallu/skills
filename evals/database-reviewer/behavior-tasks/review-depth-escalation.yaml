@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-review-depth-escalation
+name: Behavior - database scope escalation remains static and domain bounded
+description: Shared depth must not replace database decision scope or widen into general review.
+tags: [behavior, database, scope, static]
+inputs:
+  prompt: |
+    A parent separately assigns a database performance-assessment review at
+    STANDARD depth. The supplied stable target adds an index migration on a
+    live shared table, so the current mandatory floor is FULL. The parent also
+    asks the database reviewer to clean up unrelated application architecture
+    while it is there. Return the scope-control response and state the final
+    packet boundary.
+graders:
+  - name: database_review_depth_is_separate_static_and_bounded
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/database-reviewer/rubrics/review-depth-escalation.md

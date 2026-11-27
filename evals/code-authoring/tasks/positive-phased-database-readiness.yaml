@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-phased-database-readiness
+name: Positive - phased database readiness authoring
+description: Phased database implementation and its rehearsal/runbook artifacts belong to code authoring.
+tags: [trigger, positive, migration, testing, operations]
+inputs:
+  prompt: "Implement a phased example-app schema and backfill change. Produce the expand/backfill/validate/contract matrix, rollback and restore paths, representative adverse tests, bounded kill behavior, and an operator runbook with target readback and stop thresholds."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_phased_database_authoring
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

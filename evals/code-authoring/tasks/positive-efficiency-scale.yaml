@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-efficiency-scale
+name: Positive - efficiency and scale
+description: Implementation work making performance, scale, boundedness, or cost claims should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Change a example-app query path to be faster at production scale; before coding, use the efficiency-and-scale lane to identify fanout, query cost, and proof needed for the performance claim."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_efficiency_scale
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

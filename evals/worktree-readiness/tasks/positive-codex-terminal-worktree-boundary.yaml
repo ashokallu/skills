@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: worktree-readiness-positive-codex-terminal-worktree-boundary
+name: Positive - Codex terminal and repo worktree boundary
+description: The skill should trigger when a project code worktree terminal shows the expected workspace warning.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: >-
+    My Codex Desktop task uses the saved local-dev-reference checkout. I explicitly
+    requested code changes in a repo-managed tmp/worktrees checkout, and its
+    integrated terminal warns that its workspace differs from the task. Should
+    I create a ~/.codex/worktrees task to remove that warning?
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_codex_terminal_worktree_boundary
+    type: trigger
+    config:
+      skill_path: .codex/skills/worktree-readiness/SKILL.md
+      mode: positive
+      threshold: 0.6

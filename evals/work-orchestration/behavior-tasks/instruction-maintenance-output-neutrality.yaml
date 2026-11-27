@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-instruction-maintenance-output-neutrality
+name: Behavior - optional reasoning aid preserves output contracts
+description: Instruction maintenance rejects universal ceremony and keeps optional reasoning aids inside existing owner and output boundaries.
+tags: [behavior, instructions, output-contract, evaluation]
+inputs:
+  prompt: |
+    A team proposes a reusable reflection aid for every engineering task. It
+    would always load regardless of work type, require every user-facing answer
+    to list selected reflection lenses and internal skill identifiers, append a
+    packet terminator, and perform web research except during static review.
+
+    Audited baseline-versus-candidate runs found no better decisions, material
+    response growth, internal-metadata leakage, and conflicts with existing
+    strict output contracts. The proposal is still described as useful for
+    thoroughness. Apply instruction maintenance and decide what, if anything,
+    should become durable. Do not edit files.
+graders:
+  - name: optional_reasoning_aid_preserves_output_contracts
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/instruction-maintenance-output-neutrality.md

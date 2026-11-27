@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-negative-atlassian-cloud-rovo-setup
+name: Negative - Atlassian Cloud Rovo setup
+description: Cloud Rovo MCP setup should not route to the Jira workflow skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt:
+    "Install and authenticate the official Atlassian Rovo MCP OAuth 2.1 endpoint for a Jira Cloud
+    tenant in Claude Code; this is environment provisioning."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_atlassian_cloud_rovo_setup
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

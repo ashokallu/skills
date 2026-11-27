@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-plan-to-slices-wide-refactor
+name: Behavior - preserve green slices for wide refactors
+description: Plans distinguish vertical product work from compatible expand-migrate-contract refactors.
+tags: [behavior, planning, slicing, dependencies, refactor]
+inputs:
+  prompt: |
+    Apply the example-app plan-to-slices lane to two independent changes.
+
+    A. Add a learner-visible preference with a backend field, API handling,
+       UI control, and tests. Each end-to-end behavior can land separately.
+    B. Rename a shared generated contract used by many packages. An atomic
+       rename would break callers, but old and new forms can coexist while
+       callers move in bounded package batches.
+
+    For each, choose the slicing shape. For A, name the concrete learner-visible
+    outcome of every proposed slice; do not separate backend/API plumbing, UI
+    wiring, or tests into layer-only slices. For B, give the direct blocker
+    edges, identify the initial and later frontier, and state the
+    green/reviewability requirement. Someone proposes a shared branch where
+    broken migration batches become green only in one final integration step.
+    That is not an accepted default.
+graders:
+  - name: wide_refactor_slicing_preserves_independent_green_batches
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/code-authoring/rubrics/plan-to-slices-wide-refactor.md

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: skill-quality-evals-positive-pi-luna-runtime-binding
+name: Positive - Pi Luna runtime binding
+description: Pi and Luna behavior evaluation setup failures should activate the skill-quality workflow.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run a Pi/Luna behavior eval from an isolated worktree where pi resolves to an untrusted mise shim. Bind the installed Pi, Node, and Ruby runtimes deterministically without changing mise trust or guessing PATH entries."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pi_luna_runtime_binding
+    type: trigger
+    config:
+      skill_path: .codex/skills/skill-quality-evals/SKILL.md
+      mode: positive
+      threshold: 0.6

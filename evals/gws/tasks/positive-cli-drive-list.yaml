@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: gws-positive-cli-drive-list
+name: Positive - gws Drive list
+description: The skill should trigger for a Google Workspace CLI request outside Google Docs.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run gws drive files list with a page size of 10 and summarize the result."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_gws_drive_list
+    type: trigger
+    config:
+      skill_path: .codex/skills/gws/SKILL.md
+      mode: positive
+      threshold: 0.4

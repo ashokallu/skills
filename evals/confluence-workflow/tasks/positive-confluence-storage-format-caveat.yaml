@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-positive-confluence-storage-format-caveat
+name: Positive - Confluence storage-format caveat
+description: Confluence macro/storage-format safety requests should route to the workflow skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Before editing this Confluence page with macros and generated tables, check whether the MCP
+    gives storage-format content so we avoid a markdown round-trip."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_confluence_storage_format_caveat
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-interface-semantic-trigger-boundaries
+name: Behavior - preserve semantic trigger boundaries
+description: Agents must route from the actual work decision point rather than using an expected disposition or an action word as a gate bypass.
+tags: [behavior, routing, conformance, database, terraform, bootstrap, premise]
+inputs:
+  prompt: |
+    The loaded example-app dispatcher is the governing source for this
+    self-contained comparison. Do not inspect the repository, edit files, run
+    commands, contact services, or delegate. For each case, state the active
+    route and the required disposition or handoff.
+
+    A. Parent-authored instruction work has an exact target and fix. The parent
+       has decided a critic is unnecessary and is about to begin meaningful
+       editing.
+
+    B. An ordinary PR review has a stable target, base, and changed-file
+       inventory. The diff appears documentation-only and has no apparent
+       database consequence.
+
+    C1. The user asks, "Should I apply this Terraform plan?"
+    C2. The user asks, "Apply this Terraform plan now," and requests no
+        analysis or advice.
+
+    D. The root instruction says that a subtree AGENTS.md governs its own
+       directory. The bootstrap read sequence lists the root before the subtree,
+       and the two contain different rules for a file inside that subtree.
+
+    E. The user says the current branch still has a named file. A read of the
+       exact current branch proves that the file was deleted. The correction
+       does not change the requested objective, scope, target, or authority.
+
+    Explain why obviousness, an expected `not required` result, or the word
+    "apply" does not by itself select a skip path. Also distinguish bootstrap
+    read sequence from authority precedence and state whether case E requires
+    the user to choose which fact is current.
+graders:
+  - name: semantic_triggers_route_to_their_actual_decision_points
+    type: text
+    config:
+      regex_match:
+        - "(?is)A\\.(?:[^B]|B[^.])*?(?:orchestration[- ]conformance(?:[^B]|B[^.])*?(?:(?:before|prior to)(?:[^B]|B[^.])*?meaningful|block(?:ed|s|ing)?(?:[^B]|B[^.])*?meaningful)|(?:block(?:ed|s|ing)?(?:[^B]|B[^.])*?meaningful(?:[^B]|B[^.])*?until|meaningful(?:[^B]|B[^.])*?until)(?:[^B]|B[^.])*?orchestration[- ]conformance)(?:[^B]|B[^.])*?B\\."
+        - "(?is)B\\..*database[- ]review[- ]applicability.*not required.*negative trace"
+        - "(?is)C1\\..*release[- ]terraform[- ]plan[- ]analysis"
+        - "(?is)C2\\..*?((execution|mutation|operation).*?(owner|lane|workflow|runbook)|(owner|lane|workflow|runbook).*?(execution|mutation|operation)).*?D\\."
+        - "(?is)D\\..*(subtree|more specific).*(governs|overrides|controls)"
+        - "(?is)D\\..*read (sequence|order).*(not|does not|doesn't).*(authority|precedence)"
+        - "(?is)E\\..*(verified|exact.target|current evidence).*(proceed|follow|use)"
+        - "(?is)E\\..*(inform|tell|report).*(user)"
+        - "(?is)E\\..*(does not|doesn't|no).*(ask|choose).*(fact|current)"
+        - "(?is)(obvious|obviousness).{0,160}(does not|doesn't|cannot)\\s+(?:by itself\\s+)?(skip|waive|bypass)"
+        - "(?is)(expected|apparent).*not required.*(does not|doesn't|cannot).*skip"
+        - "(?is)(word|mention).{0,80}apply.{0,240}((does not|doesn't|cannot)\\s+(?:by itself\\s+)?(skip|waive|bypass)|identif(y|ies).{0,80}(action|intent).{0,80}not.{0,80}(permission|readiness|route|ownership))"

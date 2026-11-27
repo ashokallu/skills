@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-performance-advisory-uncertainty
+name: Behavior - advisory performance uncertainty
+description: Missing comparison evidence leaves an advisory claim unproven without inventing a merge blocker.
+tags: [behavior, performance, advisory]
+inputs:
+  prompt: |
+    Perform an advisory performance assessment of a query refactor. The author
+    claims it is faster, but supplied only one candidate timing and no comparable
+    baseline. Performance is not an acceptance criterion for merge or a planned
+    Production operation. Return the complete Database review packet. Keep the
+    performance claim unproven, but do not fabricate a correctness finding or
+    block an unrelated merge or Production decision.
+graders:
+  - name: advisory_performance_uncertainty_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/database-reviewer/graders/behavior_contract.py,
+          performance-advisory-uncertainty,
+        ]

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: readonly-data-access-negative-local-mongo
+name: Negative - local Mongo development
+description: Local dev Mongo work should not trigger staging Mongo MCP routing.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Start the local development Mongo container on port 27017 and seed test data for a backend unit test."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_local_mongo
+    type: trigger
+    config:
+      skill_path: .codex/skills/readonly-data-access/SKILL.md
+      mode: negative
+      threshold: 0.75

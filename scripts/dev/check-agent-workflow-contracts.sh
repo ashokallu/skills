@@ -3873,7 +3873,7 @@ for runtime in "${contract_runtimes[@]}"; do
   forbid_text "$reviewer_handoff" "no-agreement-through-EOF" "retired-negative-pattern-marker"
 
   require_text "$reviewer" \
-    "docs/agents/pr-4713-review-thoroughness-case-study.md" \
+    "docs/agents/initial-review-thoroughness-primer.md" \
     "reviewer-full-primer-role-fallback"
   require_text "$reviewer" \
     "focused re-review never activate" \

@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-production-ready-persisted-state-necessity
+name: Behavior - database reviewer challenges unnecessary persisted state
+description: Database review must separate required evidence persistence from speculative lifecycle tables and workflows.
+tags: [behavior, database, scope, persistence]
+inputs:
+  prompt: |
+    Review a database target for sampled mismatch investigation. The acceptance
+    criteria require retained mismatch evidence but do not require a uniqueness
+    constraint. The protected database invariant is "at most one current
+    mismatch row per user." Current source evidence proves concurrent upserts
+    can both insert a current row because no uniqueness constraint exists. The
+    target adds that constraint plus episode history, resolution
+    transitions, retention state, deletion fences, cleanup runs, and
+    decommission state. The lifecycle mechanisms are not required by an
+    acceptance criterion or mandatory current contract. All migrations are
+    syntactically valid. Return the database scope verdict.
+graders:
+  - name: production_ready_persisted_state_necessity
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/database-reviewer/rubrics/production-ready-persisted-state-necessity.md

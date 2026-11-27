@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-reviewer-packet-acceptance-repair
+name: Behavior - reject malformed reviewer packets before join or closeout
+description: The parent validates exact reviewer bytes against trusted dispatch inputs and returns one bounded mechanical repair to the same reviewer.
+tags: [behavior, review, packet, acceptance, repair]
+inputs:
+  prompt: |
+    You are the parent orchestrating a FULL review of PR #4826 at exact head H.
+    The reviewer was dispatched for `canonical packet with conditional review
+    comments`, then returned a normal Markdown executive summary rather than
+    the canonical packet. When asked about compliance, it asserted that an
+    unseen earlier response had conformed. On a further request it returned a
+    finding-bearing packet-like block with no `Review comments:` section, a tautological `Would
+    flip verdict if`, and prose after `Packet ends.`.
+
+    Explain the next control-plane action. State whether review is still active,
+    what exact trusted inputs govern validation, what private acceptance result
+    is produced, what is sent to whom, what work the parent must not perform,
+    what downstream actions remain blocked, and what happens if the complete
+    corrected response is mechanically malformed again. Do not review the PR,
+    invent findings, post comments, ask the user for approval, or run tools.
+graders:
+  - name: parent_rejects_and_repairs_same_reviewer_packet
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/reviewer-packet-acceptance-repair.md

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-typescript-contracts
+name: Positive - TypeScript contracts
+description: Focused TypeScript contract tightening should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Tighten example-app TypeScript component props and requester response shapes without any, broad unions, or optional required fields; run type-check and focused tests."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_typescript_contracts
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

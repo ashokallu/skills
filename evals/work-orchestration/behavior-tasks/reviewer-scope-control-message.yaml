@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-reviewer-scope-control-message
+name: Behavior - bound reviewer scope without hierarchy or repeated negotiation
+description: Parent forecasts are advisory, proved safety escalation is non-waivable, and unresolved narrowing fails closed.
+tags: [behavior, review, scope, collaboration]
+inputs:
+  prompt: |
+    You are the parent orchestrating a read-only ordinary reviewer. You proposed
+    STANDARD depth. The reviewer returns REVIEW_SCOPE_ESCALATION to FULL because
+    the exact target changes a public API and cites the changed producer and
+    consumer. Explain the control exchange. Also state what happens if a later
+    discretionary escalation rests on a premise disproved by current source,
+    but the reviewer still rejects the narrower scope after one evidence
+    correction. Return one control response without restating the exchange.
+    Do not emit a final review verdict.
+graders:
+  - name: scope_control_uses_exact_fail_closed_states
+    type: text
+    config:
+      regex_match:
+        - "REVIEW_SCOPE_ESCALATION"
+        - "SCOPE_DISPUTE_BLOCKED"
+        - "conflict-resolution"
+      regex_not_match:
+        - "(?i)(review|analysis) (proceeds|continues) (at|under) the (reviewer.?s )?(retained |broader )?scope"
+        - "(?s)REVIEW_SCOPE_ESCALATION.*REVIEW_SCOPE_ESCALATION"
+        - "(?i)\\b(defeat(?:s|ed|ing)?|beat(?:s|en|ing)?|win(?:s|ning)?|won)\\b"
+        - "(?m)^Verdict:"
+  - name: reviewer_scope_control_is_evidence_bound_and_fail_closed
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/reviewer-scope-control-message.md

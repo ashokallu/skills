@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: skill-quality-evals-positive-claude-mirror
+name: Positive - Claude mirror skill eval
+description: The skill should trigger when Claude skill edits need Waza coverage through a Codex mirror.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "I changed .claude/skills/github-pr-read-mcp/SKILL.md and the Codex mirror. Check mirrored skill drift and run the relevant Waza eval suite."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_claude_mirror_eval
+    type: trigger
+    config:
+      skill_path: .codex/skills/skill-quality-evals/SKILL.md
+      mode: positive
+      threshold: 0.6

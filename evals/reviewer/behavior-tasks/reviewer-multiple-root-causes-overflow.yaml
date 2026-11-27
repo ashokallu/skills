@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-multiple-root-causes-overflow
+name: Behavior - reviewer multiple root causes and overflow
+description: Compact output must preserve every material candidate and separate independent root causes.
+tags: [behavior, candidates, root-cause, overflow]
+inputs:
+  prompt: |
+    Review analysis produced material candidates C1-C4 from one shared retry
+    ownership bug and C5-C6 from an independent authorization bug. The consumer
+    wants a compact top-five summary. Explain the internal disposition and
+    closeout shape without writing the final packet.
+graders:
+  - name: issue_six_cannot_disappear
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if all six candidates retain stable IDs and dispositions,
+        C1-C4 are joined only under their shared retry root cause, and C5-C6
+        remain a separate authorization root cause. A top-five summary must
+        state total six and overflow one and still name C6 with its disposition
+        or retained finding reference. Fail if any candidate disappears, all
+        six are merged into one cause, or compactness truncates material work.

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-luna-preflight-gate
+name: Positive - Luna preflight gate
+description: Non-trivial Codex work should route to the orchestration skill so the Luna scout gate is considered before deep parent exploration.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Start this non-trivial example-app cleanup. Before deep local exploration, use available sidecar capacity to map callers, likely tests, and validation commands if it can stay read-only."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_luna_preflight_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

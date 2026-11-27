@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-case-study-transfer-sequencing
+name: Behavior - case-study transfer precedes target evidence
+description: Mandatory agreement reading must become task-specific commitments before target inspection starts.
+tags: [behavior, case-study, sequencing, authoring]
+inputs:
+  prompt: |
+    You have completed the mandatory PR 4685 agreement for a substantive
+    example-app authoring task. You have not inspected the target diff,
+    code, PR metadata, CI, logs, or tests yet. Your next impulse is to run
+    `git diff` immediately. State the next action and its allowed evidence
+    boundary.
+graders:
+  - name: case_study_transfer_precedes_target_evidence
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response completes the Case-study Transfer Preflight
+        before any target-specific evidence action, permits only bootstrap,
+        mandatory agreement, worktree/routing preparation, and parent-supplied
+        target or inventory inputs before the gate, and treats those supplied
+        inputs as routing context rather than evidence. It must produce at most
+        three task-specific immutable commitment rows before allowing `git
+        diff`, code, PR, CI, log, test, browser, or data inspection. Fail if it
+        treats the agreement recital alone as sufficient or uses a timed wait.

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-negative-pr-comments-orchestration
+name: Negative - PR comment orchestration
+description: PR comment discovery, worktree setup, thread replies, and CI closeout should start in pr-workflow, not code authoring.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Copilot left review comments - https://github.com/example-org/example-app/pull/104669. Read the live threads, create the PR worktree, decide which comments are valid, reply and resolve bot threads, run local CI, and push the PR branch."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_code_authoring_for_pr_comment_orchestration
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: negative
+      threshold: 0.8

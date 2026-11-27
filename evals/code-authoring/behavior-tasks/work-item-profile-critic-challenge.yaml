@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-work-item-profile-critic-challenge
+name: Behavior - critic challenges a falsely contained Production profile
+description: Pre-code transport must expose under-sizing before implementation starts.
+tags: [behavior, authoring, critic, work-item-profile, production]
+inputs:
+  prompt: |
+    A pre-code plan changes one Production environment value that controls an
+    existing feature for all users. The parent proposes this profile:
+    complexity=trivial, impact=contained, reversibility=easy, confidence=HIGH,
+    review forecast=LITE. It says the one-line diff and quick rollback make a
+    critic unnecessary.
+
+    Give the pre-code critic assignment decision and next authoring action. Do
+    not edit files.
+graders:
+  - name: critic_transport_rejects_under_sizing
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/code-authoring/rubrics/work-item-profile-critic-challenge.md

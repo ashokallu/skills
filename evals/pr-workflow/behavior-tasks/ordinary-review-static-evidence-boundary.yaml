@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-ordinary-review-static-evidence-boundary
+name: Behavior - ordinary PR review keeps a static evidence boundary
+description: Static review permits mandatory Git setup but forbids live reads and persisted helper evidence.
+tags: [behavior, pr, review, database, evidence, worktree]
+inputs:
+  prompt: |
+    First invoke and follow the pr-workflow skill. An ordinary PR review
+    has a stable target and requires the database reviewer. The only checked-in
+    Production snapshot is stale and no current environment proof exists.
+    Explain the evidence boundary, reviewer dispatch, Pending Verification, and
+    whether the review may claim production readiness. Then explain what changes
+    if the user separately requests production-readiness validation after the
+    review. Make clear whether review-phase authority carries forward. Also
+    classify the required fetch, canonical review-worktree creation, and local
+    rebase, and whether the review may write a helper evidence file containing
+    fetched Production data to local temporary storage.
+graders:
+  - name: ordinary_review_static_evidence_boundary
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/pr-workflow/graders/database_applicability_contract.py,
+          static_boundary,
+        ]

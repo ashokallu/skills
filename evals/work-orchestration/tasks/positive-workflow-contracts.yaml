@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-workflow-contracts
+name: Positive - workflow contracts checklist
+description: The umbrella should trigger when a example-app task asks for reusable phase-completion, blocked-state, and result-packet checklist structure with reviewer-useful context.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this example-app implementation handoff, shape the result as a reusable phase completion contract with Objective, Intent, changed contracts, non-goals, data/runtime risk, maintainability rationale, Files Changed, Validation, Pending Verification, and Confidence. Do not execute the work."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_workflow_contracts_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.3

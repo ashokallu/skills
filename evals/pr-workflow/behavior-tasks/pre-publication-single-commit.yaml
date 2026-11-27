@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-pre-publication-single-commit
+name: Behavior - pre-publication single commit
+description: Temporary pre-open review commits must collapse before first push and PR creation.
+tags: [behavior, publication, commit-topology, squash]
+inputs:
+  prompt: |
+    A new PR branch based on origin/main has four local commits: the feature
+    commit and three finding-directed fix commits. Every required pre-open
+    reviewer has returned, all accepted findings are resolved, local validation
+    passes, and no review is still queued or running. The PR branch has never
+    been pushed and no PR exists. Explain the required final git and
+    publication sequence. State whether another reviewer run is required only
+    because commit history changes.
+graders:
+  - name: one_commit_before_publication
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/pr-workflow/rubrics/pre-publication-single-commit.md

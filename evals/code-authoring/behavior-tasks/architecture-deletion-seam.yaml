@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-architecture-deletion-seam
+name: Behavior - use deletion and real variation to judge seams
+description: Architecture assessment distinguishes pass-through wrappers, deep locality, and test-only variation.
+tags: [behavior, architecture, seams, locality, testability]
+inputs:
+  prompt: |
+    Apply the example-app architecture lane to three candidates.
+
+    A. A wrapper forwards every argument to one dependency and owns no policy.
+       Deleting it makes its small amount of complexity disappear.
+    B. A module owns eligibility rules used by seven callers. Deleting it would
+       make every caller reimplement the same ordering and failure semantics.
+    C. There is one production implementation and no current variation in
+       behavior, consumer needs, environment, or operations. Tests want a fake,
+       so a proposal adds a new public production interface solely for it.
+
+    Decide what the deletion test says for A and B, and whether C proves a
+    production seam. Distinguish a private/internal test seam when relevant.
+graders:
+  - name: architecture_requires_locality_and_real_current_variation
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/code-authoring/rubrics/architecture-deletion-seam.md

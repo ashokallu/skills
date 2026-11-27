@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-behavior-github-read-recovery-guards
+name: Behavior - CI and GraphQL read recovery guards
+description: Known-restricted CI reads stay forbidden and malformed GraphQL retries must materially change.
+tags: [behavior, github-actions, graphql, recovery]
+inputs:
+  prompt: |
+    Explain the next action for both cases without contacting GitHub:
+
+    1. Branch workflow runs are available for a example-app PR, and an agent
+       proposes `gh pr checks` as a quicker secondary confirmation.
+    2. A GraphQL review-thread query failed because it was malformed. The same
+       query was retried once without correcting its fields or variables and
+       failed identically.
+graders:
+  - name: restricted_ci_and_graphql_retry_guards
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/github-workflow/rubrics/github-read-recovery-guards.md

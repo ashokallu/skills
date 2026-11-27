@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-host-isolation
+name: Positive - Muse host isolation
+description: Direct Muse work that could reach host state should trigger the guarded positive-allowlist lane and its credential and Git boundaries.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "This example-app task explicitly needs two harnesses, Codex Desktop and Muse, for cross-harness review, a direct Muse call, collaboration wrapper/session routing, and an implementation handoff. Use Muse as the workhorse in its registered worktree, with the positive mount allowlist, private home/run/tmp, read-only Git metadata, clean environment, stdin credential, and Meta-only proxy."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_host_isolation
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

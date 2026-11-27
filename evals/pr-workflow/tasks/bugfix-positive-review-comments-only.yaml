@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-bugfix-review-comments-only
+name: Positive - review comments route through umbrella
+description: Review-comment triage should trigger the umbrella and route to the comments-worktree lane.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Read the unresolved review threads on this example-app PR, decide which comments are still valid, and fix the actionable feedback in a clean worktree."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_review_comments_only
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

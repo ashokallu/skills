@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-re-review-same-session-ancestral
+name: Behavior - same-session ancestral re-review
+description: Exact reused provenance and an ancestral finding-directed fix should select bounded re-review and its non-packet result.
+tags: [behavior, re-review, provenance, ancestry]
+inputs:
+  prompt: |
+    Continue reviewer session review-thread-42, which emitted immutable result
+    artifact review-a with SHA-256 digest digest-a against H0. Its findings F1
+    and F2 were addressed by the single ancestral fix commit H1; the parent has
+    supplied the successful merge-base ancestry artifact, resolution notes,
+    and validation. Explain the review action and required output shape.
+graders:
+  - name: selects_bounded_re_review_contract
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response selects the scoped same-session re-review,
+        retains the reviewer's own F1/F2 context while resetting its conclusion,
+        re-enters the reviewer middle phase, recomputes the selected lens set for
+        H1, verifies the fix delta and bounded impact cone, and requires output
+        beginning `Re-review result:` with H0, H1, exact provenance, ancestry,
+        finding dispositions, selected lenses, closure/expansion evidence,
+        validation, escalation, and `Whole-PR signoff: not granted`. Fail if it
+        emits or requests the canonical `Verdict:` packet as the scoped result.

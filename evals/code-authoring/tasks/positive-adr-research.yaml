@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-adr-research
+name: Positive - ADR research packet
+description: Code decision research before an ADR should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Research options for an ADR about replacing a monolithic final-verdict gate with lazy-loaded lenses. Gather repo evidence, external sources, options, risks, and Pending Verification before we write the ADR."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_adr_research_packet
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

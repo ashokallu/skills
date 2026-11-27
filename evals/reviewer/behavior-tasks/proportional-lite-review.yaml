@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-proportional-lite-review
+name: Behavior - LITE closes the target without FULL fixed cost
+description: Ordinary review performs the common floor and bounded work without untriggered breadth.
+tags: [behavior, review, scope, proportional]
+inputs:
+  prompt: |
+    A parent separately assigns an ordinary review at LITE depth and single
+    topology. The immutable target changes one private helper name and its
+    focused unit test in the same package. The changed-file inventory is
+    complete, no caller exists outside that package, no public, auth, data,
+    migration, infrastructure, generated, operator, or rollout boundary is
+    touched, and the parent claims the focused unit test passed.
+
+    Return the exact scope-control receipt and describe the review work and stop
+    proof you would perform. During receipt planning, use only the reviewer role,
+    mandatory phase owners, and shared control contract. Do not open optional
+    domain lens files unless admitted evidence already satisfies their trigger;
+    this private rename does not itself trigger the intent or full conventions
+    lens. Do not emit a final verdict packet.
+graders:
+  - name: ordinary_lite_is_complete_and_proportional
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/reviewer/rubrics/proportional-lite-review.md

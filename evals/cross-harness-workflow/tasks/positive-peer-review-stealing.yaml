@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-peer-review-stealing
+name: Positive - cross-harness stealing and reviews
+description: The skill should trigger for peer-review rounds where harnesses read each other's plans, steal ideas, and write review docs.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Now run cross-harness peer review: each harness should read the other plan documents, steal the best ideas into its own plan, then write GOOD/BAD/UGLY review files in its own folder. Codex must use high reasoning."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_peer_review_stealing
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

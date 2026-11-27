@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-production-ready-scope-growth
+name: Behavior - scope growth blocks reviewer handoff
+description: Authoring preflight must stop when the diff adds lifecycle machinery outside the active objective and mechanism scope.
+tags: [behavior, scope, preflight, review-handoff]
+inputs:
+  prompt: |
+    Objective `mismatch-record@v1` requires one idempotent current mismatch row
+    and explicitly excludes automated repair, episode history, recurrence
+    policy, and cleanup automation. Its mechanism scope is
+    `mismatch-record@v1/mechanisms@v1`. The current diff now adds an episode
+    table, a resolution state machine, a recurrence window, and a cleanup job.
+    Local tests pass. Return the authoring-preflight decision before reviewer
+    handoff. Two broad review rounds were already recorded for this action item.
+graders:
+  - name: production_ready_scope_growth
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response blocks reviewer handoff, identifies scope
+        growth against mismatch-record@v1 and its mechanism scope, builds or
+        requires a keep/defer/remove mechanism ledger, and removes the
+        unsupported mechanisms or freezes the mechanism revision because the
+        proposal changes explicit non-goals. Explicit mechanism approval must
+        not amend those non-goals; proceeding requires owner-approved objective
+        revision followed by a new mechanisms@v1 ledger. It must rerun authoring
+        self-audit and validation while preserving the same action-item identity
+        and both prior broad rounds append-only. It must not cite a case study,
+        emit a read acknowledgement, reset review history, or request a third
+        broad review first.

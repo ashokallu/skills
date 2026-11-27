@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-database-required-gate-blocking
+name: Behavior - required database review blocks parent outcomes
+description: Preserve ordinary reviewer independence while failing closed on a missing required sibling.
+tags: [behavior, review, database, publication]
+inputs:
+  prompt: |
+    A stable authored PR target changes transaction boundaries, so independent
+    database review is required. The ordinary reviewer is available but the
+    database-reviewer runtime is temporarily unavailable. State what can start,
+    what cannot be waived, which author publication and reviewer handoff
+    decisions remain blocked, and who combines the eventual verdicts.
+graders:
+  - name: database_required_parent_gate
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/pr-workflow/graders/database_applicability_contract.py,
+          blocking,
+        ]

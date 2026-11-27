@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-orchestration-conformance-own-work-scope-substitution
+name: Behavior - own-work reviewer rejects scope substitution
+description: Own-work review must enforce the final target-bound attestation and return contract-changing scope to its owner.
+tags: [behavior, reviewer, orchestration-conformance, own-work, scope]
+inputs:
+  prompt: |
+    Review parent-authored own work. Its final orchestration conformance
+    attestation locks a bounded retry for one timeout failure and lists authority
+    cutover, deployment redesign, and migration-job changes as non-goals. The
+    stable diff nevertheless adds a new database write-authority transition
+    and mixed-version rollout machinery. Tests pass.
+
+    Return the direction and evidence portion of the reviewer verdict.
+graders:
+  - name: target_bound_attestation_blocks_contract_changing_scope
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/reviewer/rubrics/orchestration-conformance-own-work-scope-substitution.md

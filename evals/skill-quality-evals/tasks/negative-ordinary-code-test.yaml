@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: skill-quality-evals-negative-ordinary-code-test
+name: Negative - ordinary code validation
+description: Ordinary code test requests should not trigger skill-quality eval routing.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "I changed a Go handler in backend. Run the targeted unit tests and tell me whether the implementation passes."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_code_tests
+    type: trigger
+    config:
+      skill_path: .codex/skills/skill-quality-evals/SKILL.md
+      mode: negative
+      threshold: 0.75

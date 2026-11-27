@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-objective-conformance-pre-edit
+name: Behavior - classify a source-of-truth rewrite before editing
+description: Authoring must stop a related safety mechanism from silently replacing an accepted source contract.
+tags: [behavior, authoring, objective-lock, source-of-truth, scope]
+inputs:
+  prompt: |
+    The accepted objective says that enabling an existing flag makes Postgres
+    the XP source for one response field. Unrelated Mongo-backed fields remain
+    unchanged and shadow comparison remains non-blocking. Before editing, an
+    implementer proposes synchronously reading Mongo on every request and
+    returning an error whenever Mongo disagrees with Postgres because that
+    seems safer.
+
+    Give the code-change intake decision and next authoring action.
+graders:
+  - name: source_contract_is_classified_before_edit
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response performs the objective-conformance intake
+        before editing, limits its comparison to applicable authority fields,
+        and classifies the synchronous Mongo veto as contract-changing rather
+        than direct or protective. It must identify at least source authority,
+        error or availability semantics, and the new runtime dependency as
+        changed fields; freeze meaningful edits; and return the proposal to the
+        intent owner instead of polishing or implementing it. Reviewer caution
+        or incident history must remain evidence, not authority. It must not
+        require or cite the source-of-truth-scope-rewrite case study.

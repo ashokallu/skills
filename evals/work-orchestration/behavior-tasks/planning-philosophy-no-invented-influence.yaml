@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-planning-philosophy-no-invented-influence
+name: Behavior - planning philosophy does not invent influence
+description: A principle that confirms but does not change a decision is not reported as embodied or influential.
+tags: [behavior, planning, philosophy, evidence, output]
+inputs:
+  prompt: |
+    Current evidence already selected a bounded canary because the full rollout
+    acceptance check is unavailable. During planning, a familiar "measure
+    twice" maxim points to the same canary but changes no alternative, probe,
+    acceptance condition, or stop. Explain the decision rationale and whether
+    the philosophy should be acknowledged. Do not add new work.
+graders:
+  - name: planning_philosophy_requires_observable_influence
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/planning-philosophy-no-invented-influence.md

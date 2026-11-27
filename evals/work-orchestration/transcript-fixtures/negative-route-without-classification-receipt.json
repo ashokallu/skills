@@ -1,0 +1,16 @@
+{
+  "expect_pass": false,
+  "expected_error": "complete Classification receipt must precede the first meaningful action",
+  "options": {},
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Route/mode: code-authoring; edit\nTarget: target.go\nSide effects: local repository edits\nRisk: low"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "target.go" }
+    }
+  ]
+}

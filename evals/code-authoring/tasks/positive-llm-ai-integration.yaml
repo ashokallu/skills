@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-llm-ai-integration
+name: Positive - LLM AI integration
+description: Runtime model-call product code should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Implement a example-app runtime LLM integration that builds prompts from user and CMS content, validates model JSON output, handles truncation and refusals, enforces token caps, and adds deterministic tests."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_llm_ai_integration
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

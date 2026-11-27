@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-quality-scout
+name: Positive - quality scout
+description: Broad repository quality improvement prompts should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Find one high-value example-app code health improvement we should make next. Use a quality scout pass, give evidence from files, and route the resulting task through the right code-authoring lane."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_quality_scout
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

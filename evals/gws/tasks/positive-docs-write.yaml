@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: gws-positive-docs-write
+name: Positive - gws Docs append
+description: The skill should trigger for the gws Docs write helper.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use gws docs +write to append a short approved status note to document DOC_ID."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_gws_docs_write
+    type: trigger
+    config:
+      skill_path: .codex/skills/gws/SKILL.md
+      mode: positive
+      threshold: 0.4

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-direct-claude-review
+name: Positive - direct Claude review from Codex
+description: The skill should trigger when Codex needs Claude Code as a peer reviewer.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Ask Claude Code to review Codex's implementation plan and tell us what objections or failure scenarios it sees."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_direct_claude_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

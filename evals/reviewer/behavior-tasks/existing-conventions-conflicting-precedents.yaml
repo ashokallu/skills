@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-existing-conventions-conflicting-precedents
+name: Behavior - conflicting convention precedents
+description: Conflicting local precedents require bounded resolution without automatic findings.
+tags: [behavior, conventions, conflict, bounded-search]
+inputs:
+  prompt: |
+    Treat the facts below as the complete case. Do not inspect the repository or run tools.
+    Review a stable implementation diff whose package contains two current,
+    conflicting error-wrap patterns and no documented owner. The diff follows
+    one of them, and the ambiguity has no material effect on correctness or the
+    verdict. Apply the existing-conventions lens and explain the evidence
+    boundary and disposition.
+    End with exactly one field per line using these allowed values:
+    Convention disposition: FINDING or NO_FINDING
+    Standard state: AUTHORITATIVE, CONFLICTING, JUSTIFIED, NONE, or NIT
+    Search scope: OWNER_BOUNDED when package/owner evidence is used, otherwise INPUT_SUFFICIENT
+    Finding owner: CONVENTIONS, SECURITY_PRIVACY, or NONE
+    Pending verification: YES or NO
+    Reason: one sentence supporting every field without hypothetical findings.
+graders:
+  - name: conflicting_precedents_stay_bounded
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/reviewer/graders/existing_conventions_contract.py,
+          conflicting-precedents,
+        ]

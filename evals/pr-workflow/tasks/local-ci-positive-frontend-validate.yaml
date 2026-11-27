@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-frontend-validate
+name: Positive - frontend PR gate
+description: The skill should trigger when a PR worktree needs local Frontend - Validate reproduction.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "From this example-app PR worktree, reproduce the pull_request Frontend - Validate gate locally before pushing the app change."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_frontend_pr_gate
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

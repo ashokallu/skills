@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-migration-positive-concurrent-index
+name: Positive - concurrent index review
+description: The skill should trigger when a migration needs DDL safety review.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Check whether this new Postgres migration creates indexes safely on hot tables and whether the SQL is compatible with rolling deploys."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_concurrent_index_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

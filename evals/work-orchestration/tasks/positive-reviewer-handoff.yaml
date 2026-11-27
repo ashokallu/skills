@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-reviewer-handoff
+name: Positive - reviewer handoff support
+description: Reviewer gates should trigger orchestration and use the reviewer-handoff support reference for exact target proof and stated intent.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Before invoking the example-app reviewer subagent on this pre-open branch, prepare the exact base/head target, intent head provenance, changed-file inventory, acceptance criteria, validation already run, Pending Verification, and factual review intent packet so the reviewer understands intent without receiving parent conclusions or an unpublished PR-body draft."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_reviewer_handoff_support
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

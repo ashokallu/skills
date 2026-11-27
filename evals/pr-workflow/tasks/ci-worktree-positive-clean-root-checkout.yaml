@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-clean-root-checkout
+name: Positive - keep root checkout clean
+description: The skill should trigger when the user explicitly asks for isolated PR CI debugging.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Keep my current example-app checkout clean, create the repo-local worktree for the PR merge ref, and debug the failing Actions lane there."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_isolated_pr_debug
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

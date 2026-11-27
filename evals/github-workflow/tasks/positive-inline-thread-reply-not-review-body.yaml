@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: github-workflow-positive-inline-thread-reply-not-review-body
+name: Positive - inline thread reply not review body
+description: Authenticated GitHub mutation work must route thread replies to the inline comment reply endpoint.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "For this example-app PR, post an author reply to an existing Copilot inline review thread, resolve the PRRT thread after the reply is visible there, and do not use a create-review or top-level PR review body for the reply."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_inline_thread_reply_mutation
+    type: trigger
+    config:
+      skill_path: .codex/skills/github-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

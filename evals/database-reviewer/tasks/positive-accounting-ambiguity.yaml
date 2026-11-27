@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-positive-accounting-ambiguity
+name: Positive - committed state and accounting ambiguity
+description: Migration import accounting and retry semantics require the DBA specialist.
+tags: [trigger, positive, accounting, pr4708-seed]
+inputs:
+  prompt: "Perform a read-only DBA safety review of pending Postgres migration and import changes under backend/internal/shared/sql/migrations. Writes commit transactionally, the post-write count can fail, dry-run and apply overload inserted_count, and the same run ID cannot resume after partial progress."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_accounting_ambiguity
+    type: trigger
+    config:
+      skill_path: .codex/skills/database-reviewer/SKILL.md
+      mode: positive
+      threshold: 0.45

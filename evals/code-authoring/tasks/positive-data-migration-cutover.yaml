@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-data-migration-cutover
+name: Positive - data migration cutover
+description: Cross-store source-of-truth movement should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Implement a example-app Mongo-to-Postgres cutover slice with dual-write behavior, backfill parity checks, datasource flag rollback, and legacy-store decommission notes."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_data_migration_cutover
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

@@ -206,6 +206,16 @@ In the catalog, **Shared** means an edition is shipped under `.agents/skills/`,
 | [antigravity-operating-contract](.agents/skills/antigravity-operating-contract/SKILL.md) | Shared | Gives Antigravity and Gemini tasks a consistent startup, evidence, and handoff procedure for reviews, planning, and implementation. Catches missing context and incomplete reviewer handoffs before downstream work relies on them. |
 | [claude-code-configuration](.agents/skills/claude-code-configuration/SKILL.md) | Shared, Claude | Diagnoses and configures Claude Code settings, MCP servers, and local setup. Traces which settings layer owns a behavior so a fix lands at the intended project or user scope. |
 
+## Run the skill evaluations
+
+The [Waza evaluation guide](evals/README.md) explains how to run the 21
+offline trigger suites and six model-backed behavior suites. Run an offline
+suite first to verify skill routing and fixture wiring.
+
+```sh
+waza --no-update-check run evals/work-orchestration/eval.yaml -v
+```
+
 ## How the skills work together
 
 - **Review a migration PR.** Start with `pr-workflow` to establish the exact

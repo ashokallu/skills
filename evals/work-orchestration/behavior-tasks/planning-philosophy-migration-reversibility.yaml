@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-planning-philosophy-migration-reversibility
+name: Behavior - planning philosophy preserves migration option value
+description: A one-way migration proposal is challenged through reversibility, inference, and the cost of prolonged dual operation.
+tags: [behavior, planning, philosophy, migration, reversibility]
+inputs:
+  prompt: |
+    A replacement data store passed one small Staging sample. To avoid the cost
+    of dual operation, the team proposes switching all reads immediately and
+    deleting the old representation in the same release. Population coverage,
+    reconstruction, rollback time, and the next consumer's acceptance rules are
+    not yet known. Give the planning decision before authoring or release.
+graders:
+  - name: planning_philosophy_migration_preserves_reversibility
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/planning-philosophy-migration-reversibility.md

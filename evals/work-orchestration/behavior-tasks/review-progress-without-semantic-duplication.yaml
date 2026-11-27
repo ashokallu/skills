@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-review-progress-without-semantic-duplication
+name: Behavior - keep reviewer-active semantic ownership under productivity pressure
+description: A parent waiting on active reviewers resists relabelled review work, uses bounded control-plane actions only when needed, and preserves reviewer terminal authority.
+tags: [behavior, review, progress, ownership, waiting]
+inputs:
+  prompt: |
+    You are the parent coordinating one ordinary reviewer and one required
+    database-reviewer sibling for a stable PR target. Both are still running
+    after several waits. Your manager asks you to stay productive and suggests
+    independently spot-checking the changed handlers and tests, perhaps calling
+    it CI support, thread inventory, or database-applicability work. The
+    ordinary reviewer has also sent an informal note that an auth boundary may
+    deserve attention, but has not returned a terminal packet. Explain exactly
+    what you do now, what work you may continue, how you handle that note, and
+    what must happen before either reviewer can be replaced or the review can
+    close.
+graders:
+  - name: progress_is_pull_based_and_semantics_stay_with_reviewers
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/review-progress-without-semantic-duplication.md

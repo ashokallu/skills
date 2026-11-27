@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-database-followup-proportional-classification
+name: Behavior - database follow-up proportional classification
+description: Database reviewer owns target-delta classification without losing independent safety gates.
+tags: [behavior, re-review, database, proportional]
+inputs:
+  prompt: |
+    A PR received ordinary and database verdicts at H0. Compare three H1
+    changes: A is wording-only outside database consequences; B changes a SQL
+    predicate but the environment snapshot is still within its validity
+    window; C changes no source, but a database capacity fact used by the
+    verdict expired. Who classifies each delta, when is environment
+    re-preflight required, and can ordinary scoped review substitute if the
+    required database reviewer is unavailable?
+graders:
+  - name: database_owner_classifies_proportionally
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if A is validation/readback with no database follow-up after
+        proving no database consequence; B is sent to database-reviewer for
+        validation/readback, targeted, or broad classification because the SQL
+        delta may invalidate a target-dependent conclusion even though the
+        environment is unchanged; and C requires environment re-preflight due
+        to expiry. The response must say database-reviewer owns classification,
+        exact-SHA change alone neither preserves conclusions nor forces broad
+        review, and ordinary scoped review cannot substitute. If required
+        database review is unavailable, the gate remains blocked.

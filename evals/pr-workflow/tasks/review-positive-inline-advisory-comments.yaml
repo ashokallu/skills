@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-inline-advisory-comments
+name: Positive - inline advisory review comments
+description: The skill should trigger when a PR review explicitly asks for high-signal non-blocking inline comments as well as material findings.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Open a review worktree for PR 4558, inspect it with the reviewer instructions, and add GitHub review comments for real findings plus high-signal non-blocking advisory comments about avoidable runtime work, misleading operator evidence, redundant structures, stale downstream assumptions, or tests that only prove counts."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_inline_advisory_review_comments
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.55

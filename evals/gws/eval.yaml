@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/eval.schema.json
+name: gws-trigger-eval
+description: Trigger regression checks for the consolidated Google Workspace CLI skill and its lanes.
+skill: gws
+version: "0.1"
+
+config:
+  trials_per_task: 1
+  timeout_seconds: 120
+  parallel: false
+  executor: mock
+  model: mock-trigger-grader
+  skill_directories:
+    - ../../.codex/skills
+
+metrics:
+  - name: trigger_precision
+    weight: 1
+    threshold: 0.8
+    description:
+      The skill should trigger for gws CLI, Drive and Docs commands through gws, and gws
+      quota-project diagnosis, but not gcloud, ordinary document artifacts, or browser-only Drive
+      work.
+
+tasks:
+  - tasks/*.yaml

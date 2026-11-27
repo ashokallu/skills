@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: readonly-data-access-negative-db-write
+name: Negative - database write or repair
+description: Database writes and data repair must not route to the readonly data-access skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Connect to production Postgres and update the broken user rows, then repair the migrated data."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_db_write
+    type: trigger
+    config:
+      skill_path: .codex/skills/readonly-data-access/SKILL.md
+      mode: negative
+      threshold: 0.75

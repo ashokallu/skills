@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-release-regression-validation
+name: Positive - release regression validation
+description: Post-deploy Staging or Production validation should route through the release regression lane before browser and data-access specialists.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Validate the example-app Staging release after deploy. Check the release tag, Cloud Run image and feature flags, run an authenticated normal-user regression through e2e/pd, inspect read-only DB rows, and check logs before saying the regression passed."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_release_regression_validation
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.7

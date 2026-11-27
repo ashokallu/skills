@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-backend-codegen-migration
+name: Positive - backend migration codegen lane
+description: Backend migrations and generated artifacts changing together should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use code-authoring's backend-codegen lane to add a Postgres migration under backend/internal/shared/sql/migrations, update the related sqlc query, regenerate backend Go code and mocks, and verify the example-app generation order."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_backend_codegen_migration
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

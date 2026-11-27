@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-negative-jira-issue-read
+name: Negative - Jira issue read
+description: Jira issue reads should route to the Jira workflow skill, not Confluence.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Fetch Jira issue DEMO-2911 and summarize its status, assignee, and latest update."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_jira_issue_read
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: negative
+      threshold: 0.75

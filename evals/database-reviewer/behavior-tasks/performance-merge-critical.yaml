@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-performance-merge-critical
+name: Behavior - merge-critical performance evidence gap
+description: Missing evidence blocks merge only when performance is an explicit acceptance criterion.
+tags: [behavior, performance, merge]
+inputs:
+  prompt: |
+    Review a change whose accepted merge contract requires p95 below 250 ms on
+    the documented production-shaped fixture. The author supplied no comparable
+    baseline or candidate measurement. Return the complete Database review
+    packet. Treat the acceptance-critical performance decision as unproven and
+    block merge, but do not fabricate a confirmed regression finding.
+graders:
+  - name: merge_critical_performance_contract
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/database-reviewer/graders/behavior_contract.py,
+          performance-merge-critical,
+        ]

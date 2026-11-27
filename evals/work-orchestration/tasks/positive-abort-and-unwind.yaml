@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-abort-and-unwind
+name: Positive - abort and unwind
+description: User-initiated stop or undo of example-app agent work should trigger the dispatcher.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Stop the current example-app instruction edit now, inventory what you changed, and unwind only your own local and git mutations without touching the user's work."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_abort_and_unwind_lane
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.6

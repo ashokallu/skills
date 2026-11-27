@@ -1,0 +1,16 @@
+{
+  "expect_pass": false,
+  "expected_error": "Classification receipt has a non-canonical Work type",
+  "options": {},
+  "transcript": [
+    {
+      "type": "assistant.message",
+      "content": "Classification receipt:\nWork type: small task\nRoute/mode: code-authoring; edit\nRoute rationale: code authoring owns the requested change\nWork ownership: parent-only: no net-positive child identified\nTarget: target.go\nSide effects: local repository edits\nRisk: low\nProof/evidence: reviewed candidate"
+    },
+    {
+      "type": "tool.execution_start",
+      "tool_name": "view",
+      "arguments": { "path": "target.go" }
+    }
+  ]
+}

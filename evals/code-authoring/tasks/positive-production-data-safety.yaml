@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-positive-production-data-safety
+name: Positive - production data safety
+description: SQL, import, and dry-run apply safety should trigger code-authoring.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Implement the XP import dry-run audit query, but make sure the production data safety lane catches chunking, timeout, generated sqlc, and operator truth before PR review."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_code_authoring_production_data_safety
+    type: trigger
+    config:
+      skill_path: .codex/skills/code-authoring/SKILL.md
+      mode: positive
+      threshold: 0.5

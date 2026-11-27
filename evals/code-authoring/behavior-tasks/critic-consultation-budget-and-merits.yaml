@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-critic-consultation-budget-and-merits
+name: Behavior - critic consultation is bounded and merits-first
+description: The pre-code critic owner permits at most three substantive contacts and makes contact 3 terminal.
+tags: [behavior, authoring, critic, consultation, conformance, plan-acceptance]
+inputs:
+  prompt: |
+    Decide the critic workflow result for each independent case. Do not inspect
+    files, run commands, or implement. Start each answer with the exact heading
+    requested, then give the reason and next action.
+
+    Case A: Contact 1 contains the objective, authority, scope, risks,
+    ownership, rollback, verification, and current conformance decisions, but
+    labels the candidate-design paragraph `Approach`. No governing-source path
+    or hash inventory is included. The evidence supports approval.
+    Start with `Case A: EVALUATE MERITS`.
+
+    Case B: Contact 1 returned two material findings. Contact 2 carries a
+    revised candidate and explicitly marks one finding resolved with evidence;
+    the other remains blocking. No independent merit is left unevaluated.
+    Start with `Case B: CONTACT 3` and state what contact 3 must do.
+
+    Case C: Contact 3 still has a central safety blocker. The parent renames
+    the candidate and asks a different critic for another review without
+    changing the objective, core decision, or risk boundary.
+    Start with `Case C: BLOCK`.
+graders:
+  - name: critic_consultation_terminal_contact_contract
+    type: program
+    config:
+      command: python3
+      args: [evals/code-authoring/graders/critic_consultation_contract.py]
+  - name: critic_consultation_structural_results
+    type: text
+    config:
+      regex_match:
+        - "Case A: EVALUATE MERITS"
+        - "Case B: CONTACT 3"
+        - "Case C: BLOCK"
+      regex_not_match:
+        - "(?i)(required|must).{0,40}(sha-?256|source hash|path inventory)"
+        - "(?i)(may|can|should|will) (allow|permit|use|schedule|start|take|continue with|proceed with).{0,30}(4th|fourth|contact 4|review 4)"
+        - "(?i)(4th|fourth|contact 4|review 4).{0,25}(is|remains|becomes) (allowed|permitted|available|required)"
+  - name: critic_consultation_semantic_contract
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/code-authoring/rubrics/critic-consultation-budget-and-merits.md

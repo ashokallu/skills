@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: clawpatch-review-negative-generic-review
+name: Negative - generic code review
+description: A generic review request without Clawpatch should use normal review behavior.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Review the current diff for bugs and missing tests, then summarize findings with file and line references."
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_for_generic_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/clawpatch-review/SKILL.md
+      mode: negative
+      threshold: 0.9

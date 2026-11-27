@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-create-ticket-for-untracked-work
+name: Positive - create ticket for untracked work
+description: The skill should trigger when the user wants a new Jira ticket created before branch and PR work.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "I found a application bug that has no Jira issue yet. Create the DEMO ticket, assign it to me, put it
+    on my board, create the Jira-keyed branch, fix it, and open the PR."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_create_ticket_for_untracked_work
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

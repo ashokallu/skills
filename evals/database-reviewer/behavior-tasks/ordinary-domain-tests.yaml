@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-ordinary-domain-tests
+name: Behavior - ordinary tests stay domain-owned
+description: Routine domain test evidence must not activate the cross-lane verification overlay.
+tags: [behavior, tests, lazy-load, safe-pattern]
+inputs:
+  prompt: |
+    Act as the independent database reviewer. Review immutable target
+    `transaction-test-v2` against `transaction-test-v1` without editing files.
+    A stable single-statement transaction-helper change and its routine unit
+    test establish narrow retry-free behavior. Current source and test
+    execution establish that behavior; no production-readiness,
+    representative-rehearsal, cross-lane independence, fault-injection,
+    concurrency, recovery, or adverse-condition claim is requested. Return the
+    complete Database review packet and verdict.
+graders:
+  - name: ordinary_domain_tests_contract
+    type: program
+    config:
+      command: python3
+      args: [evals/database-reviewer/graders/behavior_contract.py, domain-tests]

@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-direct-pi-council
+name: Positive - explicit Pi council candidate
+description: An explicit Pi consultation selects the guarded cross-harness candidate route.
+tags: [trigger, positive]
+inputs:
+  prompt: "Use Pi with gpt-5.6-luna as a read-only council candidate to review this small source snapshot."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_pi_council
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

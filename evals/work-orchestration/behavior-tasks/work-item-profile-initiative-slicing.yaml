@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-work-item-profile-initiative-slicing
+name: Behavior - slice an initiative container before authoring
+description: Initiative shape is independent from semantic work kind and cannot enter authoring directly.
+tags: [behavior, routing, work-item-profile, initiative, slicing]
+inputs:
+  prompt: |
+    An owner-approved and accepted feature initiative will move three
+    learner-data domains from a legacy store to Postgres, changing reads,
+    writes, backfills, rollout flags, validation, and later cleanup. The user
+    asks the agent to start coding the initiative now.
+
+    Classify the Work Item Profile and give the next route. Do not edit files.
+graders:
+  - name: initiative_is_execution_shape_not_work_kind
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/work-item-profile-initiative-slicing.md

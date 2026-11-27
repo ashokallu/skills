@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-review-fix-topology-precedence
+name: Behavior - review-fix topology precedence
+description: Review provenance must be classified before provider-specific amend convenience.
+tags: [behavior, review-fix, topology, provenance]
+inputs:
+  prompt: |
+    An internal reviewer found two issues at H0 and must verify its fixes. A
+    Copilot comment is also in the same batch. The author wants to amend H0 to
+    keep the PR at one commit, then ask the internal reviewer to inspect only
+    the fixes. Explain the required commit and review sequence. Contrast it
+    with a simple Copilot-only wording fix where no human baseline changed and
+    no internal scoped review or immutable reviewed target must be preserved.
+graders:
+  - name: provenance_precedes_provider_convenience
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response rejects amending H0 for the mixed batch,
+        requires one new ancestral finding-directed fix commit or exact range,
+        and sends that bounded delta to the exact internal reviewer. It must
+        say that amend is merely permitted for the simple Copilot-only case,
+        not mandatory, and that uncertainty selects a new commit. Fail if it
+        chooses topology from the provider name alone, rewrites while scoped
+        review is pending, or treats a tree-equivalent rewrite as preserved
+        SHA-bound provenance.

@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-assigned-issue-worktree
+name: Positive - assigned issue worktree
+description:
+  The skill should trigger when the user wants the agent to choose an assigned Jira issue and start
+  branch/worktree work.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Use Jira to pull the latest DEMO issues assigned to me, choose the highest priority item, create
+    a git worktree branch with the Jira ticket number, implement it, and open a PR."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_assigned_issue_worktree
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

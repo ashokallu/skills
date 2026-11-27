@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: claude-code-configuration-positive-hard-stop-manual-recovery
+name: Positive - hard stop manual recovery
+description: The skill should trigger when a Claude Code setup hard stop needs OS-specific manual recovery guidance.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Claude Code setup hard-stopped because Enterprise login or the headless smoke failed. Give me the macOS or Linux manual recovery workflow without printing my token."
+expected:
+  should_trigger: true
+graders:
+  - name: agents_skill_should_trigger_manual_recovery
+    type: trigger
+    config:
+      skill_path: .agents/skills/claude-code-configuration/SKILL.md
+      mode: positive
+      threshold: 0.6
+  - name: claude_skill_should_trigger_manual_recovery
+    type: trigger
+    config:
+      skill_path: .claude/skills/claude-code-configuration/SKILL.md
+      mode: positive
+      threshold: 0.6

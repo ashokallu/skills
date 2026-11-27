@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-tmux-persistent-harness
+name: Positive - persistent cross-harness tmux session
+description: The skill should trigger when tmux is requested for durable external harness calls, including Codex CLI workers.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use tmux so the parent can run and monitor persistent Codex CLI, Claude Code, Grok CLI, and Muse CLI conversations without losing them when a terminal closes."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_tmux_persistent_harness
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

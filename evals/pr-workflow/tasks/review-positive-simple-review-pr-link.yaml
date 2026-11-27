@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-positive-simple-review-pr-link
+name: Positive - simple review PR link
+description: The skill should trigger for the user's normal short prompt with only a PR review request and link.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review this PR https://github.com/example-org/example-app/pull/104492"
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_simple_review_pr_link
+    type: trigger
+    config:
+      skill_path: .codex/skills/pr-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

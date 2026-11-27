@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-aggregate-audit-summary-review
+name: Positive - aggregate audit summary review
+description: The reviewer skill should trigger for aggregate audit-summary SQL, operator-log, doc, and test coverage review after changed-file inventory exists.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a example-app PR after changed-file inventory shows backend/internal/shared/sql/queries/xp_import.sql, backend/internal/shared/sql/migrations/000036_xp_import_audit_summaries.up.sql, backend/internal/xpimport/ledgeraudit.go, backend/internal/xpimport/ledgeraudit_integration_test.go, and backend/jobs/xp-mongo-to-postgres-import/README.md. The diff adds per-run aggregate audit summaries with capped JSON samples, COUNT(DISTINCT user_id), gate-count predicates, a new updated_at table, a secondary index near a primary key, chunk-level operator logs, and docs claiming chunked audit cost. Select reviewer lenses and look for non-blocking but material SQL scale, operator evidence, doc, and test-coverage issues."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_aggregate_audit_summary_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

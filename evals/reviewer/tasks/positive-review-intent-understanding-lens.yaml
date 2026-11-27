@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-review-intent-understanding-lens
+name: Positive - review intent understanding lens
+description: PR reviews with a body or handoff packet should trigger reviewer lens selection and the review-intent understanding lens before findings.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "A example-app PR review has a pinned head, base, changed-file inventory, local diff, and live PR body with What, Why, non-goals, risks, operator notes, and validation. Select reviewer lenses so the reviewer treats the body as stated intent, reconciles it against the pinned head and changed files, probes source for disconfirming evidence, and only then reviews the diff."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_review_intent_understanding_lens
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

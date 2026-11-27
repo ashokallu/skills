@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-explicit-context-bridge
+name: Positive - Muse explicit context bridge
+description: A task that asks Codex to give Muse selected history context should route through the guarded context bridge rather than ambient filesystem access.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use Muse as the cross-harness workhorse for this task. Read this Codex task history yourself, distill only the relevant non-secret decisions into bounded context files, and pass those explicit snapshots to Muse without source paths. Muse must not browse Codex memory, sessions, auth, or unrelated home files."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_explicit_context_bridge
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

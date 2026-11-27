@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/config.schema.json
+paths:
+  skills: .codex/skills/
+  evals: evals/
+  results: tmp/waza-results/
+
+defaults:
+  engine: mock
+  model: mock-trigger-grader
+  timeout: 120
+  parallel: false
+  workers: 2
+  verbose: false
+  sessionLog: false
+
+cache:
+  enabled: false
+  dir: tmp/waza-cache/
+
+server:
+  port: 3000
+  resultsDir: tmp/waza-results/
+
+tokens:
+  warningThreshold: 1800
+  fallbackLimit: 3000
+  limits:
+    defaults:
+      "**/SKILL.md": 3000
+
+graders:
+  programTimeout: 30

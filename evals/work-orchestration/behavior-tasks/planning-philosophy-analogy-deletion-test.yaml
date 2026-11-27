@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-planning-philosophy-analogy-deletion-test
+name: Behavior - planning philosophy rejects an analogy-only architecture
+description: The deletion test prevents a nature slogan from authorizing costly redundancy.
+tags: [behavior, planning, philosophy, analogy, architecture]
+inputs:
+  prompt: |
+    A design proposal says, "Nature favors diversity, so every critical service
+    must use two database technologies." No concrete common-cause failure,
+    recovery objective, independent operating path, or ownership model has been
+    identified. Challenge the proposal and give the smallest decision that is
+    justified now. Do not edit files.
+graders:
+  - name: planning_philosophy_analogy_must_survive_deletion
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/planning-philosophy-analogy-deletion-test.md

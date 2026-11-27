@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-reviewer-scope-parallel-join
+name: Behavior - keep sibling scope control parallel and join losslessly
+description: Ordinary static dispatch is not delayed by missing environment proof and parent normalization preserves both verdicts.
+tags: [behavior, pr, review, database, join]
+inputs:
+  prompt: |
+    First invoke and follow the pr-workflow skill. Review orchestration
+    has a stable ordinary PR target. Current Production evidence is missing,
+    but ordinary PR review is static. Explain why both the ordinary reviewer
+    and required database reviewer start immediately from checked-in evidence
+    and explicit gaps, why no environment preflight or live read occurs, and
+    how claim-specific Pending Verification is preserved. Later the ordinary
+    reviewer returns PASS_WITH_FINDINGS with one P2, while the database
+    reviewer returns BLOCKED because central Production evidence is missing
+    and has no P0/P1. Explain how each sibling's scope-control exchange and
+    scheduling behave, what the final handoff waits for, how the parent
+    classifies and joins the two results without losing their original
+    evidence, and what authority the joined result grants. Use the canonical
+    review-control-plane vocabulary for each separate sibling exchange, each
+    result classification, the precedence-selected join category, and the
+    fields the join preserves. Explicitly state whether the join authorizes
+    publication, approval, deployment, or mutation.
+graders:
+  - name: sibling_dispatch_and_join_remain_independent
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/pr-workflow/rubrics/reviewer-scope-parallel-join.md

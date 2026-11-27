@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: confluence-workflow-positive-confluence-versioned-update
+name: Positive - Confluence versioned update
+description: Version-aware Confluence edits should route to the Confluence workflow skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Use the Confluence MCP to update a Server/Data Center page after reading its storage body and
+    current version, then read it back."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_confluence_versioned_update
+    type: trigger
+    config:
+      skill_path: .codex/skills/confluence-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

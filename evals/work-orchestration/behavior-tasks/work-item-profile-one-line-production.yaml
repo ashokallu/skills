@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-behavior-work-item-profile-one-line-production
+name: Behavior - keep one-line Production impact separate from complexity
+description: A tiny diff must not receive a weak review forecast when its runtime impact is broad.
+tags: [behavior, routing, work-item-profile, production, review]
+inputs:
+  prompt: |
+    A requested example-app change edits one Terraform value so an existing
+    feature becomes enabled for every Production user. The implementation is a
+    known one-line change and the existing value can be restored, but the
+    resulting release changes live behavior for the whole Production cohort.
+
+    Give the initial Work Item Profile and the next route. Do not edit files.
+graders:
+  - name: production_profile_uses_canonical_tokens
+    type: text
+    config:
+      regex_match:
+        - "(?i)impact(?: scope)?:.*production-wide"
+        - "(?i)review forecast:.*FULL"
+        - "(?i)does(?:\\s|\\*|_)*not(?:\\s|\\*|_)*authorize"
+        - "(?i)mandatory gate"
+  - name: production_impact_is_not_sized_from_diff
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/work-orchestration/rubrics/work-item-profile-one-line-production.md

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-feature-flag-inert-rollout-review
+name: Positive - feature flag inert rollout review
+description: Reviewer should inspect feature-flag and runtime-config combinations before accepting an inert rollout claim.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review this stable example-app PR diff. It adds a feature flag and runtime config where Staging enables the path and Production pins config but keeps the flag disabled. Check whether every fallback, empty-state, default, and error path is still inert when the flag is disabled."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_feature_flag_inert_rollout_review
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

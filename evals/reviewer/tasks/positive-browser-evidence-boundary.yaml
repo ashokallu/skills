@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-browser-evidence-boundary
+name: Positive - browser evidence boundary routing
+description: Concrete reviewer routing for screenshot and browser-state evidence limits should trigger this skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a stable example-app UI PR after changed-file inventory shows app/components/CheckoutButton.tsx, app/hooks/useCheckoutState.ts, and e2e/pd/tests/checkout.spec.ts. The author wants PASS based on one screenshot from a reused local browser profile, with unknown auth state, viewport, feature flags, and no deterministic route assertion. Select reviewer lenses for frontend, validation, browser evidence limits, and security/privacy before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_browser_evidence_boundary
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

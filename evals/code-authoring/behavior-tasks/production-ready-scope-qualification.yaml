@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-production-ready-scope-qualification
+name: Behavior - production-ready durable scope is locked before authoring
+description: Durable production-ready work must separate mandatory current contracts from future machinery without narrative ceremony.
+tags: [behavior, scope, production-readiness, persistence]
+inputs:
+  prompt: |
+    Objective `sampled-comparison@v1` requires a production-ready sampled
+    comparison that leaves the current API response unchanged and retains
+    mismatch evidence for team investigation. Its protected invariant is "at
+    most one current mismatch row per user," but its acceptance criteria do not
+    require a uniqueness constraint. Current source evidence proves two
+    concurrent upserts can both insert a current row because no uniqueness
+    constraint exists. The proposal adds that constraint and also suggests
+    episodes, automatic resolution, recurrence windows, cleanup jobs, and
+    decommission state; none of the latter mechanisms appear in an acceptance
+    criterion or mandatory current contract. Return the authoring-core decision
+    before editing.
+graders:
+  - name: production_ready_scope_qualification
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response preserves sampled-comparison@v1 as the sole
+        owner of outcome, acceptance criteria, invariants, and non-goals;
+        creates sampled-comparison@v1/mechanisms@v1; identifies mandatory
+        current contracts and deferred lifecycle mechanisms; explicitly
+        classifies the uniqueness constraint as protective; cites the named
+        at-most-one-current-row invariant and concurrent-upsert causal evidence;
+        keeps that constraint without inventing an acceptance criterion; and
+        defers episodes, automatic resolution, recurrence, cleanup, and
+        decommission because no acceptance criterion or mandatory current
+        contract requires them. It must not cite a case study, emit a read
+        acknowledgement, or treat production-ready as permission to build the
+        full lifecycle.

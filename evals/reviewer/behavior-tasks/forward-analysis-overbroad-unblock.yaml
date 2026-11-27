@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-forward-analysis-overbroad-unblock
+name: Behavior - reviewer challenges an overbroad unblock claim
+description: Reviewers must separate a correct local fix from unsupported downstream readiness.
+tags: [behavior, forward-analysis, reviewer, evidence]
+inputs:
+  prompt: |
+    Review a stable migration PR that correctly handles the latest failed policy
+    bucket and claims it unblocks the full Production apply. The diff and tests
+    prove only that local bucket. Current evidence for older lineage and
+    freshness gates, Production data shape, materialization, and validate is
+    absent. Return the direction and evidence portion of the verdict.
+graders:
+  - name: forward_analysis_overbroad_unblock
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the reviewer accepts that the local fix may be correct but
+        rejects or narrows the full Production-unblock claim. It must identify
+        the next consumers and their unproven acceptance rules, classify absent
+        operational proof as Pending Verification rather than inventing a code
+        defect, and require a bounded gate map or evidence handoff. It must not
+        query Production, require a narrative read or acknowledgement, or ask
+        the parent to repeat unchanged forward analysis.

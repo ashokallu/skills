@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-explicit-transition-after-pr
+name: Positive - explicit transition after PR
+description:
+  The skill should trigger when Jira branch, PR, and transition orchestration are requested
+  together.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "For DEMO-2911, create the Jira-keyed worktree branch, open the GitHub PR, verify the branch
+    association, then transition the Jira issue to In Code Review if that transition is available."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_explicit_transition_after_pr
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

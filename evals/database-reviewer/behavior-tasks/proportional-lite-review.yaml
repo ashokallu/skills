@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: database-reviewer-behavior-proportional-lite-review
+name: Behavior - database LITE closes triggered lanes without broad residual work
+description: Database review remains complete, static, and proportional for a bounded advisory.
+tags: [behavior, database, scope, proportional]
+inputs:
+  prompt: |
+    A parent separately assigns a database performance-assessment review at
+    LITE depth. The immutable target is a bounded advisory comparing two
+    source-proven query shapes for a non-Production fixture. It changes no SQL,
+    schema, migration, generated query, data, topology, config, rollout,
+    recovery, or operator action. The supplied inventory is complete and no
+    environment evidence is needed for the advisory claim.
+
+    Return the exact `REVIEW_SCOPE_ACCEPTED:` scope-control receipt with its
+    trailing colon, then describe the database review work and stop proof you
+    would perform. Do not emit the final Database review packet.
+graders:
+  - name: database_lite_is_complete_static_and_proportional
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/database-reviewer/rubrics/proportional-lite-review.md

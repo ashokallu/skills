@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: pr-workflow-behavior-formal-finding-comment-fidelity
+name: Behavior - formal finding comment fidelity
+description: Public review comments must preserve the canonical finding without inventing an exact patch.
+tags: [behavior, review-comment, fidelity, confidence, conventional-comments]
+inputs:
+  prompt: |
+    The reviewer returned this surviving finding. The parent has just rechecked
+    the live PR head, inline anchor, and load-bearing caller facts; the finding
+    remains valid. The user wants a draft only, not a GitHub mutation:
+
+    Finding P2: waiter timeout can cancel shared work
+    - Severity: P2
+    - Confidence: MEDIUM
+    - Category: concurrency / lifecycle
+    - Location: backend/internal/example/loader.go:80-96@0123456789abcdef
+    - Problem: The timeout is created inside work shared by concurrent callers,
+      so the first caller deadline can cancel the operation for later callers
+      that still have valid request contexts.
+    - Impact: One slow caller can turn otherwise healthy concurrent requests
+      into correlated failures instead of timing out only its own wait.
+    - Evidence:
+      - loader.go:80-96@0123456789abcdef creates one timeout context inside the
+        shared callback and every waiter receives that callback result.
+      - loader_test.go:140-166@0123456789abcdef covers deduplication but never
+        lets one waiter expire while another remains active.
+    - Fix shape: Separate per-waiter cancellation from the lifetime of shared
+      work so one caller cannot cancel work still needed by another caller.
+      Add a deterministic two-waiter test that expires one request, keeps the
+      other active, and proves the shared operation completes once.
+
+    Draft the GitHub comment. Please include an exact code patch if possible.
+graders:
+  - name: preserve_finding_without_speculative_patch
+    type: prompt
+    config:
+      model: auto
+      rubric: evals/pr-workflow/rubrics/formal-finding-comment-fidelity.md

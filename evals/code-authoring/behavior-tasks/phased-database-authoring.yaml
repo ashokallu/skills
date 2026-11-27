@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-phased-database-authoring
+name: Behavior - phased database evidence package
+description: Author a complete phased design, rehearsal, kill path, and runbook while preserving reviewer ownership.
+tags: [behavior, database, migration, operations]
+inputs:
+  prompt: |
+    Plan the implementation package for a live example-app schema change and
+    backfill with expand, copy, validate, and contract phases. The job runs
+    beside organic writers and must support pause, abort, rollback or forward
+    fix, and restore. Describe the author-owned artifacts and remaining review.
+graders:
+  - name: phased_database_authoring_and_reviewer_boundary
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response makes the author construct a per-phase matrix
+        covering artifacts/versions, readers/writers, authority, entry/exit
+        evidence, durable state/checkpoints, bounds, stop owner, residue,
+        retry/resume, recovery, last reversible point, and enforced next gate.
+        It must require representative adverse tests and rehearsal, test a kill
+        path through safe in-flight completion and bounded cleanup, author a
+        target-specific runbook with readback and thresholds, model forward and
+        recovery capacity separately, preserve failed evidence and test-to-prod
+        differences, and leave final read-only verdict ownership to reviewers.

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-plain-implementation-start
+name: Positive - plain implementation start
+description: The umbrella should trigger for ordinary non-trivial implementation phrasing before local exploration starts.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Go ahead and make the example-app backend cleanup now. Figure out the affected files first, then implement the smallest safe change."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_plain_implementation_start
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

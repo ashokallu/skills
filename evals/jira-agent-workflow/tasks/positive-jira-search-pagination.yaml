@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: jira-agent-workflow-positive-jira-search-pagination
+name: Positive - Jira search pagination
+description: Broad Jira list requests should route to the Jira workflow skill.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt:
+    "Use the Jira MCP to find all open DEMO issues assigned to me, handling pagination or marking
+    incomplete results Pending Verification."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_jira_search_pagination
+    type: trigger
+    config:
+      skill_path: .codex/skills/jira-agent-workflow/SKILL.md
+      mode: positive
+      threshold: 0.5

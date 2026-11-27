@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-behavior-existing-conventions-justified-divergence
+name: Behavior - justified convention divergence
+description: A discoverable replacement for a proved unsafe pattern is not convention drift.
+tags: [behavior, conventions, divergence, discoverability]
+inputs:
+  prompt: |
+    Treat the facts below as the complete case. Do not inspect the repository or run tools.
+    Review a stable implementation diff that replaces an old helper after tests
+    prove the old pattern loses cancellation diagnostics. The change introduces
+    one shared replacement helper, migrates every in-scope caller, documents
+    the new owner, and leaves no concurrent old/new path in the reviewed scope.
+    Apply the existing-conventions lens.
+    End with exactly one field per line using these allowed values:
+    Convention disposition: FINDING or NO_FINDING
+    Standard state: AUTHORITATIVE, CONFLICTING, JUSTIFIED, NONE, or NIT
+    Search scope: OWNER_BOUNDED when package/owner evidence is used, otherwise INPUT_SUFFICIENT
+    Finding owner: CONVENTIONS, SECURITY_PRIVACY, or NONE
+    Pending verification: YES or NO
+    Reason: one sentence supporting every field without hypothetical findings.
+graders:
+  - name: justified_discoverable_divergence_is_clean
+    type: program
+    config:
+      command: python3
+      args:
+        [
+          evals/reviewer/graders/existing_conventions_contract.py,
+          justified-divergence,
+        ]

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: cross-harness-workflow-positive-muse-public-native-web
+name: Positive - Muse wholly public native web
+description: Explicit Muse research with wholly public inputs should route to the guarded researcher and require structured web evidence.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Run a direct cross-harness Muse CLI researcher handoff through the repository collaboration wrapper/session route for this public-source task. The prompt, every attachment, and the entire target checkout are public. Enable native web only with those classifications, require structured web invocation and successful result events plus URLs and retrieval dates, and otherwise fall back to Codex-brokered sources."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_for_muse_public_native_web
+    type: trigger
+    config:
+      skill_path: .codex/skills/cross-harness-workflow/SKILL.md
+      mode: positive
+      threshold: 0.6

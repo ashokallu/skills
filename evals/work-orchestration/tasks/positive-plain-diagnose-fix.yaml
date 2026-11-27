@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: work-orchestration-positive-plain-diagnose-fix
+name: Positive - plain diagnose and fix
+description: The umbrella should trigger for ordinary diagnose-then-fix phrasing when root cause is not known.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "This example-app command is failing. Diagnose the cause, find the narrowest fix, and then make the change."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_plain_diagnose_fix
+    type: trigger
+    config:
+      skill_path: .codex/skills/work-orchestration/SKILL.md
+      mode: positive
+      threshold: 0.5

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-negative-pr-orchestration
+name: Negative - standalone PR orchestration
+description: A bare PR review request should route to pr-workflow first, not directly to the reviewer lens skill.
+tags:
+  - trigger
+  - negative
+inputs:
+  prompt: "Review this example-app pull request: https://github.com/example-org/example-app/pull/101234"
+expected:
+  should_trigger: false
+graders:
+  - name: should_not_trigger_before_pr_workflow
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: negative
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: reviewer-positive-flags-a11y-i18n-lenses
+name: Positive - flags accessibility i18n lenses
+description: Stable review of feature flag, rollout, accessible UI, and localization changes should trigger reviewer.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Review a stable example-app UI diff after changed-file inventory shows app/components/EnrollmentForm.tsx, app/public/locales/en.json, app/public/locales/fr.json, and app/config/featureFlags.ts. The PR adds a rollout flag, translated validation messages, keyboard focus handling, and mobile long-copy behavior. Select feature flag, accessibility i18n, frontend, tests, and docs lenses before verdict."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_reviewer_flags_a11y_i18n_lenses
+    type: trigger
+    config:
+      skill_path: .codex/skills/reviewer/SKILL.md
+      mode: positive
+      threshold: 0.6

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: readonly-data-access-positive-cloudsql-replica-read
+name: Positive - Cloud SQL replica read
+description: The skill should trigger for production Cloud SQL read-replica metadata and bounded readonly query checks.
+tags:
+  - trigger
+  - positive
+inputs:
+  prompt: "Use the example-app Production Cloud SQL read replica to check table size and row-count evidence with statement_timeout, without printing SQL_REPLICA_URI or secrets."
+expected:
+  should_trigger: true
+graders:
+  - name: should_trigger_cloudsql_replica_read
+    type: trigger
+    config:
+      skill_path: .codex/skills/readonly-data-access/SKILL.md
+      mode: positive
+      threshold: 0.6

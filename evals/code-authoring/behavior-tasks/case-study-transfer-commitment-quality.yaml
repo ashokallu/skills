@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/waza/main/schemas/task.schema.json
+id: code-authoring-behavior-case-study-transfer-commitment-quality
+name: Behavior - case-study commitments require active recall
+description: Generic agreement paraphrases cannot satisfy the transfer preflight.
+tags: [behavior, case-study, active-recall, fail-closed]
+inputs:
+  prompt: |
+    A substantive authoring session proposes these transfer commitments before
+    inspecting its target:
+
+    - C1: Be careful and apply the lanes.
+    - C2: Test thoroughly.
+    - C3: Remember the case study.
+
+    Decide whether the gate passes and show the required correction shape.
+graders:
+  - name: case_study_transfer_rejects_shallow_paraphrase
+    type: prompt
+    config:
+      model: auto
+      prompt: |
+        Pass only if the response rejects all three rows as shallow
+        paraphrases and blocks target evidence. The correction must use no more
+        than three immutable C1-C3 rows total, each containing an operational
+        lesson in the agent's own words, a task-specific risk, an observable
+        changed decision/probe/stop condition, and a concrete self-violation
+        signature. Fail if it merely rewrites the rows as longer generic
+        reminders or reveals hidden chain of thought.
