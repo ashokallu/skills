@@ -8,7 +8,7 @@ harnesses to produce independent plans, cross-review each other, steal the best
 ideas, and then review or aggregate the final documents.
 
 In this repo, "council", "council opinion", and "council review" mean the
-cross-harness council roster: AGY/Gemini, Grok, Muse with
+cross-harness council roster: Grok, Muse with
 `muse-spark-1.3-contributor`, Claude Code with Opus, and Codex with high
 reasoning. Council does not mean native
 runtime `reviewer` or `critic` subagents. Do not replace council lanes with
@@ -400,7 +400,7 @@ Record these fields per harness lane:
 ```yaml
 run_id: <slug>-<date>
 phase: independent | stealing | review | aggregation
-harness: claude | codex | agy | grok | muse
+harness: claude | codex | grok | muse
 model_and_reasoning: <exact model/profile/reasoning used>
 tool_or_entrypoint: <codex exec high | Codex closeout-review lane | wrapper command>
 worktree: tmp/worktrees/<slug>
@@ -544,7 +544,6 @@ the same generic answer. Include the relevant row in that harness's prompt.
 | Claude Code / Opus | Optimize for deep architecture, state machines, policy design, failure modes, security boundaries, and uncomfortable risk analysis. | Lead with the few decisions that matter; put sprawl in appendices; mark unverified environmental facts `Pending Verification`. |
 | Codex / high planning | Optimize for repo-grounded implementation detail, exact files to change, buildable slices, validation commands, and operational constraints. | Use only for planning lanes; state the highest-impact architecture tradeoff before implementation slices; every repo claim should cite an inspected file or command. |
 | Codex Review | Optimize for stable-target code review findings through the Codex `work-orchestration` closeout-review lane, including accepted/rejected findings and focused validation. | Use for code, PR, diff, and implementation-review lanes when the Codex lane is available; do not replace this with plain headless Codex unless unavailable or explicitly requested. |
-| AGY / Gemini High | Optimize for clear system framing, diagrams, stakeholder-readable tradeoffs, policy math, and platform-fit analysis. | Do not invent IDs, roles, metrics, URLs, or product capabilities; cite repo/source evidence or mark the claim `Pending Verification`. |
 | Grok | Optimize for pragmatic workflows, recovery mechanics, operator handoffs, edge cases, and direct action sequencing. | Include at least one concrete execution/checklist/drill or stop condition for substantial plans; external landscape claims need sources or `Pending Verification`. |
 | Muse / `muse-spark-1.3-contributor` | Optimize for a concrete alternative contribution with implementation tradeoffs, edge cases, and observable validation. | Keep the lane read-only unless separately delegated; cite current repo evidence and mark unverified model, runtime, or external claims `Pending Verification`. |
 
@@ -731,7 +730,7 @@ After all first-pass plans exist:
 
 ## Phase 3: Independent Review Folders
 
-When the user asks for review folders such as `<planning-root>/agy`,
+When the user asks for review folders such as
 `<planning-root>/grok`, `<planning-root>/claude`, or
 `<planning-root>/codex`:
 
@@ -739,7 +738,7 @@ When the user asks for review folders such as `<planning-root>/agy`,
 2. Pass only the source plan documents and a requirements file as context.
 3. Add an explicit bias-control rule that forbids reading other review folders.
    Example: when writing `<planning-root>/codex`, forbid reads of
-   `<planning-root>/agy`, `<planning-root>/grok`, and
+   `<planning-root>/grok` and
    `<planning-root>/claude`.
 4. Ask for one review document per source plan in the reviewer-owned folder.
 5. Tell the reviewer that its review quality will be evaluated against the
@@ -877,8 +876,6 @@ Use the strongest practical mode for planning/review quality:
 
 - Claude Code: `scripts/dev/agent-call-claude.sh --profile opus --effort max`
   for Opus planning/review lanes that need maximum reasoning.
-- AGY/Gemini: use the configured AGY wrapper and the user's requested Gemini
-  mode, such as Gemini 3.8 Flash (High).
 - Grok: use `scripts/dev/agent-call-grok.sh --model grok-4.6` for an
   explicitly selected brokered council lane. Supply the prompt by file or
   stdin. Use the explicit contributor role/write/worktree triplet only when
@@ -940,7 +937,6 @@ When producing eval tables:
     - `Grok / Grok`
     - `Muse Spark 1.3 Contributor / Muse`
     - `GPT-5.6-Sol (high, or user-requested xhigh|max|ultra) / Codex`
-    - `Gemini 3.8 Flash (High) / AGY`
 
 11. If a model was accidentally run with the wrong reasoning effort, state that
    plainly and use the correct setting in future runs.

@@ -1,6 +1,6 @@
 ---
 name: cross-harness-workflow
-description: Use when example-app work explicitly needs two or more harnesses, cross-harness review, council planning, direct Claude Code/Codex/AGY/Grok/Muse/Pi/Copilot calls, explicit Pi council or bounded contributor/workhorse requests, lane-selected source-native AGY/Grok research, tmux-backed persistent harness sessions, wrapper/session routing, bridge audits, PR-bound pre-push collaborator review, fanout plans, plan stealing, artifact implementation review, recursive final-package evaluation, or multi-harness consolidation.
+description: Use when example-app work explicitly needs two or more harnesses, cross-harness review, council planning, direct Claude Code/Codex/Grok/Muse/Pi/Copilot calls, explicit Pi council or bounded contributor/workhorse requests, lane-selected source-native Grok research, tmux-backed persistent harness sessions, wrapper/session routing, bridge audits, PR-bound pre-push collaborator review, fanout plans, plan stealing, artifact implementation review, recursive final-package evaluation, or multi-harness consolidation.
 ---
 
 <!-- markdownlint-disable MD013 -->
@@ -13,6 +13,10 @@ instead of staying inside the current parent agent. This is the umbrella for
 direct peer calls, critic/reviewer gates, bridge audits, reusable sessions,
 multi-harness councils, plan stealing, artifact contracts, and final
 consolidation.
+
+Cross-harness calls use the providers listed below. Use Antigravity in its own
+client and bring back a user-provided result for comparison.
+[Google Antigravity FAQ](https://antigravity.google/docs/faq)
 
 ## Picker Contract
 
@@ -35,7 +39,7 @@ memory, auth, or private files on its own.
 
 When the user says "council", "council opinion", "council review", or "take it
 to council", route to cross-harness council planning. In this repo, council
-means the external harness roster: AGY/Gemini, Grok, Muse with
+means the external harness roster: Grok, Muse with
 `muse-spark-1.3-contributor`, Claude Code with Opus, and Codex with high
 reasoning. Do not satisfy a council
 request by spawning native runtime `reviewer` or `critic` subagents. Native
@@ -62,13 +66,13 @@ Pi is not part of the default council roster and has no autonomous admission.
 
 This skill routes these work shapes after it is invoked:
 
-- ask Claude Code, Codex, AGY, Grok, Muse, or Copilot CLI for a
+- ask Claude Code, Codex, Grok, Muse, or Copilot CLI for a
   direct peer review, implementation-plan objection pass, failure-scenario
   review, critic pass, second opinion, or wrapper smoke
 - run a PR-bound pre-push collaborator review for a substantial diff, workflow
   behavior change, shared test-helper change, or open-PR branch
 - dogfood the plan -> execute -> review controller
-- create separate worktrees for Claude, Codex high, AGY, Grok, or Muse to write
+- create separate worktrees for Claude, Codex high, Grok, or Muse to write
   independent plans
 - run cross-harness peer review, GOOD/BAD/UGLY review folders, plan stealing,
   best-idea stealing into each harness's own plan, rating-table aggregation,
@@ -106,7 +110,7 @@ surface, session, worktree, and evidence selection. Use the stages below for
 the remaining direct-collaboration routing and any generic transport needs.
 
 1. Load `direct-collaboration.md` to select the execution surface, permissions,
-   model, timeout, and continuation identity. For AGY or Grok, this includes
+   model, timeout, and continuation identity. For Grok, this includes
    choosing between an existing Codex Desktop in-app session and the headless
    wrapper.
 2. Consume the current `work-orchestration` Host Surface Gate decision.
@@ -115,7 +119,7 @@ the remaining direct-collaboration routing and any generic transport needs.
    authoritative. In Codex CLI, invoke the wrapper directly by default. If the
    host remains `unknown` and the distinction is material, use
    `runtime-capability-check` before selecting the execution surface.
-3. Before headed AGY or Grok interaction, check the current Codex skill
+3. Before headed Grok interaction, check the current Codex skill
    inventory for `desktop-task-coordination`. When present, load it to own
    task-terminal and shared headed-UI mechanics, then verify the required live
    capability plane. If the skill or plane is unavailable, stop the headed
@@ -126,7 +130,7 @@ the remaining direct-collaboration routing and any generic transport needs.
    headless call, tmux may instead wrap the selected repository wrapper when
    persistence or attachment is needed.
 
-When `work-orchestration` selects AGY or Grok through its `web-search`
+When `work-orchestration` selects Grok through its `web-search`
 lane, consume that lane's complete capability handoff. Do not re-decide the
 engine, add Parallel Search context to the collaborator prompt, or choose a
 surface that cannot provide the required source-native coverage.
@@ -139,7 +143,7 @@ headed session. Never blur their authority, prompt, or result contracts.
 | Ask shape | Lane |
 | --- | --- |
 | Explicit Muse offload or a delegation/council decision that selects Muse; capability, role, model, surface, session, worktree, and evidence boundary | Generic delegation first, then [references/muse-work-orchestration.md](references/muse-work-orchestration.md) |
-| First-stage wrapper and call choice for Claude, AGY, Grok, Copilot, or Codex; lane-selected source-native AGY/Grok execution; critic/reviewer gate; session reuse; bridge audit; controller run; async handoff | [references/direct-collaboration.md](references/direct-collaboration.md) |
+| First-stage wrapper and call choice for Claude, Grok, Copilot, or Codex; lane-selected source-native Grok execution; critic/reviewer gate; session reuse; bridge audit; controller run; async handoff | [references/direct-collaboration.md](references/direct-collaboration.md) |
 | Second-stage durable transport for persistent wrappers or headed raw TUIs when navigation, persistence, or exact pane control is expected; visible right-shell launch; pane inspection; bounded waiting; session cleanup | [references/tmux-persistent-sessions.md](references/tmux-persistent-sessions.md), after `direct-collaboration.md` |
 | Two or more harnesses producing independent plans, council reviews, cross-harness stealing, scoring, candidate-vs-current replacement review, mirror upgrade, recursive final-package evaluation, or artifact consolidation | [references/council-planning.md](references/council-planning.md) |
 | Multi-harness workflow smoke, low-reasoning calibration, routing-quality comparison, harness self-repair, or current-vs-expected workflow behavior audit | [references/workflow-calibration.md](references/workflow-calibration.md) |

@@ -116,8 +116,6 @@ repo contracts before accepting it.
 When council review is requested, start all five lanes headless with these
 defaults unless the user gives a stricter explicit override:
 
-- AGY: high reasoning/model profile through `scripts/dev/agent-call-agy.sh`
-  with `--model "Gemini 3.8 Flash (High)"`.
 - Grok brokered council: `scripts/dev/agent-call-grok.sh --model grok-4.6`;
   supply the prompt by file or stdin. Use the contributor triplet only for a
   separately assigned clean linked worktree.

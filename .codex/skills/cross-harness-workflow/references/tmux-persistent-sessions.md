@@ -22,13 +22,12 @@ permissions, model selection, logical-session identity, and result readback.
 - Use tmux when the call must survive a terminal closing, the user wants to
   navigate other Codex tasks during control, or exact pane addressing is
   required. Direct right-panel launch is the simpler headed default otherwise.
-- Do not launch raw Claude, Codex, AGY, Grok, Muse, or Copilot TUIs merely
+- Do not launch raw Claude, Codex, Grok, Muse, or Copilot TUIs merely
   because tmux is available. Raw TUI is allowed only when an explicit Codex
   Desktop headed request selects it and the tool/runtime path is currently
   proven. Grok is the general Linux candidate. For Muse, use
   `muse-work-orchestration.md` as the canonical capability, one-writer, and TUI
-  transaction boundary. AGY raw tmux and non-Linux paths remain `Pending
-  Verification` and fail closed.
+  transaction boundary.
   Muse's TUI may repaint continuously or acknowledge a paste late. Never press
   Enter until the exact composer text is visibly present once, never bypass a
   stale-input rejection, and use only one Ctrl+C to interrupt because a second
@@ -224,7 +223,6 @@ Use the source-confirmed wrapper for the selected harness:
 | --- | --- |
 | Claude Code | `scripts/dev/agent-call-claude.sh` |
 | Codex CLI | `scripts/dev/agent-call-codex.sh` |
-| AGY | `scripts/dev/agent-call-agy.sh` |
 | Grok CLI brokered council/contributor | `scripts/dev/agent-call-grok.sh` |
 | Muse CLI | `scripts/dev/agent-call-muse.sh` |
 | Copilot CLI | `scripts/dev/agent-call-copilot.sh` |

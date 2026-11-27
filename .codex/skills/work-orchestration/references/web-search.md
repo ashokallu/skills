@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD013 -->
-<!-- Last verified: 2026-08-19 (source-native Grok, AGY, and Parallel Search routing) -->
+<!-- Last verified: 2026-08-19 (source-native Grok and Parallel Search routing) -->
 
 # Web Search Routing
 
@@ -7,7 +7,7 @@
 Type: owning lane
 Use when: example-app work needs current external web research, a social URL,
           live thread or sentiment coverage, broad source discovery, or a decision
-          about Grok, AGY, Parallel Search, or bounded fanout
+          about Grok, Parallel Search, or bounded fanout
 Skip when: the task is local repository search, one known non-social page only needs a
            direct fetch, an authenticated product connector owns the resource, or
            rendered browser interaction is the actual task
@@ -35,11 +35,11 @@ broad-web engine into a substitute for platform-native access.
   [conflict-resolution](conflict-resolution.md). Never resolve it by majority
   vote or model count.
 - Use `cross-harness-workflow` and its direct-collaboration lane only
-  after this lane selects AGY or Grok. That specialist owns headed/headless
+  after this lane selects Grok. That specialist owns headed/headless
   surface choice, permissions, prompt transport, logical sessions, waits, and
   response readback.
 - Keep Parallel Search as a parent-native MCP arm. Do not pass its ranking,
-  availability, results, or tool name to AGY or Grok unless the user explicitly
+  availability, results, or tool name to Grok unless the user explicitly
   asks the collaborator to consume that context.
 - Use a purpose-built connector or authenticated specialist for private product
   resources. Use the browser specialist when rendered interaction, not search,
@@ -59,14 +59,13 @@ broad-web engine into a substitute for platform-native access.
 | Request or source family | Primary route | Required capability |
 | --- | --- | --- |
 | Literal `x.com` or `twitter.com` URL, X post/thread/replies, or live X sentiment | Grok | X-native post/search evidence and reply-thread coverage appropriate to the request |
-| Literal Reddit URL, live Reddit threads or sentiment, explicit Google search, or Google-grounded live-web exploration | AGY | Reddit or Google/web grounding that returns exact underlying pages or honestly reports blocked coverage |
+| Literal Reddit URL, live Reddit threads or sentiment, explicit Google search, or Google-grounded live-web exploration | Parent web/search tools that cover the requested source | Retrieve the exact Reddit thread or results from the requested search provider. Report any missing coverage. |
 | Broad open-web discovery, primary-source finding, generic current-web comparison, or corroboration | Parallel Search MCP | Broad search plus direct fetch of the underlying sources needed for the claim |
 | Multiple named source families or explicit cross-platform sentiment | Bounded fanout across the relevant rows | Independent source-family coverage with one parent join |
 
 Parallel Search is the preferred broad-web engine under the owner-approved
 policy. That preference is not evidence that it is universally best and never
-overrides Grok's X-native role, AGY's Reddit/Google role, or an explicit user
-surface.
+overrides Grok's X-native role or an explicit user surface.
 
 ## Bounded Fanout
 
@@ -83,18 +82,18 @@ Expand beyond the primary engine only when at least one condition is true:
 
 Use only the engines that can close the named gap. Poll and record each arm
 independently. Do not give one engine another engine's synthesis before its
-independent pass, and do not call all three for reassurance. Apply the one
+independent pass, and avoid redundant calls. Apply the one
 focused gap-closure pass and coverage language owned by `source-handling`.
 
 ## Capability-Bearing Handoff
 
-Create this handoff before an AGY or Grok research call. A collaborator name
+Create this handoff before a Grok research call. A collaborator name
 alone is not an executable research contract.
 
 ```text
 Web-search capability handoff:
 - request and literal target:
-- selected engine: Grok | AGY
+- selected engine: Grok
 - required source-native capability:
 - coverage requirement:
 - explicit surface constraint: headed | headless | user-selected session | none

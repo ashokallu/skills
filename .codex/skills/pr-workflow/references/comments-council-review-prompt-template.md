@@ -95,7 +95,6 @@ Output contract:
 
 Use these defaults unless the user gives a stricter explicit override:
 
-- AGY: `scripts/dev/agent-call-agy.sh --role reviewer --model "Gemini 3.8 Flash (High)"`
 - Grok brokered council: `scripts/dev/agent-call-grok.sh --role reviewer --model grok-4.6`; supply the prompt by file or stdin. Use the contributor triplet only for a separately assigned clean linked worktree.
 - Muse: `scripts/dev/agent-call-muse.sh --role reviewer --model muse-spark-1.3-contributor --target-class private --context-class private-approved --confirm-contributor-data-use`
 - Claude Code: `scripts/dev/agent-call-claude.sh --profile review --effort high`

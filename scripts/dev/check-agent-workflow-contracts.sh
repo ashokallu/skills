@@ -6771,30 +6771,6 @@ require_text evals/README.md \
 require_text evals/README.md \
   '`--route no-vpn --dry-run`' \
   "behavior-eval-no-vpn-dry-run-example"
-require_text scripts/dev/agent-call-agy.sh \
-  '--evaluation-envelope' \
-  "agy-wrapper-explicit-evaluation-envelope"
-require_text scripts/dev/agent-call-agy.sh \
-  'an explicit diagnostic path; the VPN-off behavior' \
-  "agy-wrapper-nondefault-evaluation-boundary"
-require_text scripts/dev/agent-call-agy.sh \
-  '--disable-slash-commands' \
-  "agy-wrapper-evaluation-slash-disable"
-require_text scripts/dev/agent-call-agy.sh \
-  '--output-format stream-json' \
-  "agy-wrapper-evaluation-stream-trace"
-require_text scripts/dev/agent-call-agy.sh \
-  'agy-evaluation-session-$session_alias' \
-  "agy-wrapper-evaluation-fresh-alias-reservation"
-require_text .agents/skills/antigravity-operating-contract/SKILL.md \
-  '## Controlled Behavior-Evaluation Subject Exception' \
-  "agy-operating-contract-controlled-eval-exception"
-require_text .agents/skills/antigravity-operating-contract/SKILL.md \
-  'normal VPN-off selector uses Pi' \
-  "agy-operating-contract-nondefault-eval-boundary"
-require_text .agents/skills/antigravity-operating-contract/SKILL.md \
-  'not to call tools are not isolation proof.' \
-  "agy-operating-contract-tool-audit"
 for database_prompt_case in \
   peer-challenge-reassessment \
   production-ready-persisted-state-necessity; do

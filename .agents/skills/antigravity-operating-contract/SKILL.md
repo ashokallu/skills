@@ -46,45 +46,6 @@ excerpts, memory, or prior conversation text are not a substitute when the file
 exists in the checkout. If a required file cannot be read, say `Pending
 Verification` and name the file and blocker.
 
-## Controlled Behavior-Evaluation Subject Exception
-
-An AGY candidate or judge process is exempt from this contract's repo bootstrap
-only when it is deliberately launched through
-`scripts/dev/agent-call-agy.sh --evaluation-envelope` as the controlled subject
-of a behavior evaluation. The normal VPN-off selector uses Pi; this AGY
-envelope remains an explicit diagnostic path and must not be inferred as the
-automatic fallback. Loading `AGENTS.md`, `GEMINI.md`, this contract, plugins,
-skills other than the explicitly selected target, or other repo guidance into
-that subject would contaminate the behavior being measured. The parent,
-selector, authoring work, validation, and later review remain fully governed by
-the normal bootstrap and this contract. This is not a waiver for peer review,
-planning, implementation, documentation, CI, PR, database, or other repo work.
-
-The exception is valid only when the wrapper mechanically requires a new
-non-resuming session alias, `--no-direnv`, disabled slash-command expansion,
-sandboxed plan mode, and complete stream-JSON capture in a separate temporary
-workspace. Runner-supplied candidate inputs are limited to the task prompt, the
-exact target `SKILL.md`, and explicitly allowlisted files inside that target
-skill tree. Runner-supplied judge inputs are limited to the task prompt,
-candidate output, and rubric-derived grading contract. A missing, malformed,
-truncated, unknown, or duplicate terminal trace, missing explicit tool-call
-audit evidence, or any tool call invalidates the result. Prompt instructions
-not to call tools are not isolation proof.
-
-AGY currently exposes no per-call plugin-disable flag. The caller must inspect
-and record the current plugin and MCP inventories before the model call, keep
-slash and skill expansion disabled, and mark strict input isolation `Pending
-Verification`. Do not call this envelope hermetic or claim that no ambient
-system context existed. A global plugin mutation to improve isolation is not
-authorized by an evaluation run.
-
-Results from this exception are AGY-native behavior evidence only. They do not
-prove the current Pi fallback, Waza execution, Copilot/LiteLLM compatibility,
-AGY effective-provider model identity, or future model availability. If the
-current AGY trace schema cannot be audited under these rules, fail closed and
-keep the behavior result `Pending Verification` until an explicit AGY caller is
-updated from current evidence.
-
 ## Purpose
 
 Antigravity exists here to produce trustworthy, usable engineering output. The

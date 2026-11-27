@@ -1,7 +1,7 @@
 # Tmux Persistent Harness Sessions
 
 Use tmux as a durable, observable transport around the repository-owned
-Claude, Codex CLI, AGY, Grok, Muse, and Copilot wrappers. Tmux keeps the
+Claude, Codex CLI, Grok, Muse, and Copilot wrappers. Tmux keeps the
 terminal process alive; the selected wrapper or specialist adapter remains
 responsible for authentication, permissions, model selection, conversation
 identity, timeout, and captured output.
@@ -16,7 +16,7 @@ identity, timeout, and captured output.
   supervise to completion.
 - Use tmux when the call must survive a terminal closing, the user wants to
   attach and observe it, or several long calls need isolated terminals.
-- Do not launch raw Claude, Codex, AGY, Grok, Muse, or Copilot TUIs merely
+- Do not launch raw Claude, Codex, Grok, Muse, or Copilot TUIs merely
   because tmux is available. Use the repository wrappers and their prompt,
   context, output, alias, budget, and permission flags. For Muse, use
   `muse-work-orchestration.md` as the canonical capability and TUI boundary.
@@ -105,7 +105,6 @@ Use the source-confirmed wrapper for the selected harness:
 | --- | --- |
 | Claude Code | `scripts/dev/agent-call-claude.sh` |
 | Codex CLI | `scripts/dev/agent-call-codex.sh` |
-| AGY | `scripts/dev/agent-call-agy.sh` |
 | Grok CLI brokered council/contributor | `scripts/dev/agent-call-grok.sh` |
 | Muse CLI | `scripts/dev/agent-call-muse.sh` |
 | Copilot CLI | `scripts/dev/agent-call-copilot.sh` |

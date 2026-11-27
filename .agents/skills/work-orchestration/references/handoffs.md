@@ -134,7 +134,7 @@ verified owner accepted it.
 
 ## External Harnesses
 
-For Claude Code, AGY, Copilot CLI, or other cross-harness work, use
+For Claude Code, Copilot CLI, or other cross-harness work, use
 `cross-harness-workflow` and its current collaboration wrapper. The
 project `ACTIONABLE` packet is not a substitute for session/secret-safe
 cross-harness transport. Never invent an external agent or paste credentials

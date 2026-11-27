@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   cat <<'USAGE'
 Usage:
-  scripts/dev/agent-collab-handoff.sh create --from <claude-code|codex-cli|agy-cli|grok-cli|muse-cli|copilot-cli> --to <claude-code|codex-cli|agy-cli|grok-cli|muse-cli|copilot-cli|either> --title <title> [options]
+  scripts/dev/agent-collab-handoff.sh create --from <claude-code|codex-cli|grok-cli|muse-cli|copilot-cli> --to <claude-code|codex-cli|grok-cli|muse-cli|copilot-cli|either> --title <title> [options]
   scripts/dev/agent-collab-handoff.sh list
   scripts/dev/agent-collab-handoff.sh show [handoff-file|latest]
 
@@ -74,13 +74,13 @@ create_handoff() {
   [[ -n "$title" ]] || die "--title is required"
 
   case "$from" in
-    claude-code|codex-cli|agy-cli|grok-cli|muse-cli|copilot-cli) ;;
-    *) die "--from must be claude-code, codex-cli, agy-cli, grok-cli, muse-cli, or copilot-cli" ;;
+    claude-code|codex-cli|grok-cli|muse-cli|copilot-cli) ;;
+    *) die "--from must be claude-code, codex-cli, grok-cli, muse-cli, or copilot-cli" ;;
   esac
 
   case "$to" in
-    claude-code|codex-cli|agy-cli|grok-cli|muse-cli|copilot-cli|either) ;;
-    *) die "--to must be claude-code, codex-cli, agy-cli, grok-cli, muse-cli, copilot-cli, or either" ;;
+    claude-code|codex-cli|grok-cli|muse-cli|copilot-cli|either) ;;
+    *) die "--to must be claude-code, codex-cli, grok-cli, muse-cli, copilot-cli, or either" ;;
   esac
 
   if [[ -n "$body_file" && ! -f "$body_file" ]]; then
@@ -134,11 +134,6 @@ create_handoff() {
       printf -- '- Codex latest thread id: `%s`\n' "$(sed -n '1p' "$state_dir/codex-latest-session-id")"
     else
       printf -- '- Codex latest thread id: Pending Verification - none recorded in `%s`.\n' "tmp/codex-claude/state/codex-latest-session-id"
-    fi
-    if [[ -s "$state_dir/agy-latest-conversation-id" ]]; then
-      printf -- '- AGY latest conversation id: `%s`\n' "$(sed -n '1p' "$state_dir/agy-latest-conversation-id")"
-    else
-      printf -- '- AGY latest conversation id: Pending Verification - none recorded in `%s`.\n' "tmp/codex-claude/state/agy-latest-conversation-id"
     fi
     if [[ -s "$state_dir/grok-latest-session-id" ]]; then
       printf -- '- Grok latest session id: `%s`\n' "$(sed -n '1p' "$state_dir/grok-latest-session-id")"

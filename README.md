@@ -9,23 +9,144 @@ guides, examples, or scripts that an agent can load as the task calls for them.
 Start with the catalog below. Open the linked `SKILL.md` for the complete
 workflow and its prerequisites.
 
-## Getting started
+## Install skills in a project
 
-1. **Choose the skill for your task.** For example, ask your agent to use
-   `pr-workflow` for a pull request, `database-reviewer` for a migration
-   review, or `local-browser-workflow` when a local page has login or TLS
-   problems.
-2. **Use the copy for your runtime.** The catalog lists where each skill is
-   available. A listed location means the skill is shipped there. Individual
-   workflows can still require a particular runtime capability, CLI, or
-   connector.
-3. **Configure the tools the workflow needs.** See the [script setup
-   guide](scripts/dev/README.md) for shared helpers and [MCP configuration
-   examples](examples/mcp/README.md) for opt-in connector setup. Application
-   examples use placeholder environments. Substitute your checkout, service
-   URLs, and test data. Keep credentials in your local environment.
+Clone this library once, then change into the Git checkout where your agent
+will work. These commands use a Bash-compatible shell. Adjust the paths to
+match your machine.
 
-In the catalog, **Shared** means a copy exists under `.agents/skills/`,
+```sh
+git clone https://github.com/ashokallu/skills.git ./agent-skills-library
+skills_library="$(cd ./agent-skills-library && pwd)"
+cd /path/to/your/project
+```
+
+### 1. Choose your runtime
+
+Set the source and destination from the row for your runtime. For example, in
+Codex use `skill_source="$skills_library/.codex/skills"` and
+`skill_target=".agents/skills"`.
+
+| Runtime | `skill_source` relative to `$skills_library` | `skill_target` relative to your project | Verify in a fresh session |
+| --- | --- | --- | --- |
+| Codex | `.codex/skills` | `.agents/skills` | Open `/skills` in the CLI or select the skill by name. |
+| Claude Code | `.claude/skills` | `.claude/skills` | Type the skill's slash command, such as `/reviewer`. |
+| Gemini CLI | `.agents/skills` | `.gemini/skills` or `.agents/skills` | Run `/skills list`, then ask Gemini to use the skill by name. |
+| Google Antigravity | `.agents/skills` | `.agents/skills` | Open `/skills` in the CLI or find the skill in the app's workspace customization settings. |
+
+The first path is the **edition stored in this library**. The second is where
+the client discovers it. For a skill listed as Shared in the catalog, use
+`skill_source="$skills_library/.agents/skills"` when no client-specific copy
+is available and the skill's requirements fit your client. Use one copy per
+skill name. Codex and Antigravity share `.agents/skills` for project skills.
+If both work in the same checkout, use the shared editions there. Gemini CLI
+also reads `.agents/skills` and gives it precedence over `.gemini/skills`
+when both contain the same skill.
+
+[Codex skills](https://developers.openai.com/codex/skills) ·
+[Claude Code skills](https://code.claude.com/docs/en/skills) ·
+[Gemini CLI skills](https://geminicli.com/docs/cli/skills/) ·
+[Antigravity skills](https://antigravity.google/docs/skills)
+
+### 2. Install one skill or the full edition
+
+**Single skill.** Set `skill_source` and `skill_target` from the table, then
+choose a skill from that edition. Copy its whole folder so the references,
+scripts, and metadata stay alongside `SKILL.md`.
+
+```sh
+skill=reviewer
+(
+  set -e
+  test -f "$skill_source/$skill/SKILL.md"
+  mkdir -p "$skill_target"
+  test ! -e "$skill_target/$skill"
+  cp -R "$skill_source/$skill" "$skill_target/"
+)
+```
+
+If the skill refers to another skill for the workflow you need, install that
+companion the same way. If a folder already exists, compare the two copies
+before updating it.
+
+**Full edition.** Set the same variables, then run this loop to install every
+skill shipped for your chosen runtime. It skips existing skill folders.
+
+```sh
+(
+  set -e
+  test -d "$skill_source"
+  mkdir -p "$skill_target"
+  for skill_dir in "$skill_source"/*; do
+    test -f "$skill_dir/SKILL.md" || continue
+    skill=${skill_dir##*/}
+    if test -e "$skill_target/$skill"; then
+      printf 'Skipping existing skill: %s\n' "$skill"
+      continue
+    fi
+    cp -R "$skill_dir" "$skill_target/"
+  done
+)
+```
+
+This installs the full **runtime edition**. The catalog marks skills available
+only in another edition, such as Codex Desktop's `peer-result-propagation`.
+Reopen the intended project in your client and verify discovery with the
+command or UI in the table before using the skills.
+
+### 3. Add shared scripts when a workflow calls them
+
+Scripts packaged inside a skill stay in that skill folder. Commands such as
+`scripts/dev/agent-call-codex.sh` expect the shared helpers at
+`scripts/dev/` **relative to the target project's root**. Install that bundle
+for workflows that call it, including cross-harness collaboration. Preserve
+its subdirectories and executable bits so wrappers can find their dependencies.
+
+For a project without a `scripts/dev` directory:
+
+```sh
+(
+  set -e
+  test ! -e scripts/dev
+  mkdir -p scripts
+  cp -Rp "$skills_library/scripts/dev" scripts/
+)
+```
+
+If the project already has `scripts/dev`, review and merge the helper files
+instead of overwriting its scripts. Run the helpers from the intended
+checkout. The [script setup guide](scripts/dev/README.md) lists CLI, package,
+and environment requirements, including the pinned dependency for Muse MSP.
+
+### 4. Configure MCP only when the task needs an MCP server
+
+Skills can be loaded from disk without MCP. Local planning, reading a diff,
+and running an installed CLI can use the client's existing tools. Set up MCP
+when a selected workflow calls a server that your client does not already
+provide, such as a Jira or Confluence server, a read-only database server, or
+the search server used by `parallel-search-mcp`.
+
+Merge the needed server entry into the client's project configuration. Use
+the server's documented transport and authentication settings. Keep
+credentials in your local environment or the client's sign-in flow.
+
+| Client | Project MCP configuration | Verify the server |
+| --- | --- | --- |
+| Codex | Trusted project `.codex/config.toml`, under `[mcp_servers.<name>]`. [Codex example](examples/mcp/codex.config.toml) | Run `codex mcp list` or open `/mcp` in the CLI. |
+| Claude Code | Project root `.mcp.json`, under `mcpServers`. [Claude example](examples/mcp/claude.mcp.json) | Review and approve the server in Claude Code, then check `/mcp`. |
+| Gemini CLI | Project `.gemini/settings.json`, under `mcpServers`. | Open `/mcp` to check the server and its tools. |
+| Google Antigravity | Workspace `.agents/mcp_config.json`, under `mcpServers`. | Check the workspace's MCP server list in the client. |
+
+The [MCP examples](examples/mcp/README.md) show configuration shapes. Add the
+actual server required by the skill, then verify it exposes the needed tool
+before using that workflow.
+
+[Codex MCP](https://developers.openai.com/codex/mcp) ·
+[Claude Code MCP](https://code.claude.com/docs/en/mcp) ·
+[Gemini CLI MCP](https://geminicli.com/docs/tools/mcp-server/) ·
+[Antigravity MCP](https://antigravity.google/docs/mcp)
+
+In the catalog, **Shared** means an edition is shipped under `.agents/skills/`,
 **Codex** under `.codex/skills/`, and **Claude** under `.claude/skills/`.
 
 ## Skill catalog

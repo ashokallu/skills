@@ -4,7 +4,7 @@
 # Direct Collaboration
 
 Use this skill when a Copilot-side agent should ask Codex CLI, Claude Code,
-Antigravity CLI, Grok CLI, Muse CLI, or Copilot CLI for a peer review, planning
+Grok CLI, Muse CLI, or Copilot CLI for a peer review, planning
 pass, repo inspection, implementation consultation, or second-model objection
 pass.
 
@@ -12,7 +12,6 @@ pass.
 
 - If the user explicitly names Codex, call Codex.
 - If the user explicitly names Claude or Claude Code, call Claude Code.
-- If the user explicitly names AGY or Antigravity, call Antigravity CLI.
 - If the user explicitly names Grok or xAI, route to the Grok section below.
   Use the brokered headless wrapper for consultation or an explicitly assigned
   linked-worktree contribution.
@@ -27,8 +26,6 @@ pass.
 - Prefer Claude Code for architecture review, high-risk reasoning, broad
   planning, large-context synthesis, Claude session continuity, or when the
   user explicitly wants Claude's judgment.
-- Prefer AGY when the user wants Google's Antigravity reviewer or critic
-  surface, or when the project AGY CLI and MCP setup should be exercised.
 - Prefer Grok when the user wants xAI's Grok coding-agent model or an
   additional Grok reviewer/critic perspective.
 - Prefer Muse when explicitly requested or selected by an owning council or
@@ -51,19 +48,17 @@ pre-implementation critic gate before editing files. Treat a plan as
 non-trivial when it changes production behavior, shared contracts, migrations,
 infrastructure, workflows, auth, permissions, security-sensitive code,
 generated clients, broad tests, multi-file behavior, or external integrations.
-Skip the three-way gate for typo fixes, format-only edits, comment-only edits,
+Skip the paired gate for typo fixes, format-only edits, comment-only edits,
 narrow docs clarifications, or mechanical follow-ups that do not need
 cross-model review:
 
 - ask the in-house Codex `critic` subagent to review the plan
 - ask Claude Code to review the same plan
-- ask AGY with `scripts/dev/agent-call-agy.sh --role critic` to review the same
-  plan
-- wait for all three results before implementation
+- wait for both results before implementation
 
 If one or more external collaborator calls fail, time out, lose auth, or cannot
-start, retry the in-house Codex `critic` once with the failure context. If all
-three fail, still retry the Codex `critic` once as the in-house fallback. Mark
+start, retry the in-house Codex `critic` once with the failure context. If both
+reviews fail, still retry the Codex `critic` once as the in-house fallback. Mark
 unavailable collaborator results `Pending Verification`; ask the user before
 proceeding when the missing external review would cover high-risk auth, data
 integrity, production config, permissions, migrations, security, or
@@ -75,12 +70,10 @@ Codex `reviewer` subagent:
 
 - ask the in-house Codex `reviewer` subagent to review the current diff
 - ask Claude Code to review the current diff
-- ask AGY with `scripts/dev/agent-call-agy.sh --role reviewer` to review the
-  current diff
-- wait for all three results before deciding readiness
+- wait for both results before deciding readiness
 
 If one or more external review calls fail, retry the in-house Codex `reviewer`
-once with the failure context. Do not treat failed Claude or AGY review as a
+once with the failure context. Do not treat failed Claude review as a
 pass; record it as `Pending Verification` and decide whether local validation
 plus the in-house review is enough to proceed.
 
@@ -111,10 +104,6 @@ controller call requires `--acknowledge-post-request-budget`: the configured
 USD value is a post-request stop threshold, and one final request can exceed
 it. Pass the flag only after the caller understands this and has current spend
 authority. Live-call examples assume that authority.
-
-The historical AGY workhorse admission fixture retains the exact runtime that
-its evidence evaluated. It is non-admitted and does not gate ordinary AGY
-peer calls or grant a new runtime admission.
 
 ## Wrapper Smoke And Output Hygiene
 
@@ -177,9 +166,6 @@ start a fresh compact Claude call.
 For Grok, trust the wrapper's current `--help`, capability probes, exact session
 metadata, and output artifact. Do not reuse historical prompt-in-argv,
 global-latest, mutation, `direnv`, or stale CLI-flag guidance.
-
-For AGY print-mode calls, pass timeout values with an explicit unit such as
-`120s`; bare integers can fail before the model runs.
 
 ## Call Codex CLI
 
@@ -399,180 +385,8 @@ This fifty-minute cutoff is Claude-specific. Claude Code on subscription billing
 uses a one-hour prompt-cache TTL and cache reads are materially cheaper than full
 input, but a stale long session can force Claude Code to rebuild the full
 project/session prefix. Other subscription-backed harnesses may have different
-cache/session economics; do not apply this cutoff to Codex, AGY, Grok, Muse,
+cache/session economics; do not apply this cutoff to Codex, Grok, Muse,
 or Copilot unless their current docs and wrapper telemetry prove the same TTL.
-
-## Call Antigravity CLI
-
-Use AGY when the user asks for Antigravity review, when a third reviewer surface
-is useful, or when the project AGY setup should smoke real reviewer or critic
-behavior.
-
-Before routing implementation, shell, browser, or autonomous work to AGY, read
-`docs/agents/workhorse-harness-capability-ledger.md`. It preserves the tested
-release history, current admission state, and exact retest boundary; this
-reference continues to own invocation mechanics.
-
-When diagnosing AGY project, plugin, agent, hook, or customization discovery,
-restrict filesystem evidence to explicit repo plugin paths, task-owned
-synthetic fixtures, CLI help/list/validate output, and allowlisted non-secret
-configuration fields. Never recursively search AGY home or configuration
-trees: exclude conversation brains, session or conversation metadata, caches,
-logs, auth files, and state databases. If source attribution would require
-private history, stop and mark that attribution `Pending Verification`.
-
-If AGY creates standalone `antigravity-*` skill or agent files while asked to
-update existing example-app guidance, treat those files as source material,
-not the desired destination. Extract durable rules into the existing repo
-skills, plugin agents, AGY plugin skill, or shared instructions, then remove the
-parallel scratch guidance once the useful content has landed.
-
-Ask AGY to follow the needed role directly. Do not ask AGY to spawn its own
-reviewer or critic subagent for planning or review gates; that path can return
-async acknowledgements or permission-blocked status instead of findings. For
-higher-fidelity critic or reviewer passes, attach the matching AGY plugin agent
-instructions with
-`--context-file .agents/plugins/example-app/agents/critic.md` or
-`--context-file .agents/plugins/example-app/agents/reviewer.md`, and use
-`--role none --model "Gemini 3.8 Flash (High)"` so Gemini follows the
-AGY-adapted rubric itself.
-
-For AGY/Gemini reviewer calls, include an explicit role-adherence reminder in
-the prompt. The user has observed Gemini/AGY failing reviewer instructions by
-prepending status prose, using local file links or absolute machine paths,
-claiming tests or linters passed without visible evidence, emitting weak P3
-filler, omitting base/head SHA, and marking `Pending Verification: N/A` when
-central facts were not proven. Tell AGY to avoid those exact failures and to
-follow the reviewer agent contract 100%. Also require packet `Pending
-Verification` to summarize any later validation gaps or unrun
-E2E/browser/API checks; it must not say `N/A` while the body lists gaps.
-Require a final-output self-check: the first non-whitespace characters of the
-captured response must be `Verdict:`, and all file references must be
-repo-relative plain text or backticks, not Markdown links to local files. This
-also applies to session hygiene and worktree references; use paths such as
-`tmp/worktrees/<slug>`, not absolute machine paths. Tell AGY not to start,
-include, or preserve background task, timer, scheduler, or asynchronous
-tool-status updates in the captured reviewer artifact; if such output appears,
-it must be removed before finalizing. Tell AGY not to install tools, bootstrap
-dependencies, brute-force linter/test command variants, or repair local setup;
-if a required tool or environment is missing, mark the check `Pending
-Verification` and recommend the exact command plus working directory for the
-parent or implementer.
-
-Also tell AGY/Gemini that the captured reviewer output is an evaluation
-artifact. The parent will judge it for constraint adherence, evidence
-traceability, output-contract compliance, role fidelity, path hygiene, and
-honest uncertainty handling before trusting the review. Constraint adherence,
-evidence traceability, and output-contract compliance are non-negotiable.
-
-For PR reviews, include PR ownership in the prompt. If the PR author is the
-user or the parent says it is user-owned, a stale branch is not an automatic
-AGY review `BLOCKED`; the expected workflow is to rebase the existing PR
-worktree on `origin/main`, then review the rebased target. `BLOCKED` is for
-someone else's stale PR, unsafe/conflicted rebase, or a freshness fact that
-cannot be verified.
-
-```bash
-scripts/dev/agent-call-agy.sh \
-  --role reviewer \
-  --title "review current diff" \
-  --model "Gemini 3.8 Flash (High)" \
-  --prompt "Review the current diff for regressions, missing tests, and rollout risk."
-```
-
-Use `--role critic` before implementation when the parent wants plan
-challenge. The wrapper runs through `direnv exec .` by default so env-backed
-MCP servers receive repo environment variables. Use `--no-direnv` only for an
-intentionally environment-free smoke.
-
-For AGY implementation advice, keep the repo contract above generic
-Antigravity aesthetics. Follow `AGENTS.md`, `repo.md`, and existing frontend
-patterns for UI work; do not accept broad "premium visual" rules, mandatory
-planning artifact files, or whole-file rewrite habits when they conflict with
-example-app's surgical edit and validation workflow.
-
-Keep AGY's plugin MCP set small. The default example-app baseline is
-`github`, `gopls`, `sentry-mcp`, `mcp-jira-prd`, and `mcp-confluence-prd`.
-Keep optional servers, including `typescript-lsp`, out of the default set and
-add them only for a task that needs them. Do not re-enable the broad MCP set by
-default.
-`google-cloud-logging-stg` is known to
-hang/fail while VPN is connected and can make the whole headless AGY call time
-out. Other disabled AGY MCPs are `context7_remote`, `parallel-search`,
-`typescript-lsp`, `google-cloud-sql-stg-readonly`,
-`dev-sql-readonly-local`,
-`dev-redis-local`, `google-developer-knowledge`, `google-cloud-sql-stg`,
-`google-cloud-error-reporting-stg`, and `google-cloud-monitoring-stg`.
-
-When changing AGY MCPs, update `.agents/plugins/example-app/mcp_config.json`,
-run `agy plugin validate .agents/plugins/example-app`, run
-`agy plugin install .agents/plugins/example-app`, and also sync the same
-config to `~/.gemini/config/plugins/example-app/mcp_config.json`. AGY keeps
-plugin copies in both `~/.gemini/antigravity-cli/plugins/example-app/` and
-`~/.gemini/config/plugins/example-app/`; stale MCP entries in either copy
-can keep breaking headless calls after the repo config looks fixed. Add removed
-MCPs back one at a time, then run
-`agy --print-timeout 60s --print 'Reply exactly: agy-ok'` before keeping the
-server enabled.
-
-The wrapper requests `Gemini 3.8 Flash (High)` by default for `reviewer` and
-`critic` calls. It requests `Gemini 3.8 Flash (Medium)` by default for
-`--role none` general purpose calls. Use `--model <name>` or
-`AGENT_CALL_AGY_MODEL=<name>` only as a scoped model override. The wrapper
-applies the model through Antigravity CLI settings under a lock for the
-duration of the call and then restores the previous settings.
-
-For isolated AGY availability smokes, use a fresh alias and the low-reasoning
-model name directly:
-
-```bash
-scripts/dev/agent-call-agy.sh \
-  --role none \
-  --model "Gemini 3.8 Flash (Low)" \
-  --no-direnv \
-  --timeout-sec 120 \
-  --print-timeout 120s \
-  --session-alias "agy-gemini-38-flash-low-smoke-<date>" \
-  --title "agy-gemini-38-flash-low-smoke" \
-  --prompt "Smoke test only. Do not inspect files. Reply exactly: agy-ok"
-```
-
-Do not rely on the wrapper's default Codex-thread alias for smoke tests. It can
-resume old AGY context and return stale conversation work while still recording
-the requested model. A clean smoke needs a unique alias or another explicit
-fresh-session boundary, then the response should match the smoke prompt.
-
-AGY CLI may need a non-sandbox shell because it writes local log files and
-starts a local language-server socket. If a sandboxed caller sees log-dir or
-socket permission errors, rerun the same wrapper from a normal shell before
-treating AGY as unavailable.
-
-If AGY exposes a stable conversation id during a task, record it in the handoff.
-If no AGY conversation id is available, mark it `Pending Verification` instead
-of inventing one.
-
-For related AGY follow-ups, resume the same conversation with
-`scripts/dev/agent-call-agy.sh --conversation alias:<name>` or
-`--conversation <id>` when the id is known. Prefer `--session-alias <name>` on
-the first AGY call for a user thread, then resume with `--conversation
-alias:<name>` for plan and review follow-ups. The wrapper records
-`tmp/codex-claude/state/agy-latest-conversation-id` and
-`tmp/codex-claude/state/agy-conversation-<alias>` from AGY's local brain
-directory after successful calls. Do not use `latest`, `last`, or `--continue`
-for same-thread reuse because they are global checkout pointers and can point
-at a different concurrent call; use an explicit id or alias in handoffs so
-later agents do not resume the wrong task.
-When the wrapper is called from Codex and no explicit alias or conversation is
-provided, it uses `CODEX_THREAD_ID` to create or resume a `codex-thread-<id>`
-alias automatically.
-When calling from Copilot or another non-Codex harness, do not assume
-`CODEX_THREAD_ID` exists. Pass an explicit `--session-alias <slug>` for the
-task, and pass distinct explicit aliases such as `<slug>-critic` and
-`<slug>-reviewer` for parallel calls.
-When intentionally running multiple AGY calls in parallel for the same Codex
-thread, pass distinct lanes, for example `--lane critic` and `--lane reviewer`.
-Each lane becomes `codex-thread-<id>-<lane>` so parallel calls do not share or
-overwrite one conversation.
 
 ## Direct Pi Candidate Call
 
@@ -706,7 +520,6 @@ Every handoff after collaborator usage must include reusable session state:
 - Claude session id or alias
 - Codex CLI thread id or alias
 - Codex in-house subagent ids used for critic/reviewer gates
-- AGY conversation id or alias from `tmp/codex-claude/state/agy-latest-conversation-id`
 - Copilot CLI session id or alias from `tmp/codex-claude/state/copilot-latest-session-id`
 - lane aliases such as `codex-thread-<id>-critic` and
   `codex-thread-<id>-reviewer` when parallel collaborator calls used `--lane`
@@ -714,7 +527,7 @@ Every handoff after collaborator usage must include reusable session state:
 Use `scripts/dev/agent-collab-handoff.sh create --session ...` for explicit
 entries. For parallel lanes, pass the lane aliases explicitly because `latest`
 only records whichever lane finished last. The handoff script also auto-includes
-latest Claude, Codex, AGY, and Copilot ids from `tmp/codex-claude/state/` when
+latest Claude, Codex, and Copilot ids from `tmp/codex-claude/state/` when
 they exist.
 
 ## Closeout

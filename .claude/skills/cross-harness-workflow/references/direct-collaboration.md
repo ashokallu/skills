@@ -3,8 +3,7 @@
 
 # Direct Collaboration
 
-Use this skill when Claude Code should collaborate with Codex CLI, Antigravity
-CLI, Grok CLI, Muse CLI, or Copilot CLI instead of staying inside the Claude
+Use this skill when Claude Code should collaborate with Codex CLI, Grok CLI, Muse CLI, or Copilot CLI instead of staying inside the Claude
 harness. Keep Claude as the parent for the current turn unless the user
 explicitly hands ownership to another harness.
 
@@ -46,7 +45,7 @@ docs clarifications, or mechanical follow-ups that do not need cross-model
 review.
 
 For the pre-implementation gate, ask Codex CLI and any explicitly requested
-collaborator such as AGY or Grok to review the same plan, then wait for the
+collaborator such as Grok to review the same plan, then wait for the
 results before implementation. If a collaborator call fails, times out, loses
 auth, or cannot start, do not treat it as a pass. Record it as `Pending
 Verification`; ask the user before proceeding when the missing review would
@@ -120,10 +119,6 @@ USD value is a post-request stop threshold, and one final request can exceed
 it. Pass the flag only after the caller understands this and has current spend
 authority. Live-call examples assume that authority.
 
-The historical AGY workhorse admission fixture retains the exact runtime that
-its evidence evaluated. It is non-admitted and does not gate ordinary AGY
-peer calls or grant a new runtime admission.
-
 ## Wrapper Smoke And Output Hygiene
 
 For isolated availability, routing, or model/effort smokes, use a fresh alias,
@@ -185,9 +180,6 @@ start a fresh compact Claude call.
 For Grok, trust the wrapper's current `--help`, capability probes, exact session
 metadata, and output artifact. Do not reuse historical prompt-in-argv,
 global-latest, mutation, `direnv`, or stale CLI-flag guidance.
-
-For AGY print-mode calls, pass timeout values with an explicit unit such as
-`120s`; bare integers can fail before the model runs.
 
 ## PR-Bound Pre-Push Collaboration
 
