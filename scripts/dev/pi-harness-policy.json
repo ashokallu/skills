@@ -1,0 +1,21 @@
+{
+  "revision": "pi-openai-snapshot-candidate-v4",
+  "status": "candidate-only",
+  "provider": "openai-codex",
+  "models": ["gpt-5.6-luna", "gpt-5.6-terra", "gpt-6.1-sol"],
+  "cli_policy": "current-with-capability-probes",
+  "max_requests": 8,
+  "max_tokens": 16000,
+  "max_request_bytes": 262144,
+  "max_response_bytes": 2097152,
+  "max_snapshot_bytes": 16777216,
+  "max_file_bytes": 1048576,
+  "max_files": 256,
+  "max_output_bytes": 8388608,
+  "timeout_sec": 180,
+  "address_space_bytes": 2147483648,
+  "processes": 24,
+  "cpu_seconds": 60,
+  "workspace_bytes": 33554432,
+  "scratch_bytes": 16777216
+}
